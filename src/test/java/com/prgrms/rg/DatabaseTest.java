@@ -17,9 +17,7 @@ class DatabaseTest {
 		var dummy = new Dummy();
 		dummy.setName("hello");
 		dummy = repository.save(dummy);
-
 		assertThat(repository.findById(dummy.getId())).get().extracting("id").isEqualTo(dummy.getId());
 
 	}
-
 }

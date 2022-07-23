@@ -12,6 +12,7 @@ import lombok.Setter;
 @Setter
 @Getter
 public class Dummy {
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
