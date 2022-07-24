@@ -11,3 +11,6 @@ sudo docker run  -p 80:80 -d \
 --env RDBMS_USERNAME="$RDBMS_USERNAME" \
 --env RDBMS_PASSWORD="$RDBMS_PASSWORD" \
 epicblueha/rg:latest
+echo "$RDBMS_PASSWORD"
+echo "$RDBMS_URL"
+echo "$RDBMS_USERNAME"
