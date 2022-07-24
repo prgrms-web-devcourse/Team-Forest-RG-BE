@@ -3,9 +3,9 @@
 image_name=epicblueha/rg:latest
 
 # 인스턴스에 이미 작동하는 컨테이너가 있으면 종료시킵니다.
-if [ -n "$(sudo docker ps -a -q)" ]
+if [ -n "$(sudo docker ps -q)" ]
 then
-  sudo docker rm "$(sudo docker ps -a -q)"
+  sudo docker stop "$(sudo docker ps -q)"
 fi
 
 sudo docker pull $image_name
