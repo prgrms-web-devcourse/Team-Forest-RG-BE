@@ -1,0 +1,21 @@
+## 배포용
+
+spring:
+  datasource: # Production DB
+    url: "jdbc:mysql://${RDBMS_URL}/rg"
+    username: ${RDBMS_USERNAME}
+    password: ${RDBMS_PASSWORD}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  jpa:
+    show-sql: true
+    generate-ddl: true
+    database: mysql
+    open-in-view: false
+    hibernate:
+      ddl-auto: create-drop
+    properties:
+      hibernate:
+        format_sql: true
+        use_sql_comments: true
+server:
+  port: 80
