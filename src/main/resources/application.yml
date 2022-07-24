@@ -2,7 +2,7 @@
 
 spring:
   datasource: # Production DB
-    url: jdbc:mysql://${RDBMS_URL}/rg
+    url: jdbc:mysql://${RDBMS_URL}:3306/rg
     username: ${RDBMS_USERNAME}
     password: ${RDBMS_PASSWORD}
     driver-class-name: com.mysql.cj.jdbc.Driver
