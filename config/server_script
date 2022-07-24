@@ -1,8 +1,8 @@
-RUN_CONTAINERS=$(sudo docker ps -a -q)
+RUNNING_CONTAINERS=$(sudo docker ps -a -q)
 
-if [ "$RUN_CONTAINERS" ]
+if [ "$RUNNING_CONTAINERS" ]
 then
-  sudo docker rm --force "$RUN_CONTAINERS"
+  sudo docker rm --force "$RUNNING_CONTAINERS"
 fi
 
 sudo docker pull epicblueha/rg:latest
