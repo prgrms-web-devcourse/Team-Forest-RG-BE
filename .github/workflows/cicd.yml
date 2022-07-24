@@ -32,19 +32,10 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_SECRET }}
 
-      - name: Extract metadata (tags, labels) for Docker
-        id: meta
-        uses: docker/metadata-action@98669ae865ea3cffbcbaa878cf57c20bbf1c6c38
-        with:
-          images: epicblueha/rg
-
       - name: Build and push Docker image
-        uses: docker/build-push-action@ad44023a93711e3deb337508980b4b5e9bcdc5dc
-        with:
-          context: .
-          push: true
-          tags: latest
-          labels: ${{ steps.meta.outputs.labels }}
+        run: |
+          sudo docker build . epicblueha/rg:latest
+          sudo docker push epicblueha/rg:latest
           
       - name: Install SSH Key
         uses: shimataro/ssh-key-action@v2
@@ -58,6 +49,6 @@ jobs:
 
       - name : ec2 instance docker pull & run
         run: |
-          ssh -i ~/.ssh/devcourse-joseph-key-pair.pem ${{ secrets.SERVER_SSH_USER }} sudo docker rm $(docker ps -a -q) && sudo docker pull epicblueha/rg:latest && sudo docker run epicblueha/rg:latest -p 80:80 -d -e RDBMS_URL=${{ secrets.RDBMS_URL }} RDBMS_USERNAME=${{ secrets.RDBMS_USERNAME }} RDBMS_=${{ secrets.RDBMS_PASSWORD }}  
+          ssh -i ~/.ssh/devcourse-joseph-key-pair.pem ${{ secrets.SERVER_SSH_USER }} sudo docker rm $(docker ps -a -q) && sudo docker pull epicblueha/rg:latest && sudo docker run epicblueha/rg:latest -p 80:80 -d --env RDBMS_URL=${{ secrets.RDBMS_URL }} --env RDBMS_USERNAME=${{ secrets.RDBMS_USERNAME }} --env RDBMS_PASSWORD=${{ secrets.RDBMS_PASSWORD }}  
       
     
