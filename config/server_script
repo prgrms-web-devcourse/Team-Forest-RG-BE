@@ -4,7 +4,7 @@ running_containers=$(sudo docker ps -a -q)
 image_name=epicblueha/rg:latest
 
 # 인스턴스에 이미 작동하는 컨테이너가 있으면 종료시킵니다.
-if [ "$running_containers" ]
+if [ -n "$running_containers" ]
 then
   sudo docker rm --force "$running_containers"
 fi
