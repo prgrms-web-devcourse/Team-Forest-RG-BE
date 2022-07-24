@@ -38,7 +38,7 @@ jobs:
           push: true
           tags: epicblueha/rg:latest
           context: .
-          
+
       - name: Install SSH Key
         uses: shimataro/ssh-key-action@v2
         with:
@@ -51,6 +51,8 @@ jobs:
 
       - name : ec2 instance docker pull & run
         run: |
-          ssh -i ~/.ssh/devcourse-joseph-key-pair.pem ${{ secrets.SERVER_SSH_USER }} sudo docker rm $(docker ps -a -q) && sudo docker pull epicblueha/rg:latest && sudo docker run epicblueha/rg:latest -p 80:80 -d --env RDBMS_URL=${{ secrets.RDBMS_URL }} --env RDBMS_USERNAME=${{ secrets.RDBMS_USERNAME }} --env RDBMS_PASSWORD=${{ secrets.RDBMS_PASSWORD }}  
-      
-    
+          ssh -i ~/.ssh/devcourse-joseph-key-pair.pem ${{ secrets.SERVER_SSH_USER }} 'bash -s' < ./config/server_script.sh
+        env:
+          RDBMS_URL: ${{ secrets.RDBMS_URL }}
+          RDBMS_USERNAME: ${{ secrets.RDBMS_USERNAME }}
+          RDBMS_PASSWORD: ${{ secrets.RDBMS_PASSWORD }}
