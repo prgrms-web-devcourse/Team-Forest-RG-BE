@@ -34,7 +34,7 @@ jobs:
 
       - name: Build and push Docker image
         run: |
-          sudo docker build . epicblueha/rg:latest
+          sudo docker build . -t epicblueha/rg:latest
           sudo docker push epicblueha/rg:latest
           
       - name: Install SSH Key
