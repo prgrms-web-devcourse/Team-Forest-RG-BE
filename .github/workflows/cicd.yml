@@ -51,9 +51,7 @@ jobs:
 
       - name : ec2 instance docker pull & run
         run: |
-          chmod +x ./config/server_script
-          ssh -i ~/.ssh/devcourse-joseph-key-pair.pem ${{ secrets.SERVER_SSH_USER }} 'bash -s' < ./config/server_script
-        env:
-          RDBMS_URL: ${{ secrets.RDBMS_URL }}
-          RDBMS_USERNAME: ${{ secrets.RDBMS_USERNAME }}
-          RDBMS_PASSWORD: ${{ secrets.RDBMS_PASSWORD }}
+          echo 'export RDMBS_URL=${{ secrets.RDBMS_URL }}\nexport RDBMS_USERNAME=${{ secrets.RDBMS_USERNAME }}\nexport=RDBMS_PASSWORD=${{ secrets.RDBMS_PASSWORD }}\n' > ./config/server_script_env
+          cat ./config/server_script >> ./config/server_script_env
+          chmod +x ./config/server_script_env
+          ssh -i ~/.ssh/devcourse-joseph-key-pair.pem ${{ secrets.SERVER_SSH_USER }} 'bash -s' < ./config/server_script_env
