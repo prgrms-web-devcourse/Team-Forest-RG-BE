@@ -1,7 +1,8 @@
-## 배포용
+# 배포용
+# DB 관련 정보는 Docker 컨테이너의 환경 변수에서 들어옵니다.
 
 spring:
-  datasource: # Production DB
+  datasource:
     url: "jdbc:mysql://${RDBMS_URL}:3306/rg"
     username: ${RDBMS_USERNAME}
     password: ${RDBMS_PASSWORD}

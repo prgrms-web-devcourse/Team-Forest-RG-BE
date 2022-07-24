@@ -1,16 +1,20 @@
-RUNNING_CONTAINERS=$(sudo docker ps -a -q)
+# DB 관련 환경 변수는 CD 과정에서 적용됩니다.
 
-if [ "$RUNNING_CONTAINERS" ]
+running_containers=$(sudo docker ps -a -q)
+image_name=epicblueha/rg:latest
+
+# 인스턴스에 이미 작동하는 컨테이너가 있으면 종료시킵니다.
+if [ "$running_containers" ]
 then
-  sudo docker rm --force "$RUNNING_CONTAINERS"
+  sudo docker rm --force "$running_containers"
 fi
 
-sudo docker pull epicblueha/rg:latest
-sudo docker run  -p 80:80 -d \
+sudo docker pull $image_name
+
+# Docker 관련 정보는 dockerfile 참조 바랍니다.
+sudo docker run -p 80:80 -d \
 --env RDBMS_URL="$RDBMS_URL" \
 --env RDBMS_USERNAME="$RDBMS_USERNAME" \
 --env RDBMS_PASSWORD="$RDBMS_PASSWORD" \
-epicblueha/rg:latest
-echo "$RDBMS_PASSWORD"
-echo "$RDBMS_URL"
-echo "$RDBMS_USERNAME"
+$image_name
+
