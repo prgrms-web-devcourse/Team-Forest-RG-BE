@@ -43,5 +43,21 @@ jobs:
         with:
           context: .
           push: true
-          tags: ${{ steps.meta.outputs.tags }}
+          tags: latest
           labels: ${{ steps.meta.outputs.labels }}
+          
+      - name: Install SSH Key
+        uses: shimataro/ssh-key-action@v2
+        with:
+          key: ${{ secrets.SERVER_SSH_KEY }}
+          known_hosts: 'asdfasffsadf'
+          name: devcourse-joseph-key-pair.pem
+
+      - name: Adding Known Hosts
+        run: ssh-keyscan -H ${{secrets.SERVER_SSH_HOST}} >> ~/.ssh/known_hosts
+
+      - name : ec2 instance docker pull & run
+        run: |
+          ssh -i ~/.ssh/devcourse-joseph-key-pair.pem ${{ secrets.SERVER_SSH_USER }} sudo docker rm $(docker ps -a -q) && sudo docker pull epicblueha/rg:latest && sudo docker run epicblueha/rg:latest -p 80:80 -d -e RDBMS_URL=${{ secrets.RDBMS_URL }} RDBMS_USERNAME=${{ secrets.RDBMS_USERNAME }} RDBMS_URL=${{ secrets.RDBMS_PASSWORD }}  
+      
+    
