@@ -43,7 +43,7 @@ jobs:
         uses: docker/build-push-action@v3
         with:
           push: true
-          tags: epicblueha/rg:latest
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/rg:latest
           context: .
 
       - name: Install SSH Key
@@ -57,10 +57,13 @@ jobs:
         run: ssh-keyscan -H ${{secrets.SERVER_SSH_HOST}} >> ~/.ssh/known_hosts
 
       - name : Command Cloud to Run New Image
+        env:
+          SERVER_SCRIPT: ./config/server_script_env
         run: |
-          echo 'RDBMS_URL=${{ secrets.RDBMS_URL }}' >> ./config/server_script_env
-          echo 'RDBMS_USERNAME=${{ secrets.RDBMS_USERNAME }}' >> ./config/server_script_env
-          echo 'RDBMS_PASSWORD=${{ secrets.RDBMS_PASSWORD }}' >> ./config/server_script_env
-          cat ./config/server_script >> ./config/server_script_env
-          chmod +x ./config/server_script_env
-          ssh -i ~/.ssh/devcourse-joseph-key-pair.pem ${{ secrets.SERVER_SSH_USER }} 'bash -s' < ./config/server_script_env
+          echo '#!/bin/sh' >> $SERVER_SCRIPT
+          echo 'RDBMS_URL=${{ secrets.RDBMS_URL }}' >> $SERVER_SCRIPT
+          echo 'RDBMS_USERNAME=${{ secrets.RDBMS_USERNAME }}' >> $SERVER_SCRIPT
+          echo 'RDBMS_PASSWORD=${{ secrets.RDBMS_PASSWORD }}' >> $SERVER_SCRIPT
+          cat ./config/server_script >> $SERVER_SCRIPT
+          chmod +x $SERVER_SCRIPT
+          ssh -i ~/.ssh/devcourse-joseph-key-pair.pem ${{ secrets.SERVER_SSH_USER }} 'bash -s' < $SERVER_SCRIPT

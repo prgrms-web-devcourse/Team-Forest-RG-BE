@@ -1,11 +1,11 @@
 # DB 관련 환경 변수는 CD 과정에서 적용됩니다.
 
 image_name=epicblueha/rg:latest
-
+running_container=$(sudo docker ps -q)
 # 인스턴스에 이미 작동하는 컨테이너가 있으면 종료시킵니다.
-if [ -n "$(sudo docker ps -q)" ]
+if [ -n "$running_container" ]
 then
-  sudo docker stop "$(sudo docker ps -q)"
+  sudo docker rm -f "$running_container"
 fi
 
 sudo docker pull $image_name
