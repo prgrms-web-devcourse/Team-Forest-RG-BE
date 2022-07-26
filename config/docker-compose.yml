@@ -1,0 +1,20 @@
+# 테스트용 mysql 인스턴스를 docker로 만들어서 실행하고자 할 때 사용합니다.
+
+version: "3"
+
+services:
+  mysql-server:
+    image: mysql:8
+    environment:
+      - MYSQL_ROOT_PASSWORD=dev
+      - MYSQL_DATABASE=rg
+      - MYSQL_USER=dev
+      - MYSQL_PASSWORD=dev
+
+    command:
+      - --character-set-server=utf8mb4
+      - --collation-server=utf8mb4_unicode_ci
+    ports:
+      - 3306:3306
+    cap_add:
+      - SYS_NICE
