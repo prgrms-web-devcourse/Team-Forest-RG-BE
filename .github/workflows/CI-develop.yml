@@ -1,3 +1,5 @@
+# mysql이 설치된 ubuntu로 빌드(테스트)를 수행합니다.
+
 name: CI - develop
 
 on:
@@ -8,8 +10,6 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      # -------CI-------
-      # Mysql이 설치된 ubuntu로 빌드(테스트)를 수행합니다.
       - uses: actions/checkout@v3
       - uses: mirromutth/mysql-action@v1.1
         with:
