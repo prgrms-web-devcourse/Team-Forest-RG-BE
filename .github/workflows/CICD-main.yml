@@ -1,4 +1,4 @@
-name: CI / CD using Dockerhub
+name: CI / CD using Docker Hub - main
 
 on:
   pull_request:
