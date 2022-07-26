@@ -2,10 +2,5 @@
 # 테스트 코드에서 따로 profile 활성화 코드를 작성할 필요가 없음
 
 spring:
-  datasource:
-    url: "jdbc:mysql://localhost:3306/rg"
-    username: dev
-    password: dev
-    driver-class-name: com.mysql.cj.jdbc.Driver
   profiles:
     active: test

@@ -1,6 +1,11 @@
-# 테스트용
+# 테스트 전용 profile
 
 spring:
+  datasource:
+    url: "jdbc:mysql://localhost:3306/rg"
+    username: dev
+    password: dev
+    driver-class-name: com.mysql.cj.jdbc.Driver
   jpa:
     show-sql: true
     generate-ddl: true

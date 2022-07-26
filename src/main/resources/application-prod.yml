@@ -1,6 +1,7 @@
 # 배포용
+# 로컬 프로파일(application.yml)을 덮어쓴다.
 # DB 관련 정보는 Docker 컨테이너의 환경 변수에서 들어옵니다.
-# TODO: 본격적인 배포가 시작되면 jpa DDL 관련 설정 손봐야함
+# TODO: 본격적인 배포가 시작되면 jpa 설정 수정 필요 (ddl-auto 등)
 
 spring:
   datasource:

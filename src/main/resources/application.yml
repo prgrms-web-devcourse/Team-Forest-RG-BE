@@ -1,6 +1,5 @@
-# 공통 기본 설정
-# 다른 profile(prod, test)에서 추가로 덮어쓰는 방식으로 진행합니다.
-
+# 로컬용 profile
+# 로컬에서 서버를 구동시키고 postman으로 테스트하고 싶을 떄
 
 spring:
   datasource:
@@ -8,3 +7,14 @@ spring:
     username: dev
     password: dev
     driver-class-name: com.mysql.cj.jdbc.Driver
+  jpa:
+    show-sql: true
+    generate-ddl: true
+    database: mysql
+    open-in-view: false
+    hibernate:
+      ddl-auto: create-drop
+    properties:
+      hibernate:
+        format_sql: true
+        use_sql_comments: true
