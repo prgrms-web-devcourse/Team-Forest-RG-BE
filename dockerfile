@@ -9,6 +9,5 @@ RUN mkdir /app
 COPY $JAR_PATH/$JAR_NAME /app
 WORKDIR /app
 
-# Profile을 배포용으로 적용할 경우(prod)
-# java -jar -Dspring.profiles.active=prod $jarName
-CMD java -jar $JAR_NAME
+# profile : prod
+CMD java -jar -Dspring.profiles.active=prod $JAR_NAME

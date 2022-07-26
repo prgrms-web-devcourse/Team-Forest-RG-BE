@@ -1,22 +1,10 @@
-# 배포용
-# DB 관련 정보는 Docker 컨테이너의 환경 변수에서 들어옵니다.
+# 공통 기본 설정
+# 다른 profile(prod, test)에서 추가로 덮어쓰는 방식으로 진행합니다.
+
 
 spring:
   datasource:
-    url: "jdbc:mysql://${RDBMS_URL}:3306/rg"
-    username: ${RDBMS_USERNAME}
-    password: ${RDBMS_PASSWORD}
+    url: "jdbc:mysql://localhost:3306/rg"
+    username: dev
+    password: dev
     driver-class-name: com.mysql.cj.jdbc.Driver
-  jpa:
-    show-sql: true
-    generate-ddl: true
-    database: mysql
-    open-in-view: false
-    hibernate:
-      ddl-auto: create-drop
-    properties:
-      hibernate:
-        format_sql: true
-        use_sql_comments: true
-server:
-  port: 80

@@ -1,0 +1,15 @@
+# 테스트용
+
+spring:
+  jpa:
+    show-sql: true
+    generate-ddl: true
+    database: mysql
+    open-in-view: false
+    hibernate:
+      ddl-auto: create-drop
+    properties:
+      hibernate:
+        format_sql: true
+        use_sql_comments: true
+

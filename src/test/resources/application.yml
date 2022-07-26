@@ -1,4 +1,5 @@
-# 테스트용
+# test profile 활성화용 파일
+# 테스트 코드에서 따로 profile 활성화 코드를 작성할 필요가 없음
 
 spring:
   datasource:
@@ -6,15 +7,5 @@ spring:
     username: dev
     password: dev
     driver-class-name: com.mysql.cj.jdbc.Driver
-  jpa:
-    show-sql: true
-    generate-ddl: true
-    database: mysql
-    open-in-view: false
-    hibernate:
-      ddl-auto: create-drop
-    properties:
-      hibernate:
-        format_sql: true
-        use_sql_comments: true
-
+  profiles:
+    active: test
