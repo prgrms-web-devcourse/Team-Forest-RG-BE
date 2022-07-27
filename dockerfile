@@ -17,4 +17,4 @@ RUN rm -rf StringReplacer*
 COPY $JAR_PATH/$JAR_NAME /app
 
 # profile : prod
-CMD java -jar -javaagent:/app/pinpoint-agent-2.4.0/pinpoint-bootstrap-2.4.0.jar -Dpinpoint.agentId=rg -Dpinpoint.applicationName=rg_server -Dpinpoint.config=pinpoint-root.config -Dspring.profiles.active=prod $JAR_NAME
+CMD java -jar -javaagent:/app/pinpoint-agent-2.4.0/pinpoint-bootstrap-2.4.0.jar -Dpinpoint.agentId=rg -Dpinpoint.applicationName=rg_server -Dpinpoint.config=/app/pinpoint-agent-2.4.0/pinpoint-root.config -Dspring.profiles.active=prod $JAR_NAME
