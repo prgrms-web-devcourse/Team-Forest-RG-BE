@@ -15,7 +15,7 @@ public class StringReplacer {
 		try(var stream = new BufferedReader(new FileReader(filename))) {
 			String config = stream.lines().collect(Collectors.joining("\n"));
 			fixed = config.replaceFirst("profiler.collector.ip=(\\d{1,3}\\.){3}\\d{1,3}", "profiler.collector.ip=49.50.172.148");
-			fixed = config.replaceFirst("127\\.0\\.0\\.1", "49.50.172.148");
+			fixed = fixed.replaceFirst("127\\.0\\.0\\.1", "49.50.172.148");
 		};
 
 		try(var fileOutputStream =new FileOutputStream(filename)){
