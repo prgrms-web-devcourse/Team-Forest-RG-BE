@@ -4,6 +4,7 @@ FROM openjdk:11
 # CI가 성공해서 build된 jar가 이미 존재합니다.
 ENV JAR_PATH=build/libs
 ENV JAR_NAME=*SNAPSHOT.jar
+ENV PINPOINT_DIR=/app/pinpoint-agent-2.4.0
 
 # naver pinpoint 설치
 RUN mkdir /app
@@ -17,4 +18,4 @@ RUN rm -rf StringReplacer*
 COPY $JAR_PATH/$JAR_NAME /app
 
 # profile : prod
-CMD java -jar -javaagent:/app/pinpoint-agent-2.4.0/pinpoint-bootstrap-2.4.0.jar -Dpinpoint.agentId=rg -Dpinpoint.applicationName=rg_server -Dpinpoint.config=/app/pinpoint-agent-2.4.0/pinpoint-root.config -Dspring.profiles.active=prod $JAR_NAME
+CMD java -jar -javaagent:$PINPOINT_DIR/pinpoint-bootstrap-2.4.0.jar -Dpinpoint.agentId=rg -Dpinpoint.applicationName=rg_server -Dpinpoint.config=$PINPOINT_DIR/pinpoint-root.config -Dspring.profiles.active=prod $JAR_NAME
