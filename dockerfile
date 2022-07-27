@@ -10,7 +10,7 @@ ENV PINPOINT_DIR=/app/pinpoint-agent-2.4.0
 RUN mkdir /app
 WORKDIR /app
 RUN wget https://github.com/pinpoint-apm/pinpoint/releases/download/v2.4.0/pinpoint-agent-2.4.0.tar.gz
-RUN tar xvfz pinpoint-agent-2.4.0.tar.gz
+RUN tar xvfz pinpoint-agent-2.4.0.tar.gz && rm -rf pinpoint-agent-2.4.0.tar.gz
 COPY config/PinpointConfigurer.java .
 RUN javac PinpointConfigurer.java && java PinpointConfigurer && rm -rf PinpointConfigurer*
 
