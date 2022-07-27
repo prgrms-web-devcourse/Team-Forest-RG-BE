@@ -16,7 +16,8 @@ public class StringReplacer {
 			String config = stream.lines().collect(Collectors.joining("\n"));
 			fixed = config.replaceFirst("profiler.collector.ip=(\\d{1,3}\\.){3}\\d{1,3}", "profiler.collector.ip=49.50.172.148");
 			fixed = fixed.replaceFirst("127\\.0\\.0\\.1", "49.50.172.148");
-		};
+			fixed = fixed.replaceFirst("profiler.transport.module=GRPC", "profiler.transport.module=THRIFT");
+		}
 
 		try(var fileOutputStream =new FileOutputStream(filename)){
 			fileOutputStream.write(fixed.getBytes(StandardCharsets.UTF_8));
