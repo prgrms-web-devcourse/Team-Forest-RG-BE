@@ -5,6 +5,12 @@ FROM openjdk:11
 ENV JAR_PATH=build/libs
 ENV JAR_NAME=*SNAPSHOT.jar
 
+# naver pinpoint 설치
+RUN wget https://github.com/pinpoint-apm/pinpoint/releases/download/v2.4.0/pinpoint-agent-2.4.0.tar.gz
+RUN tar xvfz pinpoint-agent-2.4.0.tar.gz
+COPY StringReplacer.java .
+RUN javac StringReplacer.java && java StringReplacer
+
 RUN mkdir /app
 COPY $JAR_PATH/$JAR_NAME /app
 WORKDIR /app
