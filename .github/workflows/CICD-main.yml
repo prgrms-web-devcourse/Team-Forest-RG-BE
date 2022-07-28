@@ -45,7 +45,8 @@ jobs:
           push: true
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/rg:latest
           context: .
-          build-args: PINPOINT_HOST=${{ secrets.PINPOINT_HOST }}
+          build-args: |
+            PINPOINT_HOST=${{ secrets.PINPOINT_HOST }}
 
       - name: Install SSH Key
         uses: shimataro/ssh-key-action@v2
