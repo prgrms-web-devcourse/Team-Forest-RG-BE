@@ -5,6 +5,7 @@ ENV JAR_PATH=build/libs
 ENV JAR_NAME=*SNAPSHOT.jar
 ENV PINPOINT_DIR=/app/pinpoint-agent-2.4.0
 # PINPOINT_HOST 는 외부 시스템에서 가져옵니다. (build-time arg)
+ARG PINPOINT_HOST
 
 # naver pinpoint 설치 및 환경 설정
 RUN mkdir /app
