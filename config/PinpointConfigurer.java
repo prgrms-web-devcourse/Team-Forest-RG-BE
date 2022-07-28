@@ -14,7 +14,7 @@ public class PinpointConfigurer {
 	public static void main(String[] args) throws IOException {
 		String filename = "./pinpoint-agent-2.4.0/pinpoint-root.config";
 		String fixedConfig = null;
-		String collectorIp = "49.50.172.148";
+		String collectorIp = args[0];
 		try(var reader = new BufferedReader(new FileReader(filename))) {
 			String config = reader.lines().collect(Collectors.joining("\n"));
 			fixedConfig = config.replaceFirst("profiler.collector.ip=(\\d{1,3}\\.){3}\\d{1,3}", "profiler.collector.ip=" + collectorIp)
