@@ -21,34 +21,42 @@ public class SpyFileStore implements FileStore {
 
 	String prefix = "https://rg.storage.url/";
 
-	Map<String, MultipartFile> fileStorage = new HashMap<>();
+
+	Map<String, Integer> saveCommandCache = new HashMap<>();
+	Map<String, Integer> deleteCommandCache = new HashMap<>();
 
 	/*
 	 * 이미지 전송 요청이 제대로 전달 되었는가 확인하는 메서드
 	 */
-	public SpyFileStore assertFileStored(String url) {
-		assertThat(fileStorage).containsKey(url);
-		return this;
+	public void assertSaveCommandCalledOnce(String url) {
+		assertThat(saveCommandCache).containsEntry(url, 1);
 	}
 
 	/*
 	 * 이미지 삭제 요청이 제대로 전달 되었는가 확인하는 메서드
 	 */
-	public SpyFileStore assertFileDeleted(String url) {
-		assertThat(fileStorage).doesNotContainKey(url);
-		return this;
+	public void assertDeleteCommandCalledOnce(String url) {
+		assertThat(deleteCommandCache).containsEntry(url, 1);
 	}
 
 	@Override
 	public String save(MultipartFile multipartFile, String fileName) throws FileIOException {
 		assertThat(multipartFile).isNotNull();
-		String url = prefix + fileName;
-		fileStorage.put(url, multipartFile);
-		return prefix + fileName;
+		var url = prefix + fileName;
+		if(saveCommandCache.containsKey(url)) {
+			saveCommandCache.put(url, saveCommandCache.get(url) + 1);
+			return url;
+		}
+		saveCommandCache.put(url, 1);
+		return url;
 	}
 
 	@Override
 	public void delete(String fileUrl) {
-		fileStorage.remove(fileUrl);
+		if(deleteCommandCache.containsKey(fileUrl)) {
+			deleteCommandCache.put(fileUrl, deleteCommandCache.get(fileUrl) + 1);
+			return;
+		}
+		deleteCommandCache.put(fileUrl, 1);
 	}
 }
