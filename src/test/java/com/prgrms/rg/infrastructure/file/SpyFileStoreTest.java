@@ -22,7 +22,7 @@ class SpyFileStoreTest {
 		var savedUrl = spyFileStore.save(file, filename);
 
 		// Then
-		assertThatNoException().isThrownBy(()-> spyFileStore.assertFileStored(savedUrl));
+		assertThatNoException().isThrownBy(()-> spyFileStore.assertSaveCommandCalledOnce(savedUrl));
 
 	}
 	@Test
@@ -38,7 +38,7 @@ class SpyFileStoreTest {
 		spyFileStore.delete(savedUrl);
 
 		// Then
-		assertThatNoException().isThrownBy(() -> spyFileStore.assertFileDeleted(savedUrl));
+		assertThatNoException().isThrownBy(() -> spyFileStore.assertDeleteCommandCalledOnce(savedUrl));
 
 	}
 }
