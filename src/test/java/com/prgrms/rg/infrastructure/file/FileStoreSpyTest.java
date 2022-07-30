@@ -6,9 +6,9 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.mock.web.MockMultipartFile;
 
-class SpyFileStoreTest {
+class FileStoreSpyTest {
 
-	SpyFileStore spyFileStore = new SpyFileStore();
+	FileStoreSpy fileStoreSpy = new FileStoreSpy();
 
 	@Test
 	@DisplayName("이미지 저장 요청이 전송되었음을 확인할 수 있다.")
@@ -20,9 +20,9 @@ class SpyFileStoreTest {
 		var filename = "image.jpg";
 
 		// When
-		var savedUrl = spyFileStore.save(file, filename);
+		var savedUrl = fileStoreSpy.save(file, filename);
 		// Then
-		assertThatNoException().isThrownBy(() -> spyFileStore.assertSaveCommandCalledOnce(file, filename));
+		assertThatNoException().isThrownBy(() -> fileStoreSpy.assertSaveCommandCalledOnce(file, filename));
 
 	}
 
@@ -33,13 +33,13 @@ class SpyFileStoreTest {
 		// Given
 		var file = new MockMultipartFile("image.jpg", "<<image>>".getBytes());
 		var filename = "image.jpg";
-		var savedUrl = spyFileStore.save(file, filename);
+		var savedUrl = fileStoreSpy.save(file, filename);
 
 		// When
-		spyFileStore.delete(savedUrl);
+		fileStoreSpy.delete(savedUrl);
 
 		// Then
-		assertThatNoException().isThrownBy(() -> spyFileStore.assertDeleteCommandCalledOnce(savedUrl));
+		assertThatNoException().isThrownBy(() -> fileStoreSpy.assertDeleteCommandCalledOnce(savedUrl));
 
 	}
 }
