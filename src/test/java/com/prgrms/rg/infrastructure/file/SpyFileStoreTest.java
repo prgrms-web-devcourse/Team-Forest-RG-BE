@@ -20,11 +20,11 @@ class SpyFileStoreTest {
 
 		// When
 		var savedUrl = spyFileStore.save(file, filename);
-
 		// Then
-		assertThatNoException().isThrownBy(()-> spyFileStore.assertSaveCommandCalledOnce(savedUrl));
+		assertThatNoException().isThrownBy(() -> spyFileStore.assertSaveCommandCalledOnce(file, filename));
 
 	}
+
 	@Test
 	@DisplayName("이미지가 삭제 요청이 전달되었음을 확인할 수 있다.")
 	void validate_remo_data() {
