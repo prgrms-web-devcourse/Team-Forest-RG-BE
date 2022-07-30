@@ -22,10 +22,9 @@ import com.prgrms.rg.domain.common.file.FileStore;
 @Primary
 public class FileStoreSpy implements FileStore {
 
+	private final Map<String, Integer> saveCommandCache = new HashMap<>();
+	private final Map<String, Integer> deleteCommandCache = new HashMap<>();
 	String prefix = "https://rg.storage.url/";
-
-	Map<String, Integer> saveCommandCache = new HashMap<>();
-	Map<String, Integer> deleteCommandCache = new HashMap<>();
 
 	/*
 	 * 이미지 전송 요청이 제대로 전달 되었는가 확인하는 메서드
