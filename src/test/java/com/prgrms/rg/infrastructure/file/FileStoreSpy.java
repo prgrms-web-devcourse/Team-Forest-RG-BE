@@ -5,6 +5,7 @@ import static org.assertj.core.api.Assertions.*;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -18,6 +19,7 @@ import com.prgrms.rg.domain.common.file.FileStore;
  * 검증 사용이 불편하면 이 파일을 무시하시고 일반적인 스프링 테스트처럼 @MockBean을 통해 Mockito 방식으로 FileStore를 테스트 하시면 됩니다.
  */
 @Component
+@Primary
 public class FileStoreSpy implements FileStore {
 
 	String prefix = "https://rg.storage.url/";
