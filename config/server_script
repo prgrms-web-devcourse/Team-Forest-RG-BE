@@ -2,6 +2,7 @@
 
 image_name=epicblueha/rg:latest
 running_container=$(sudo docker ps -q)
+log_dir=$(pwd)/server_log
 # 인스턴스에 이미 작동하는 컨테이너가 있으면 종료시킵니다.
 if [ -n "$running_container" ]
 then
@@ -10,8 +11,13 @@ fi
 
 sudo docker pull $image_name
 
+if [ ! -d "$log_dir" ]
+then
+  mkdir "$log_dir"
+fi
+
 # Docker 관련 정보는 dockerfile 참조 바랍니다.
-sudo docker run -p 80:80 -d \
+sudo docker run -p 80:80 -v "$log_dir":./log -d \
 --env RDBMS_URL="$RDBMS_URL" \
 --env RDBMS_USERNAME="$RDBMS_USERNAME" \
 --env RDBMS_PASSWORD="$RDBMS_PASSWORD" \
