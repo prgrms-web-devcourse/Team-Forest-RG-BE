@@ -18,7 +18,7 @@ public class NotificationController {
 
 	@GetMapping(value = "/api/v1/notification/eventstream", produces = "text/event-stream")
 	public SseEmitter subscribe(
-		@RequestHeader(value = "Authorization", required = false, defaultValue = "") String accessToken,
+		@RequestHeader(value = "Authorization", defaultValue = "") String accessToken,
 		@RequestHeader(value = "Last-Event-ID", required = false, defaultValue = "") String lastEventId) {
 		log.info("connection request by " + accessToken);
 		return notificationService.subscribe(accessToken, lastEventId);
