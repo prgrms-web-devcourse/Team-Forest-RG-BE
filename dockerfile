@@ -4,6 +4,7 @@ FROM openjdk:11
 ENV JAR_PATH=build/libs
 ENV JAR_NAME=*SNAPSHOT.jar
 ENV PINPOINT_DIR=/app/pinpoint-agent-2.4.0
+ENV LOG_PATH=./log
 # PINPOINT_HOST 는 외부 시스템에서 가져옵니다. (build-time arg)
 ARG PINPOINT_HOST
 
@@ -16,6 +17,7 @@ COPY config/PinpointConfigurer.java .
 RUN javac PinpointConfigurer.java && java PinpointConfigurer $PINPOINT_HOST && rm -rf PinpointConfigurer*
 
 COPY $JAR_PATH/$JAR_NAME /app
+RUN mkdir $LOG_PATH
 
 # profile : prod
 CMD java -jar -javaagent:$PINPOINT_DIR/pinpoint-bootstrap-2.4.0.jar -Dpinpoint.agentId=rg -Dpinpoint.applicationName=rg_server -Dpinpoint.config=$PINPOINT_DIR/pinpoint-root.config -Dspring.profiles.active=prod $JAR_NAME
