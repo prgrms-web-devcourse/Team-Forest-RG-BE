@@ -25,8 +25,6 @@ jobs:
         with:
           java-version: '11'
           distribution: 'temurin'
-      - name: write new yml file
-        run: touch 'src/main/resources/application-aws.yml'
       - name: utilize yaml writer module
         uses: mikefarah/yq@master
         env:
@@ -34,7 +32,7 @@ jobs:
           AWS_SECRET_KEY: ${{ secrets.AWS_SECRET_KEY }}
           AWS_S3_REGION: ${{ secrets.AWS_S3_REGION }}
           AWS_S3_BUCKET: ${{ secrets.AWS_S3_BUCKET }}
-          YML_PATH: src/main/resources/application-aws.yml
+          YML_PATH: src/main/resources/application-prod.yml
         with:
           cmd: |
             yq -i '
