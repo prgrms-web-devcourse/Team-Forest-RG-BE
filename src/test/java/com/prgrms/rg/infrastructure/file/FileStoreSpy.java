@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.springframework.context.annotation.Primary;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -20,6 +21,7 @@ import com.prgrms.rg.domain.common.file.FileStore;
  */
 @Component
 @Primary
+@Scope("prototype")
 public class FileStoreSpy implements FileStore {
 
 	private final Map<String, Integer> saveCommandCache = new HashMap<>();
