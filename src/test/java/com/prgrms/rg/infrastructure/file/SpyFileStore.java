@@ -43,7 +43,8 @@ public class SpyFileStore implements FileStore {
 	public String save(MultipartFile multipartFile, String fileName) throws FileIOException {
 		assertThat(multipartFile).isNotNull();
 		var url = prefix + fileName;
-		saveCommandCache.put(hashToCommandKey(fileName, multipartFile), saveCommandCache.getOrDefault(url, 0) + 1);
+		var key = hashToCommandKey(fileName, multipartFile);
+		saveCommandCache.put(key, saveCommandCache.getOrDefault(key, 0) + 1);
 		return url;
 	}
 
