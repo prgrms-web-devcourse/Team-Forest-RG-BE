@@ -26,7 +26,22 @@ jobs:
           java-version: '11'
           distribution: 'temurin'
       - name: write new yml file
-        run: echo ${{ secrets.AWS_S3_CONFIGS }} >> src/main/resources/application-aws.yml
+        run: touch 'src/main/resources/application-aws.yml'
+      - name: utilize yaml writer module
+        uses: mikefarah/yq@master
+        env:
+          AWS_ACCESS_KEY: ${{ secrets.AWS_ACCESS_KEY }}
+          AWS_SECRET_KEY: ${{ secrets.AWS_SECRET_KEY }}
+          AWS_S3_REGION: ${{ secrets.AWS_S3_REGION }}
+          AWS_S3_BUCKET: ${{ secrets.AWS_S3_BUCKET }}
+          YML_PATH: src/main/resources/application-aws.yml
+        with:
+          cmd: |
+            yq -i ".cloud.aws.credentials.access-key = strenv(AWS_ACCESS_KEY)" $YML_PATH
+            yq -i ".cloud.aws.credentials.secret-key = strenv(AWS_SECRET_KEY)" $YML_PATH
+            yq -i ".cloud.aws.region.static = strenv(AWS_S3_REGION)" $YML_PATH
+            yq -i ".cloud.aws.s3.bucket = strenv(AWS_S3_BUCKET)" $YML_PATH
+            yq -i ".cloud.aws.stack.auto = false" $YML_PATH
 
       - name: Build with Gradle
         run: |
