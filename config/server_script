@@ -17,7 +17,7 @@ then
 fi
 
 # Docker 관련 정보는 dockerfile 참조 바랍니다.
-sudo docker run -p 80:80 -v "$log_dir":./log -d \
+sudo docker run -p 80:80 -v "$log_dir":/app/log -d \
 --env RDBMS_URL="$RDBMS_URL" \
 --env RDBMS_USERNAME="$RDBMS_USERNAME" \
 --env RDBMS_PASSWORD="$RDBMS_PASSWORD" \
