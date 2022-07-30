@@ -16,6 +16,7 @@ class SpyFileStoreTest {
 
 		// Given
 		var file = new MockMultipartFile("image.jpg", "<<image>>".getBytes());
+
 		var filename = "image.jpg";
 
 		// When
