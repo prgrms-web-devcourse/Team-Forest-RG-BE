@@ -1,5 +1,5 @@
 # 배포용
-# 로컬 프로파일(application.yml)을 덮어쓴다.
+# 배포 환경에서 가장 먼저 읽는 설정입니다. (application.yml이 아닙니다!)
 # DB 관련 정보는 Docker 컨테이너의 환경 변수에서 들어옵니다.
 # TODO: 본격적인 배포가 시작되면 jpa 설정 수정 필요 (ddl-auto 등)
 
@@ -25,3 +25,8 @@ server:
 logging:
   file:
     path: ${LOG_PATH}
+  level:
+    com:
+      amazonaws:
+        util:
+          EC2MetadataUtils: error

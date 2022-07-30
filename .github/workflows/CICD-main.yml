@@ -32,6 +32,7 @@ jobs:
           AWS_SECRET_KEY: ${{ secrets.AWS_SECRET_KEY }}
           AWS_S3_REGION: ${{ secrets.AWS_S3_REGION }}
           AWS_S3_BUCKET: ${{ secrets.AWS_S3_BUCKET }}
+          ## aws 프로파일이 아닌 프로덕션 전용 profile에 aws 관련 정보 주입
           YML_PATH: src/main/resources/application-prod.yml
         with:
           cmd: |
