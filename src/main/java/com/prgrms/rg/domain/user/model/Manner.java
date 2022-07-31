@@ -41,8 +41,9 @@ public class Manner {
 	void addNoShowCount() {
 		noShow++;
 		if (noShow % NO_SHOW_LIMIT == 0) {
-			banned = (banned == null) ? LocalDate.now().plusDays(NO_SHOW_BAN_DURATION) :
-				banned.plusDays(NO_SHOW_BAN_DURATION);
+			banned =
+				(banned == null || banned.isBefore(LocalDate.now()))
+					? LocalDate.now().plusDays(NO_SHOW_BAN_DURATION) : banned.plusDays(NO_SHOW_BAN_DURATION);
 		}
 	}
 
