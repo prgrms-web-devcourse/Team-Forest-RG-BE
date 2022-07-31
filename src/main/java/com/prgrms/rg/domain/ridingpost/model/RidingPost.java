@@ -1,5 +1,7 @@
 package com.prgrms.rg.domain.ridingpost.model;
 
+import static com.google.common.base.Preconditions.*;
+
 import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.HashSet;
@@ -34,7 +36,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-//TODO 제약 조건
+//TODO 제약 조건(title, contents..)
 @Setter(value = AccessLevel.PRIVATE)
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -54,6 +56,10 @@ public class RidingPost extends BaseTimeEntity implements ImageAttachable {
 
 	@Column(name = "contents")
 	private String contents;
+
+	@Column(name = "riding_status")
+	@Enumerated(EnumType.STRING)
+	private RidingStatus status = RidingStatus.IN_PROGRESS;
 
 	@Column(name = "participant_count")
 	private int participantCount = 0;
@@ -89,7 +95,6 @@ public class RidingPost extends BaseTimeEntity implements ImageAttachable {
 	@Column(name = "riding_year")
 	private int ridingYear;
 
-	//TODO link entity?
 	@ManyToMany
 	@JoinTable(name = "post_bicycle")
 	private Set<Bicycle> bicycleList = new HashSet<>();
@@ -97,16 +102,15 @@ public class RidingPost extends BaseTimeEntity implements ImageAttachable {
 	@OneToMany(fetch = FetchType.LAZY)
 	private Set<RidingParticipant> participants = new HashSet<>();
 
-
-	public static RidingPost createPost(User host, String title, String contents, int maxParticipantCount, int minParticipantCount,
+	public static RidingPost createPost(User host, String title, String contents, int maxParticipantCount,
+		int minParticipantCount,
 		List<String> routes, LocalDateTime ridingDate,
-		Long fee, RidingLevel level, int ridingYear, Set<Bicycle> bicycleList){
+		Long fee, RidingLevel level, int ridingYear, Set<Bicycle> bicycleList) {
 		RidingPost post = new RidingPost();
 		post.assignHost(host);
 		post.setTitle(title);
 		post.setContents(contents);
-		post.setMaxParticipantCount(maxParticipantCount);
-		post.setMinParticipantCount(minParticipantCount);
+		post.setMinMaxParticipantCount(minParticipantCount, maxParticipantCount);
 		post.setRoutes(routes);
 		post.setRidingDate(ridingDate);
 		post.setFee(fee);
@@ -114,7 +118,22 @@ public class RidingPost extends BaseTimeEntity implements ImageAttachable {
 		post.setRidingYear(ridingYear);
 		post.setBicycleList(bicycleList);
 		return post;
+	}
 
+	private void setMinMaxParticipantCount(int minParticipantCount, int maxParticipantCount) {
+		checkArgument(minParticipantCount > 0 && minParticipantCount <= maxParticipantCount
+			&& maxParticipantCount <= participantCount);
+		setMinParticipantCount(minParticipantCount);
+		setMaxParticipantCount(maxParticipantCount);
+		updateStatus();
+	}
+
+	private void updateStatus(){
+		if (participantCount >= maxParticipantCount) {
+			status = RidingStatus.CLOSING;
+		} else {
+			status = RidingStatus.IN_PROGRESS;
+		}
 	}
 
 	public void setTitle(String title) {
@@ -123,14 +142,6 @@ public class RidingPost extends BaseTimeEntity implements ImageAttachable {
 
 	public void setContents(String contents) {
 		this.contents = contents;
-	}
-
-	public void setMaxParticipantCount(int maxParticipantCount) {
-		this.maxParticipantCount = maxParticipantCount;
-	}
-
-	public void setMinParticipantCount(int minParticipantCount) {
-		this.minParticipantCount = minParticipantCount;
 	}
 
 	public void setRoutes(List<String> routes) {
@@ -150,6 +161,7 @@ public class RidingPost extends BaseTimeEntity implements ImageAttachable {
 	}
 
 	public void setRidingYear(int ridingYear) {
+		checkArgument(ridingYear >= 0);
 		this.ridingYear = ridingYear;
 	}
 
@@ -169,10 +181,11 @@ public class RidingPost extends BaseTimeEntity implements ImageAttachable {
 		participants.add(new RidingParticipant(this, host, true));
 	}
 
-	public void addParticipant(User participant){
+	public void addParticipant(User participant) {
 		//TODO 동시성 문제 발생 가능성 있음
 		participantCount++;
 		participants.add(new RidingParticipant(this, participant, false));
+		updateStatus();
 	}
 
 	@Override
