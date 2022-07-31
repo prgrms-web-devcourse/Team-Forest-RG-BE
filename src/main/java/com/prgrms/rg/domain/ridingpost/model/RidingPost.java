@@ -3,6 +3,7 @@ package com.prgrms.rg.domain.ridingpost.model;
 import static com.google.common.base.Preconditions.*;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
@@ -79,17 +80,18 @@ public class RidingPost extends BaseTimeEntity implements ImageAttachable {
 
 	//TODO string collection
 	@ElementCollection
-	@CollectionTable(name = "routes", joinColumns =
+	@CollectionTable(name = "riding_routes", joinColumns =
 	@JoinColumn(name = "post_id"))
 	@OrderColumn(name = "list_idx")
-	private List<String> routes;
+	@Column(name = "route")
+	private List<String> routes = new ArrayList<>();
 
 	@Column(name = "riding_date", nullable = false)
 	private LocalDateTime ridingDate;
 
 	//TODO thumbnail, images 병합 -> RidingImage의 isThumbnail field
 	@OneToMany(mappedBy = "post", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
-	private List<RidingImage> images;
+	private List<RidingImage> images = new ArrayList<>();
 
 	@Column(name = "fee")
 	private Long fee = 0L;
@@ -193,7 +195,7 @@ public class RidingPost extends BaseTimeEntity implements ImageAttachable {
 	}
 
 	public void addParticipant(User participant) {
-		//TODO 서비스 구현 시 동시성 처리
+		//TODO 2차 시기에 동시성 처리
 		participantCount++;
 		participants.add(new RidingParticipant(this, participant, false));
 		updateStatus();
