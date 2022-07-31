@@ -76,7 +76,7 @@ public class RidingPost extends BaseTimeEntity implements ImageAttachable {
 
 	@JoinColumn(name = "address_code", nullable = false)
 	@ManyToOne(fetch = FetchType.LAZY)
-	private Address address;
+	private AddressCode addressCode;
 
 	//TODO string collection
 	@ElementCollection
