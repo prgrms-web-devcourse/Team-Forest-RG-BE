@@ -64,15 +64,22 @@ public class RidingPost extends BaseTimeEntity implements ImageAttachable {
 	@Column(name = "participant_count")
 	private int participantCount = 0;
 
-	@Column(name = "max_participant_count")
+	@Column(name = "max_participant_count", nullable = false)
 	private int maxParticipantCount;
 
-	@Column(name = "min_participant_count")
+	@Column(name = "min_participant_count", nullable = false)
 	private int minParticipantCount;
+
+	@Column(name = "estimated_time", nullable = false)
+	private int estimatedTime;
+
+	@JoinColumn(name = "address_code", nullable = false)
+	@ManyToOne(fetch = FetchType.LAZY)
+	private Address address;
 
 	//TODO string collection
 	@ElementCollection
-	@CollectionTable(name = "riding_route", joinColumns =
+	@CollectionTable(name = "routes", joinColumns =
 	@JoinColumn(name = "post_id"))
 	@OrderColumn(name = "list_idx")
 	private List<String> routes;
@@ -89,19 +96,20 @@ public class RidingPost extends BaseTimeEntity implements ImageAttachable {
 
 	//condition
 	@Enumerated(EnumType.STRING)
-	@Column(name = "level")
+	@Column(name = "level", nullable = false)
 	private RidingLevel level;
 
-	@Column(name = "riding_year")
+	@Column(name = "riding_year", nullable = false)
 	private int ridingYear;
 
 	@ManyToMany
 	@JoinTable(name = "post_bicycle")
 	private Set<Bicycle> bicycleList = new HashSet<>();
 
-	@OneToMany(fetch = FetchType.LAZY)
+	@OneToMany(mappedBy ="post", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
 	private Set<RidingParticipant> participants = new HashSet<>();
 
+	//바뀔 가능성 ㅇ
 	public static RidingPost createPost(User host, String title, String contents, int maxParticipantCount,
 		int minParticipantCount,
 		List<String> routes, LocalDateTime ridingDate,
@@ -149,10 +157,12 @@ public class RidingPost extends BaseTimeEntity implements ImageAttachable {
 	}
 
 	public void setRidingDate(LocalDateTime ridingDate) {
+		checkArgument(ridingDate.isAfter(LocalDateTime.now()));
 		this.ridingDate = ridingDate;
 	}
 
 	public void setFee(Long fee) {
+		checkArgument(fee >= 0);
 		this.fee = fee;
 	}
 
@@ -165,11 +175,12 @@ public class RidingPost extends BaseTimeEntity implements ImageAttachable {
 		this.ridingYear = ridingYear;
 	}
 
+	//TODO List input -> set
 	public void setBicycleList(Set<Bicycle> bicycleList) {
 		this.bicycleList = bicycleList;
 	}
 
-	//update
+	//update(전체 사진 삭제 후 모든 이미지 새로 삽입)
 	public RidingImage assignThumbnail(RidingImage thumbnail) {
 		thumbnail.setThumbnail();
 		images.add(thumbnail);
@@ -182,7 +193,7 @@ public class RidingPost extends BaseTimeEntity implements ImageAttachable {
 	}
 
 	public void addParticipant(User participant) {
-		//TODO 동시성 문제 발생 가능성 있음
+		//TODO 서비스 구현 시 동시성 처리
 		participantCount++;
 		participants.add(new RidingParticipant(this, participant, false));
 		updateStatus();
