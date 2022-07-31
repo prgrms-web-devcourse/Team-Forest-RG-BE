@@ -1,5 +1,7 @@
 package com.prgrms.rg.domain.ridingpost.model;
 
+import java.util.Objects;
+
 import javax.persistence.Entity;
 import javax.persistence.Id;
 
@@ -18,4 +20,18 @@ public class Bicycle {
 
 	private String name;
 
+	@Override
+	public boolean equals(Object o) {
+		if (this == o)
+			return true;
+		if (o == null || getClass() != o.getClass())
+			return false;
+		Bicycle bicycle = (Bicycle)o;
+		return name.equals(bicycle.name);
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(name);
+	}
 }
