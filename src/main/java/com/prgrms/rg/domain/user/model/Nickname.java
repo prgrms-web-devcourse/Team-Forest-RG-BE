@@ -21,7 +21,7 @@ public class Nickname {
 	private static final short NICKNAME_MINIMAL_BYTE_LENGTH = 6;
 	private static final short NICKNAME_MAXIMUM_BYTE_LENGTH = 24;
 	private static final String LENGTH_VALIDATION_MESSAGE = "닉네임은 " + NICKNAME_MINIMAL_BYTE_LENGTH + "바이트 이상, "
-		+ NICKNAME_MAXIMUM_BYTE_LENGTH + "이하여야 합니다.";
+		+ NICKNAME_MAXIMUM_BYTE_LENGTH + "이하여야 합니다. 현재 바이트 수: ";
 	private static final Pattern CHARSET_REGEX = Pattern.compile("(^[ㄱ-ㅎ가-힣a-zA-Z]*$)");
 	private static final String ALLOWED_CHARSET = "한글과 알파벳";
 	private static final String CHARSET_VALIDATION_MESSAGE = "닉네임은 " + ALLOWED_CHARSET + "만 허용됩니다.";
@@ -35,7 +35,7 @@ public class Nickname {
 	private void validateNicknameLength(String nickname) {
 		int length = nickname.getBytes(StandardCharsets.UTF_8).length;
 		checkArgument(length >= NICKNAME_MINIMAL_BYTE_LENGTH
-			&& length <= NICKNAME_MAXIMUM_BYTE_LENGTH, LENGTH_VALIDATION_MESSAGE);
+			&& length <= NICKNAME_MAXIMUM_BYTE_LENGTH, LENGTH_VALIDATION_MESSAGE + length);
 	}
 
 	private void validateNicknameCharacter(String nickname) {
