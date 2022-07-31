@@ -3,9 +3,12 @@ package com.prgrms.rg.domain.user.model;
 import static lombok.AccessLevel.*;
 
 import java.time.Year;
+import java.util.HashSet;
+import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Embeddable;
-import javax.persistence.Embedded;
+import javax.persistence.OneToMany;
 
 import lombok.NoArgsConstructor;
 
@@ -18,15 +21,32 @@ import lombok.NoArgsConstructor;
 public class RiderProfile {
 	private Year ridingStartYear;
 	private RidingLevel level;
-	@Embedded
-	private UserBicycles bicycles;
+	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+	private Set<UserBicycle> bicycles = new HashSet<>();
 
 	/*	Tree와의 논의에서 자전거 경력을 입력 쪽에서는 "5년차" 형태로 받고,
 		서버 쪽에서는 그것을 시작 년도로 치환, 저장하여 사용자 편의성을 높이기로 하였음
 	 */
-	public RiderProfile(int ridingYears, RidingLevel level, UserBicycles bicycles) {
+	//TODO: User 생성자에서 UserBicycle 추가 불가능?
+	public RiderProfile(int ridingYears, RidingLevel level) {
 		this.ridingStartYear = Year.now().minusYears(ridingYears);
 		this.level = level;
-		this.bicycles = bicycles;
+	}
+
+	boolean addBicycle(User user, Bicycle bicycle) {
+		return bicycles.add(new UserBicycle(user, bicycle));
+	}
+
+	@Override
+	public String toString() {
+		StringBuilder sb = new StringBuilder();
+		sb.append("RiderProfile{")
+			.append("\n\tridingStartYear=").append(ridingStartYear)
+			.append("\n\tlevel=").append(level)
+			.append("\n\t bicycles=");
+		bicycles.stream().forEach((b) -> sb.append(b.toString()).append(", "));
+		sb.delete(sb.length() - 2, sb.length() - 1);
+		sb.append("\n}");
+		return sb.toString();
 	}
 }
