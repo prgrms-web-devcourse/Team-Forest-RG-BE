@@ -41,4 +41,9 @@ public class Nickname {
 	private void validateNicknameCharacter(String nickname) {
 		checkArgument(CHARSET_REGEX.matcher(nickname).matches(), CHARSET_VALIDATION_MESSAGE);
 	}
+
+	@Override
+	public String toString() {
+		return nickname;
+	}
 }

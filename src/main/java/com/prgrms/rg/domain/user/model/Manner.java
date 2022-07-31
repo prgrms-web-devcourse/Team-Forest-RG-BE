@@ -46,6 +46,15 @@ public class Manner {
 		}
 	}
 
+	@Override
+	public String toString() {
+		return "Manner{" +
+			"\n\tpoint=" + point +
+			"\n\tnoShow=" + noShow +
+			"\n\tbanned=" + banned +
+			"\n}";
+	}
+
 	enum MannerLevel {
 		//TODO: 명칭 통일
 		NORMAL, FOUR_LEGS_BICYCLE, THREE_LEGS_BICYCLE, TWO_LEGS_BICYCLE, LEGENDARY_RIDER;
