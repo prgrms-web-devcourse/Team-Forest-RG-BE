@@ -3,4 +3,5 @@
 
 spring:
   profiles:
-    active: test
+    active:
+     - test

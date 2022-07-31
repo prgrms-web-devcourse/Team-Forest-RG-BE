@@ -42,7 +42,7 @@ dependencies {
     implementation 'io.jsonwebtoken:jjwt:0.9.1'
     implementation group: 'commons-io', name: 'commons-io', version: '2.6'
     implementation 'org.projectlombok:lombok:1.18.22'
-//    implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE'
+    implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE'
 
     compileOnly 'org.projectlombok:lombok'
     runtimeOnly 'mysql:mysql-connector-java'
@@ -53,11 +53,16 @@ dependencies {
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'org.springframework.restdocs:spring-restdocs-mockmvc'
     testImplementation 'org.springframework.security:spring-security-test'
+
 }
 
 tasks.named('test') {
     outputs.dir snippetsDir
     useJUnitPlatform()
+}
+// 테스트 환경에서는 spring aws cloud를 실행하지 않는다.
+configurations.testImplementation {
+    exclude group: 'org.springframework.cloud'
 }
 
 tasks.named('asciidoctor') {

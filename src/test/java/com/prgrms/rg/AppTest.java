@@ -2,8 +2,6 @@ package com.prgrms.rg;
 
 import static org.assertj.core.api.AssertionsForClassTypes.*;
 
-import java.sql.SQLException;
-
 import javax.sql.DataSource;
 
 import org.junit.jupiter.api.Test;
@@ -17,7 +15,7 @@ class AppTest {
 	DataSource dataSource;
 
 	@Test
-	void check_database_connection() throws SQLException {
-		assertThat(dataSource.getConnection()).isNotNull();
+	void check_database_connection() {
+		assertThatNoException().isThrownBy(() -> dataSource.getConnection());
 	}
 }
