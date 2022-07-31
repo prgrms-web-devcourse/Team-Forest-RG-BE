@@ -28,4 +28,9 @@ public class Introduction {
 		int length = introduction.getBytes(StandardCharsets.UTF_8).length;
 		checkArgument(length <= MAXIMUM_LENGTH * 3, LENGTH_VALIDATION_MESSAGE);
 	}
+
+	@Override
+	public String toString() {
+		return introduction;
+	}
 }
