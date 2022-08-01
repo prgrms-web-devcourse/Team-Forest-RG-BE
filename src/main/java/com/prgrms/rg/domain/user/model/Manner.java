@@ -3,7 +3,6 @@ package com.prgrms.rg.domain.user.model;
 import static lombok.AccessLevel.*;
 
 import java.time.LocalDate;
-import java.util.Optional;
 
 import javax.persistence.Embeddable;
 
@@ -19,20 +18,20 @@ public class Manner {
 
 	private short point;
 	private short noShow;
-	private Optional<LocalDate> bannedUntil;
+	private LocalDate banned;
 
-	private Manner(short point, short noShow, Optional<LocalDate> bannedUntil) {
+	private Manner(short point, short noShow, LocalDate banned) {
 		this.point = point;
 		this.noShow = noShow;
-		this.bannedUntil = bannedUntil;
+		this.banned = banned;
 	}
 
-	public static Manner create() {
-		return new Manner((short)0, (short)0, Optional.empty());
+	static Manner create() {
+		return new Manner((short)0, (short)0, null);
 	}
 
-	public static Manner of(short point, short noShow, LocalDate banned) {
-		return new Manner(point, noShow, Optional.of(banned));
+	static Manner of(short point, short noShow, LocalDate banned) {
+		return new Manner(point, noShow, banned);
 	}
 
 	MannerLevel mannerLevel() {
@@ -42,20 +41,12 @@ public class Manner {
 	void addNoShowCount() {
 		noShow++;
 		if (noShow % NO_SHOW_LIMIT == 0) {
-			bannedUntil = Optional.of(bannedUntil.orElseGet(() -> LocalDate.now()).plusDays(NO_SHOW_BAN_DURATION));
+			banned = (banned == null) ? LocalDate.now().plusDays(NO_SHOW_BAN_DURATION) :
+				banned.plusDays(NO_SHOW_BAN_DURATION);
 		}
 	}
 
-	@Override
-	public String toString() {
-		return "Manner{" +
-			"\n\tpoint=" + point +
-			"\n\tnoShow=" + noShow +
-			"\n\tbanned=" + bannedUntil +
-			"\n}";
-	}
-
-	public enum MannerLevel {
+	enum MannerLevel {
 		//TODO: 명칭 통일
 		NORMAL, FOUR_LEGS_BICYCLE, THREE_LEGS_BICYCLE, TWO_LEGS_BICYCLE, LEGENDARY_RIDER;
 
