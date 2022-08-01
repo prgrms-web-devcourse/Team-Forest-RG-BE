@@ -11,6 +11,8 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
+import com.prgrms.rg.domain.common.model.metadata.Bicycle;
+
 import lombok.NoArgsConstructor;
 
 /**

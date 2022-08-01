@@ -1,4 +1,4 @@
-package com.prgrms.rg.domain.user.model;
+package com.prgrms.rg.domain.common.model.metadata;
 
 //TODO: Riding 관련 메타데이터는 어느 패키지로 가야할까?
 public enum RidingLevel {
