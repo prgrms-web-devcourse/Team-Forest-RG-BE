@@ -18,19 +18,19 @@ public class Manner {
 
 	private short point;
 	private short noShow;
-	private LocalDate banned;
+	private LocalDate bannedUntil;
 
-	private Manner(short point, short noShow, LocalDate banned) {
+	private Manner(short point, short noShow, LocalDate bannedUntil) {
 		this.point = point;
 		this.noShow = noShow;
-		this.banned = banned;
+		this.bannedUntil = bannedUntil;
 	}
 
-	static Manner create() {
+	public static Manner create() {
 		return new Manner((short)0, (short)0, null);
 	}
 
-	static Manner of(short point, short noShow, LocalDate banned) {
+	public static Manner of(short point, short noShow, LocalDate banned) {
 		return new Manner(point, noShow, banned);
 	}
 
@@ -41,9 +41,7 @@ public class Manner {
 	void addNoShowCount() {
 		noShow++;
 		if (noShow % NO_SHOW_LIMIT == 0) {
-			banned =
-				(banned == null || banned.isBefore(LocalDate.now()))
-					? LocalDate.now().plusDays(NO_SHOW_BAN_DURATION) : banned.plusDays(NO_SHOW_BAN_DURATION);
+			bannedUntil = ((bannedUntil != null) ? bannedUntil : LocalDate.now()).plusDays(NO_SHOW_BAN_DURATION);
 		}
 	}
 
@@ -52,7 +50,7 @@ public class Manner {
 		return "Manner{" +
 			"\n\tpoint=" + point +
 			"\n\tnoShow=" + noShow +
-			"\n\tbanned=" + banned +
+			"\n\tbannedUntil=" + bannedUntil +
 			"\n}";
 	}
 
