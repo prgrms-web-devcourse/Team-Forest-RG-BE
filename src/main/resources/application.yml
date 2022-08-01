@@ -2,8 +2,6 @@
 # 로컬에서 서버를 구동시키고 postman으로 테스트하고 싶을 떄
 
 spring:
-  main:
-    allow-circular-references: true
   datasource:
     url: "jdbc:mysql://localhost:3306/rg"
     username: dev
