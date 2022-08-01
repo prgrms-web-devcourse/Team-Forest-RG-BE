@@ -50,7 +50,7 @@ public class RidingPost extends BaseTimeEntity implements ImageAttachable {
 
 	@JoinColumn(name = "host_id", nullable = false)
 	@ManyToOne(optional = false, fetch = FetchType.LAZY)
-	private User host;
+	private User leader;
 
 	@Column(name = "title", nullable = false)
 	private String title;
@@ -146,51 +146,51 @@ public class RidingPost extends BaseTimeEntity implements ImageAttachable {
 		}
 	}
 
-	public void setTitle(String title) {
+	private void setTitle(String title) {
 		this.title = title;
 	}
 
-	public void setContents(String contents) {
+	private void setContents(String contents) {
 		this.contents = contents;
 	}
 
-	public void setRoutes(List<String> routes) {
+	private void setRoutes(List<String> routes) {
 		this.routes = routes;
 	}
 
-	public void setRidingDate(LocalDateTime ridingDate) {
+	private void setRidingDate(LocalDateTime ridingDate) {
 		checkArgument(ridingDate.isAfter(LocalDateTime.now()));
 		this.ridingDate = ridingDate;
 	}
 
-	public void setFee(Long fee) {
+	private void setFee(Long fee) {
 		checkArgument(fee >= 0);
 		this.fee = fee;
 	}
 
-	public void setLevel(RidingLevel level) {
+	private void setLevel(RidingLevel level) {
 		this.level = level;
 	}
 
-	public void setRidingYear(int ridingYear) {
+	private void setRidingYear(int ridingYear) {
 		checkArgument(ridingYear >= 0);
 		this.ridingYear = ridingYear;
 	}
 
 	//TODO List input -> set
-	public void setBicycleList(Set<Bicycle> bicycleList) {
+	private void setBicycleList(Set<Bicycle> bicycleList) {
 		this.bicycleList = bicycleList;
 	}
 
 	//update(전체 사진 삭제 후 모든 이미지 새로 삽입)
-	public RidingImage assignThumbnail(RidingImage thumbnail) {
+	private RidingImage assignThumbnail(RidingImage thumbnail) {
 		thumbnail.setThumbnail();
 		images.add(thumbnail);
 		return thumbnail;
 	}
 
 	private void assignHost(User host) {
-		this.host = host;
+		this.leader = host;
 		participants.add(new RidingParticipant(this, host, true));
 	}
 
