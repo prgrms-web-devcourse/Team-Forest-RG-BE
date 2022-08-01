@@ -65,6 +65,8 @@ jobs:
           context: .
           build-args: |
             PINPOINT_HOST=${{ secrets.PINPOINT_HOST }}
+            SLACK_CHANNEL_NAME=${{ secrets.SLACK_CHANNEL_NAME }}
+            SLACK_AUTH_TOKEN=${{ secrets.SLACK_AUTH_TOKEN }}
 
       - name: Install SSH Key
         uses: shimataro/ssh-key-action@v2
