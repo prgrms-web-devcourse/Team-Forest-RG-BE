@@ -6,6 +6,7 @@ import static lombok.AccessLevel.*;
 import java.util.Collection;
 import java.util.List;
 
+import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -17,12 +18,14 @@ import com.prgrms.rg.domain.common.model.BaseTimeEntity;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
 @Builder
 @AllArgsConstructor(access = PRIVATE)
 @NoArgsConstructor(access = PROTECTED)
+@Getter
 public class User extends BaseTimeEntity {
 
 	@Id
@@ -35,16 +38,19 @@ public class User extends BaseTimeEntity {
 	@Embedded
 	private RiderProfile profile;
 
-	@OneToOne(mappedBy = "user")
-	private ProfileImage profileImage;
+	private String profileImage;
 
 	//TODO: 연락처 추가
 
 	@Embedded
 	private Introduction introduction;
 
-	@Embedded
-	private Manner manner;
+	// @Embedded
+	// private Manner manner;
+
+	private String provider;
+
+	private String providerId;
 
 	public boolean addBicycle(Bicycle bicycle) {
 		return profile.addBicycle(this, bicycle);
@@ -58,7 +64,7 @@ public class User extends BaseTimeEntity {
 			", profile=" + profile +
 			", profileImage=" + profileImage +
 			", introduction=" + introduction +
-			", manner=" + manner +
+			// ", manner=" + manner +
 			'}';
 	}
 }
