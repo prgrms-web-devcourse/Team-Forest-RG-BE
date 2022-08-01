@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 @Embeddable
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Introduction {
-	private static final short MAXIMUM_LENGTH = (short)85;
+	private static final short MAXIMUM_LENGTH = (short) 85;
 	private static final String LENGTH_VALIDATION_MESSAGE = "소개글은 한글 기준 " + MAXIMUM_LENGTH + "자, 영문 알파벳 기준"
 		+ MAXIMUM_LENGTH * 3 + "자 이하여야 합니다. (" + MAXIMUM_LENGTH * 3 + "바이트) 현재 바이트 크기: ";
 
