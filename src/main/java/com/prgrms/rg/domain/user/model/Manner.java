@@ -19,20 +19,20 @@ public class Manner {
 
 	private short point;
 	private short noShow;
-	private Optional<LocalDate> bannedUntil;
+	private LocalDate bannedUntil;
 
-	private Manner(short point, short noShow, Optional<LocalDate> bannedUntil) {
+	private Manner(short point, short noShow, LocalDate bannedUntil) {
 		this.point = point;
 		this.noShow = noShow;
 		this.bannedUntil = bannedUntil;
 	}
 
 	public static Manner create() {
-		return new Manner((short)0, (short)0, Optional.empty());
+		return new Manner((short)0, (short)0, null);
 	}
 
 	public static Manner of(short point, short noShow, LocalDate banned) {
-		return new Manner(point, noShow, Optional.of(banned));
+		return new Manner(point, noShow, banned);
 	}
 
 	MannerLevel mannerLevel() {
@@ -42,7 +42,7 @@ public class Manner {
 	void addNoShowCount() {
 		noShow++;
 		if (noShow % NO_SHOW_LIMIT == 0) {
-			bannedUntil = Optional.of(bannedUntil.orElseGet(() -> LocalDate.now()).plusDays(NO_SHOW_BAN_DURATION));
+			bannedUntil = ((bannedUntil != null) ? bannedUntil : LocalDate.now()).plusDays(NO_SHOW_BAN_DURATION);
 		}
 	}
 
