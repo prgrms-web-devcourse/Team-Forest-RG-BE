@@ -11,6 +11,7 @@ import javax.persistence.CollectionTable;
 import javax.persistence.Column;
 import javax.persistence.ElementCollection;
 import javax.persistence.Embeddable;
+import javax.persistence.Embedded;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -56,6 +57,9 @@ public class RidingMainSection {
 	@OrderColumn(name = "list_idx")
 	@Column(name = "route")
 	private List<String> routes = new ArrayList<>();
+
+	@Embedded
+	private Coordinate departurePlace;
 
 	@Builder
 	public RidingMainSection(String title, int estimatedTime, LocalDateTime ridingDate, Long fee,
