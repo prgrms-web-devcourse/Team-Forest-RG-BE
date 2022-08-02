@@ -60,7 +60,7 @@ public class RidingParticipantSection {
 
 	private void updateStatus() {
 		if (participantCount >= maxParticipantCount) {
-			status = RidingStatus.CLOSING;
+			status = RidingStatus.CLOSED;
 		} else {
 			status = RidingStatus.IN_PROGRESS;
 		}

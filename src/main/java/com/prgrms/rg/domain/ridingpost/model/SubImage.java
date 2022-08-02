@@ -4,7 +4,7 @@ import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.ManyToOne;
 
-import com.prgrms.rg.domain.common.file.StoredFile;
+import com.prgrms.rg.domain.common.file.model.StoredFile;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;

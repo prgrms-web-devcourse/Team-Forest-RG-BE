@@ -12,9 +12,9 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 
+import com.prgrms.rg.domain.common.file.model.ImageAttachable;
+import com.prgrms.rg.domain.common.file.model.StoredFile;
 import com.prgrms.rg.domain.common.model.BaseTimeEntity;
-import com.prgrms.rg.domain.common.file.ImageAttachable;
-import com.prgrms.rg.domain.common.file.StoredFile;
 import com.prgrms.rg.domain.user.model.User;
 
 import lombok.AccessLevel;
