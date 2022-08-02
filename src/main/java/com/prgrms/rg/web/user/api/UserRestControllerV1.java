@@ -1,15 +1,15 @@
 package com.prgrms.rg.web.user.api;
 
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RestController;
 
 import com.prgrms.rg.domain.user.application.UserService;
 import com.prgrms.rg.web.user.results.UserInfoResult;
 
 import lombok.RequiredArgsConstructor;
 
-@Controller
+@RestController
 @RequiredArgsConstructor
 public class UserRestControllerV1 {
 
