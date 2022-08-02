@@ -1,10 +1,13 @@
 package com.prgrms.rg.config;
 
+import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
 import javax.servlet.http.HttpServletResponse;
+import javax.sql.DataSource;
 
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.jdbc.core.JdbcOperations;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -46,7 +49,6 @@ public class WebSecurityConfigure extends WebSecurityConfigurerAdapter {
 		web.ignoring().antMatchers("/assets/**", "/h2-console/**");
 	}
 
-	@Bean
 	public AccessDeniedHandler accessDeniedHandler() {
 		return (request, response, e) -> {
 			Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -60,7 +62,6 @@ public class WebSecurityConfigure extends WebSecurityConfigurerAdapter {
 		};
 	}
 
-	@Bean
 	public Jwt jwt() {
 		return new Jwt(
 			jwtConfigure.getIssuer(),
@@ -70,35 +71,32 @@ public class WebSecurityConfigure extends WebSecurityConfigurerAdapter {
 	}
 
 	public JwtAuthenticationFilter jwtAuthenticationFilter() {
-		Jwt jwt = getApplicationContext().getBean(Jwt.class);
-		return new JwtAuthenticationFilter(jwtConfigure.getHeader(), jwt);
+		return new JwtAuthenticationFilter(jwtConfigure.getHeader(), jwt());
 	}
 
-	@Bean
 	public AuthorizationRequestRepository<OAuth2AuthorizationRequest> authorizationRequestRepository() {
 		return new HttpCookieOAuth2AuthorizationRequestRepository();
 	}
 
-	@Bean
 	public OAuth2AuthorizedClientService authorizedClientService(
-		JdbcOperations jdbcOperations,
-		ClientRegistrationRepository clientRegistrationRepository
 	) {
+		JdbcOperations jdbcOperations = getApplicationContext().getBean(JdbcOperations.class);
+		ClientRegistrationRepository clientRegistrationRepository = getApplicationContext().getBean(
+			ClientRegistrationRepository.class);
 		return new JdbcOAuth2AuthorizedClientService(jdbcOperations, clientRegistrationRepository);
 	}
 
-	@Bean
-	public OAuth2AuthorizedClientRepository authorizedClientRepository(OAuth2AuthorizedClientService authorizedClientService) {
-		return new AuthenticatedPrincipalOAuth2AuthorizedClientRepository(authorizedClientService);
+	public OAuth2AuthorizedClientRepository authorizedClientRepository() {
+		return new AuthenticatedPrincipalOAuth2AuthorizedClientRepository(authorizedClientService());
 	}
 
-	@Bean
-	public OAuth2AuthenticationSuccessHandler oauth2AuthenticationSuccessHandler(Jwt jwt, UserService userService) {
-		return new OAuth2AuthenticationSuccessHandler(jwt, userService);
+	public OAuth2AuthenticationSuccessHandler oauth2AuthenticationSuccessHandler() {
+		return new OAuth2AuthenticationSuccessHandler(jwt(), getApplicationContext().getBean(UserService.class));
 	}
 
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
+
 		http
 			.authorizeRequests()
 			.antMatchers("/user/me").hasAnyRole("USER")
@@ -132,8 +130,10 @@ public class WebSecurityConfigure extends WebSecurityConfigurerAdapter {
 			.authorizationEndpoint()
 			.authorizationRequestRepository(authorizationRequestRepository())
 			.and()
-			.successHandler(getApplicationContext().getBean(OAuth2AuthenticationSuccessHandler.class))
-			.authorizedClientRepository(getApplicationContext().getBean(AuthenticatedPrincipalOAuth2AuthorizedClientRepository.class))
+			.successHandler(oauth2AuthenticationSuccessHandler())
+			.authorizedClientService(authorizedClientService())
+			.authorizedClientRepository(
+				authorizedClientRepository())
 			.and()
 			/**
 			 * 예외처리 핸들러
@@ -146,6 +146,32 @@ public class WebSecurityConfigure extends WebSecurityConfigurerAdapter {
 			 */
 			.addFilterAfter(jwtAuthenticationFilter(), SecurityContextPersistenceFilter.class)
 		;
+	}
+
+	@PostConstruct
+	public void setSchema() {
+		var datasource = getApplicationContext().getBean(DataSource.class);
+		new JdbcTemplate(datasource).update("CREATE TABLE oauth2_authorized_client\n"
+			+ "(\n"
+			+ "    client_registration_id  varchar(100)                            NOT NULL,\n"
+			+ "    principal_name          varchar(200)                            NOT NULL,\n"
+			+ "    access_token_type       varchar(100)                            NOT NULL,\n"
+			+ "    access_token_value      blob                                    NOT NULL,\n"
+			+ "    access_token_issued_at  timestamp                               NOT NULL,\n"
+			+ "    access_token_expires_at timestamp                               NOT NULL,\n"
+			+ "    access_token_scopes     varchar(1000) DEFAULT NULL,\n"
+			+ "    refresh_token_value     blob          DEFAULT NULL,\n"
+			+ "    refresh_token_issued_at timestamp     DEFAULT NULL,\n"
+			+ "    created_at              timestamp     DEFAULT CURRENT_TIMESTAMP NOT NULL,\n"
+			+ "    PRIMARY KEY (client_registration_id, principal_name)\n"
+			+ ");");
+	}
+
+	@PreDestroy
+	public void preDestroy() {
+		var datasource = getApplicationContext().getBean(DataSource.class);
+		new JdbcTemplate(datasource).update("DROP TABLE oauth2_authorized_client");
+
 	}
 
 }
