@@ -5,7 +5,7 @@ import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 
-import com.prgrms.rg.domain.common.file.StoredFile;
+import com.prgrms.rg.domain.common.file.model.StoredFile;
 
 import lombok.AccessLevel;
 import lombok.Getter;

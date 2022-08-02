@@ -14,8 +14,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.validation.constraints.Size;
 
-import com.prgrms.rg.domain.common.file.ImageAttachable;
-import com.prgrms.rg.domain.common.file.StoredFile;
+import com.prgrms.rg.domain.common.file.model.ImageAttachable;
+import com.prgrms.rg.domain.common.file.model.StoredFile;
 
 import lombok.AccessLevel;
 import lombok.Getter;
