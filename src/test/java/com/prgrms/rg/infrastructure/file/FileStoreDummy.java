@@ -4,8 +4,8 @@ import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.prgrms.rg.domain.common.file.FileIOException;
-import com.prgrms.rg.domain.common.file.FileStore;
+import com.prgrms.rg.domain.common.file.application.FileIOException;
+import com.prgrms.rg.domain.common.file.application.FileStore;
 
 /**
  * FileStore Dummy 클래스

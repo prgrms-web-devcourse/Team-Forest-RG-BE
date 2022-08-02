@@ -24,6 +24,10 @@ public class Introduction {
 		this.introduction = introduction;
 	}
 
+	String get() {
+		return introduction;
+	}
+
 	private void validateLength(String introduction) {
 		int length = introduction.getBytes(StandardCharsets.UTF_8).length;
 		checkArgument(length <= MAXIMUM_LENGTH * 3, LENGTH_VALIDATION_MESSAGE + length);

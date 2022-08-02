@@ -1,17 +1,22 @@
 package com.prgrms.rg.domain.user.model;
 
+import static javax.persistence.EnumType.*;
 import static lombok.AccessLevel.*;
 
 import java.time.Year;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Embeddable;
+import javax.persistence.Enumerated;
 import javax.persistence.OneToMany;
 
 import com.prgrms.rg.domain.common.model.metadata.Bicycle;
 import com.prgrms.rg.domain.common.model.metadata.RidingLevel;
+import com.prgrms.rg.domain.user.model.information.RiderInfo;
 
 import lombok.NoArgsConstructor;
 
@@ -23,6 +28,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = PROTECTED)
 public class RiderProfile {
 	private Year ridingStartYear;
+	@Enumerated(value = STRING)
 	private RidingLevel level;
 	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
 	private Set<UserBicycle> bicycles = new HashSet<>();
@@ -38,6 +44,18 @@ public class RiderProfile {
 
 	boolean addBicycle(User user, Bicycle bicycle) {
 		return bicycles.add(new UserBicycle(user, bicycle));
+	}
+
+	Year getRidingYears() {
+		return Year.now().minusYears(ridingStartYear.getValue());
+	}
+
+	RiderInfo information() {
+		List<String> bicycleNames = new ArrayList<>();
+		for (UserBicycle bicycle : bicycles) {
+			bicycleNames.add(bicycle.getName());
+		}
+		return new RiderInfo(getRidingYears().getValue(), level, bicycleNames);
 	}
 
 	@Override

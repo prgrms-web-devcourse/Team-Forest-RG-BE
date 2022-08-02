@@ -2,7 +2,7 @@ package com.prgrms.rg.domain.common.model;
 
 import javax.persistence.Entity;
 
-import com.prgrms.rg.domain.common.file.StoredFile;
+import com.prgrms.rg.domain.common.file.model.StoredFile;
 
 /*
  * JpaFileRepository 로드 통과용 임시 클래스
