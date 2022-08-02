@@ -13,11 +13,11 @@ public class SseConnector {
 	private final SseNotificationSender sender;
 
 	public SseEmitter connect(Long userId) {
-		String emitterId = userId + "_" + System.currentTimeMillis();
+		String emitterId = userId.toString();
 		SseEmitter emitter = emitterRepository.save(emitterId, new SseEmitter(DEFAULT_TIMEOUT));
 		emitter.onCompletion(() -> emitterRepository.deleteById(emitterId));
 		emitter.onTimeout(() -> emitterRepository.deleteById(emitterId));
-		sender.sendNotification(emitter, emitterId, "EventStream Created. [userId=" + userId + "]", "connection");
+		sender.sendNotification(userId, "EventStream Created. [userId=" + userId + "]", "health-check");
 		return emitter;
 	}
 
