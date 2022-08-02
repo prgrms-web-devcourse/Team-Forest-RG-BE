@@ -1,4 +1,6 @@
-package com.prgrms.rg.domain.common.file;
+package com.prgrms.rg.domain.common.file.model;
+
+import com.prgrms.rg.domain.common.file.model.StoredFile;
 
 /**
  * 이미지를 붙일 수 있는 타입입니다.

@@ -1,4 +1,4 @@
-package com.prgrms.rg.domain.common.file;
+package com.prgrms.rg.domain.common.file.model;
 
 import static javax.persistence.GenerationType.*;
 
@@ -6,6 +6,8 @@ import javax.persistence.EntityListeners;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
+
+import com.prgrms.rg.infrastructure.file.FileDeleteEntityListener;
 
 import lombok.AccessLevel;
 import lombok.Getter;

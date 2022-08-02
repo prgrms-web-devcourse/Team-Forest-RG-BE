@@ -1,12 +1,17 @@
 FROM openjdk:11
 
+# 시스템으로 부터 build 실행 명령 --build-arg 매개변수로 가져올 변수들. (build-time arg)
+ARG PINPOINT_HOST
+ARG SLACK_CHANNEL_NAME
+ARG SLACK_AUTH_TOKEN
+
 # CI가 성공해서 build된 jar가 이미 존재합니다.
 ENV JAR_PATH=build/libs
 ENV JAR_NAME=*SNAPSHOT.jar
 ENV PINPOINT_DIR=/app/pinpoint-agent-2.4.0
 ENV LOG_PATH=./log
-# PINPOINT_HOST 는 외부 시스템에서 가져옵니다. (build-time arg)
-ARG PINPOINT_HOST
+ENV SLACK_CHANNEL_NAME=$SLACK_CHANNEL_NAME
+ENV SLACK_AUTH_TOKEN=$SLACK_AUTH_TOKEN
 
 # naver pinpoint 설치 및 환경 설정
 RUN mkdir /app
