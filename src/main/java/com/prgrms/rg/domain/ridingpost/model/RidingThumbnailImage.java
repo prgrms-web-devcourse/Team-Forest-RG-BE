@@ -1,10 +1,9 @@
 package com.prgrms.rg.domain.ridingpost.model;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 
 import com.prgrms.rg.domain.common.file.StoredFile;
 
@@ -15,22 +14,14 @@ import lombok.NoArgsConstructor;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class RidingImage extends StoredFile {
+public class RidingThumbnailImage extends StoredFile {
 
+	@OneToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "post_id", nullable = false)
-	@ManyToOne(fetch = FetchType.LAZY)
 	private RidingPost post;
 
-	@Column(name = "is_thumbnail")
-	private boolean isThumbnail;
-
-	public void setThumbnail() {
-		isThumbnail = true;
-	}
-
-	public RidingImage(String originalFileName, String url, RidingPost post, boolean isThumbnail) {
+	public RidingThumbnailImage(String originalFileName, String url, RidingPost post) {
 		super(originalFileName, url);
 		this.post = post;
-		this.isThumbnail = isThumbnail;
 	}
 }
