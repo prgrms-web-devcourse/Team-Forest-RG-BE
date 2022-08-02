@@ -1,32 +1,15 @@
 package com.prgrms.rg.domain.ridingpost.model;
 
-import static com.google.common.base.Preconditions.*;
-
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.List;
 import java.util.Objects;
-import java.util.Set;
-
-import javax.persistence.CascadeType;
-import javax.persistence.CollectionTable;
-import javax.persistence.Column;
-import javax.persistence.ElementCollection;
+import javax.persistence.Embedded;
 import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-import javax.persistence.OrderColumn;
+import javax.persistence.OneToOne;
 
 import com.prgrms.rg.domain.common.file.ImageAttachable;
 import com.prgrms.rg.domain.common.file.StoredFile;
@@ -37,12 +20,11 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-//TODO 제약 조건(title, contents..)
 @Setter(value = AccessLevel.PRIVATE)
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
-public class RidingPost extends BaseTimeEntity implements ImageAttachable {
+public class RidingPost extends BaseTimeEntity implements ImageAttachable{
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -52,160 +34,44 @@ public class RidingPost extends BaseTimeEntity implements ImageAttachable {
 	@ManyToOne(optional = false, fetch = FetchType.LAZY)
 	private User leader;
 
-	@Column(name = "title", nullable = false)
-	private String title;
+	@OneToOne(mappedBy = "post")
+	private RidingThumbnailImage thumbnail;
 
-	@Column(name = "contents")
-	private String contents;
+	@Embedded
+	private RidingMainSection ridingMainSection;
 
-	@Column(name = "riding_status")
-	@Enumerated(EnumType.STRING)
-	private RidingStatus status = RidingStatus.IN_PROGRESS;
+	@Embedded
+	private RidingParticipantSection ridingParticipantSection;
 
-	@Column(name = "participant_count")
-	private int participantCount = 0;
+	@Embedded
+	private RidingConditionSection ridingConditionSection;
 
-	@Column(name = "max_participant_count", nullable = false)
-	private int maxParticipantCount;
-
-	@Column(name = "min_participant_count", nullable = false)
-	private int minParticipantCount;
-
-	@Column(name = "estimated_time", nullable = false)
-	private int estimatedTime;
-
-	@JoinColumn(name = "address_code", nullable = false)
-	@ManyToOne(fetch = FetchType.LAZY)
-	private AddressCode addressCode;
-
-	//TODO string collection
-	@ElementCollection
-	@CollectionTable(name = "riding_routes", joinColumns =
-	@JoinColumn(name = "post_id"))
-	@OrderColumn(name = "list_idx")
-	@Column(name = "route")
-	private List<String> routes = new ArrayList<>();
-
-	@Column(name = "riding_date", nullable = false)
-	private LocalDateTime ridingDate;
-
-	//TODO thumbnail, images 병합 -> RidingImage의 isThumbnail field
-	@OneToMany(mappedBy = "post", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
-	private List<RidingImage> images = new ArrayList<>();
-
-	@Column(name = "fee")
-	private Long fee = 0L;
-
-	//condition
-	@Enumerated(EnumType.STRING)
-	@Column(name = "level", nullable = false)
-	private RidingLevel level;
-
-	@Column(name = "riding_year", nullable = false)
-	private int ridingYear;
-
-	@ManyToMany
-	@JoinTable(name = "post_bicycle")
-	private Set<Bicycle> bicycleList = new HashSet<>();
-
-	@OneToMany(mappedBy ="post", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
-	private Set<RidingParticipant> participants = new HashSet<>();
-
-	//바뀔 가능성 ㅇ
-	public static RidingPost createPost(User host, String title, String contents, int maxParticipantCount,
-		int minParticipantCount,
-		List<String> routes, LocalDateTime ridingDate,
-		Long fee, RidingLevel level, int ridingYear, Set<Bicycle> bicycleList) {
+	public static RidingPost createPost(User ridingLeader,
+		RidingMainSection ridingMainSection,
+		RidingParticipantSection ridingParticipantSection,
+		RidingConditionSection ridingConditionSection) {
 		RidingPost post = new RidingPost();
-		post.assignHost(host);
-		post.setTitle(title);
-		post.setContents(contents);
-		post.setMinMaxParticipantCount(minParticipantCount, maxParticipantCount);
-		post.setRoutes(routes);
-		post.setRidingDate(ridingDate);
-		post.setFee(fee);
-		post.setLevel(level);
-		post.setRidingYear(ridingYear);
-		post.setBicycleList(bicycleList);
+		post.assignLeader(ridingLeader);
+		post.setRidingMainSection(ridingMainSection);
+		post.setRidingParticipantSection(ridingParticipantSection);
+		post.setRidingConditionSection(ridingConditionSection);
 		return post;
 	}
 
-	private void setMinMaxParticipantCount(int minParticipantCount, int maxParticipantCount) {
-		checkArgument(minParticipantCount > 0 && minParticipantCount <= maxParticipantCount
-			&& maxParticipantCount <= participantCount);
-		setMinParticipantCount(minParticipantCount);
-		setMaxParticipantCount(maxParticipantCount);
-		updateStatus();
-	}
-
-	private void updateStatus(){
-		if (participantCount >= maxParticipantCount) {
-			status = RidingStatus.CLOSING;
-		} else {
-			status = RidingStatus.IN_PROGRESS;
-		}
-	}
-
-	private void setTitle(String title) {
-		this.title = title;
-	}
-
-	private void setContents(String contents) {
-		this.contents = contents;
-	}
-
-	private void setRoutes(List<String> routes) {
-		this.routes = routes;
-	}
-
-	private void setRidingDate(LocalDateTime ridingDate) {
-		checkArgument(ridingDate.isAfter(LocalDateTime.now()));
-		this.ridingDate = ridingDate;
-	}
-
-	private void setFee(Long fee) {
-		checkArgument(fee >= 0);
-		this.fee = fee;
-	}
-
-	private void setLevel(RidingLevel level) {
-		this.level = level;
-	}
-
-	private void setRidingYear(int ridingYear) {
-		checkArgument(ridingYear >= 0);
-		this.ridingYear = ridingYear;
-	}
-
-	//TODO List input -> set
-	private void setBicycleList(Set<Bicycle> bicycleList) {
-		this.bicycleList = bicycleList;
-	}
-
-	//update(전체 사진 삭제 후 모든 이미지 새로 삽입)
-	private RidingImage assignThumbnail(RidingImage thumbnail) {
-		thumbnail.setThumbnail();
-		images.add(thumbnail);
-		return thumbnail;
-	}
-
-	private void assignHost(User host) {
-		this.leader = host;
-		participants.add(new RidingParticipant(this, host, true));
+	private void assignLeader(User leader) {
+		this.leader = leader;
+		addParticipant(leader);
 	}
 
 	public void addParticipant(User participant) {
-		//TODO 2차 시기에 동시성 처리
-		participantCount++;
-		participants.add(new RidingParticipant(this, participant, false));
-		updateStatus();
+		ridingParticipantSection.addParticipant(this, participant);
 	}
 
 	@Override
 	public boolean equals(Object o) {
 		if (this == o)
 			return true;
-		if (o == null || getClass() != o.getClass())
+		if (o instanceof RidingPost)
 			return false;
 		RidingPost that = (RidingPost)o;
 		return id.equals(that.id);
@@ -216,19 +82,15 @@ public class RidingPost extends BaseTimeEntity implements ImageAttachable {
 		return Objects.hash(id);
 	}
 
-	public List<String> getRoutes() {
-		return Collections.unmodifiableList(routes);
-	}
-
 	@Override
 	public StoredFile attach(String fileName, String fileUrl) {
-		RidingImage image = new RidingImage(fileName, fileUrl, this, false);
-		images.add(image);
+		var image = new RidingThumbnailImage(fileName, fileUrl, this);
+		setThumbnail(image);
 		return image;
 	}
 
 	@Override
 	public void removeCurrentImage() {
-		this.images.clear();
+		this.thumbnail = null;
 	}
 }
