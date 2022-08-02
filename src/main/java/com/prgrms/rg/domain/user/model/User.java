@@ -9,6 +9,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.OneToOne;
 
+import com.prgrms.rg.domain.common.file.ImageAttachable;
+import com.prgrms.rg.domain.common.file.StoredFile;
 import com.prgrms.rg.domain.common.model.BaseTimeEntity;
 import com.prgrms.rg.domain.common.model.metadata.Bicycle;
 import com.prgrms.rg.domain.user.model.information.MannerInfo;
@@ -22,7 +24,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor(access = PRIVATE)
 @NoArgsConstructor(access = PROTECTED)
-public class User extends BaseTimeEntity {
+public class User extends BaseTimeEntity implements ImageAttachable {
 
 	@Id
 	@GeneratedValue(strategy = IDENTITY)
@@ -79,5 +81,16 @@ public class User extends BaseTimeEntity {
 			", introduction=" + introduction +
 			", manner=" + manner +
 			'}';
+	}
+
+	@Override
+	public StoredFile attach(String fileName, String fileUrl) {
+		profileImage = new ProfileImage(fileName, fileUrl, this);
+		return profileImage;
+	}
+
+	@Override
+	public void removeCurrentImage() {
+		profileImage = null;
 	}
 }
