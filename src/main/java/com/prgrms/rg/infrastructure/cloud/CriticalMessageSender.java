@@ -25,7 +25,11 @@ public class CriticalMessageSender {
 
 	public static void send(Exception exception) throws Exception {
 		String body = createMessageBodyFrom(exception);
-		sendHttpRequest(body);
+		send(body);
+	}
+
+	public static void send(String message) throws Exception {
+		sendHttpRequest(message);
 	}
 
 	private static void sendHttpRequest(String body) throws Exception {

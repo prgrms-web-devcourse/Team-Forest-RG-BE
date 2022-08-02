@@ -12,7 +12,6 @@ public class RgApplication {
 	public static void main(String[] args) throws Exception {
 		// 애플리케이션을 ec2에서만 사용할 것이 아니므로, spring cloud aws에서 ec2메타데이터를 받아오는 것이 불필요함
 		System.setProperty("com.amazonaws.sdk.disableEc2Metadata", "true");
-
 		/*
 		 * 초기 profile entry point를 확인합니다. (prod 아니면 default)
 		 */
@@ -25,6 +24,10 @@ public class RgApplication {
 				CriticalMessageSender.send(exception);
 			}
 			throw exception;
+		}
+		// 스프링 애플리케이션이 예외 없이 종료 되었을 때도 메시지를 보냅니다.
+		if (initialProfile != null && initialProfile.matches("prod")) {
+			CriticalMessageSender.send("SERVER APPLICATION TERMINATED WITHOUT EXCEPTION");
 		}
 
 	}
