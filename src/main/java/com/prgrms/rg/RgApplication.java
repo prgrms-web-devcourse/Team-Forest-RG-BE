@@ -12,23 +12,15 @@ public class RgApplication {
 	public static void main(String[] args) throws Exception {
 		// 애플리케이션을 ec2에서만 사용할 것이 아니므로, spring cloud aws에서 ec2메타데이터를 받아오는 것이 불필요함
 		System.setProperty("com.amazonaws.sdk.disableEc2Metadata", "true");
-		/*
-		 * 초기 profile entry point를 확인합니다. (prod 아니면 default)
-		 */
-		var initialProfile = System.getProperty("spring.profiles.active");
 		try {
 			SpringApplication.run(RgApplication.class, args);
 		} catch (Exception exception) {
-			// 초기 profile이 prod를 포함할 경우에만 특정 모듈에 메시지를 보냅니다.
-			if (initialProfile != null && initialProfile.matches("prod")) {
-				CriticalMessageSender.send(exception);
-			}
+			// 웹 애플리케이션에서 처리되지 못한 예외에 관한 내용들을 다른 시스템으로 전송합니다.
+			CriticalMessageSender.send(exception);
 			throw exception;
 		}
-		// 스프링 애플리케이션이 예외 없이 종료 되었을 때도 메시지를 보냅니다.
-		if (initialProfile != null && initialProfile.matches("prod")) {
-			CriticalMessageSender.send("SERVER APPLICATION TERMINATED WITHOUT EXCEPTION");
-		}
+		// 웹 애플리케이션이 성공적으로 초기화 됐을 때 성공 메시지를 다른 시스템으로 전송합니다.
+		CriticalMessageSender.send("SERVER APPLICATION INITIALIZED WITHOUT EXCEPTION");
 
 	}
 }

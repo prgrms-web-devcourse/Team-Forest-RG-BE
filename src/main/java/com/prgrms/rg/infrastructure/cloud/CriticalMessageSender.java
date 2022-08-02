@@ -22,14 +22,17 @@ public class CriticalMessageSender {
 
 	private static final String SLACK_CHANNEL_ID = System.getenv("SLACK_CHANNEL_NAME");
 	private static final String SLACK_AUTH_TOKEN = System.getenv("SLACK_AUTH_TOKEN");
+	private static final String SYSTEM_PROFILE = System.getProperty("spring.profiles.active");
 
 	public static void send(Exception exception) throws Exception {
 		String stackTraceMessage = createStackTraceMessage(exception);
-		String messageBody = createMessageBodyFrom(stackTraceMessage);
-		sendHttpRequest(messageBody);
+		send(stackTraceMessage);
 	}
 
 	public static void send(String message) throws Exception {
+		if (SYSTEM_PROFILE == null || !SYSTEM_PROFILE.matches("prod")) {
+			return;
+		}
 		var messageBody = createMessageBodyFrom(message);
 		sendHttpRequest(messageBody);
 	}
