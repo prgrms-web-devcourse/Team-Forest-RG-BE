@@ -16,7 +16,7 @@ public class UserRestControllerV1 implements UserRestController {
 	private final UserService userService;
 
 	@GetMapping("/api/v1/users/{userId}")
-	public UserInfoResult getAUserInformation(@PathVariable(name = "userId") Long userId) {
+	public UserInfoResult getUserInformation(@PathVariable(name = "userId") Long userId) {
 		return UserInfoResult.of(userService.getUserInformation(userId));
 	}
 }
