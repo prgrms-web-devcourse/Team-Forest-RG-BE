@@ -29,5 +29,4 @@ public class AddressCode {
 	@Column(name = "district")
 	private String district;
 
-
 }
