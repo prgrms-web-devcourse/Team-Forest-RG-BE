@@ -1,7 +1,9 @@
 package com.prgrms.rg.domain.common.file.application.impl;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 import org.springframework.stereotype.Component;
@@ -32,21 +34,26 @@ public class MultipartFileManager implements FileManager {
 	@Override
 	public <T extends ImageAttachable> List<StoredFile> store(List<MultipartFile> multipartFiles, T attached) {
 		if (isFilesNotPresent(multipartFiles)) {
-			return null;
+			return Collections.emptyList();
 		}
 
 		//TODO: 파일 최대 첨부 가능 수에 기반하여 ArrayList의 크기 설정하기
 		List<StoredFile> storedFiles = new ArrayList<>();
+		int savedCnt = 0;
 		for (MultipartFile multipartFile : multipartFiles) {
-			storedFiles.add(store(multipartFile, attached));
+			Optional<StoredFile> storedFile = store(multipartFile, attached);
+			if (storedFile.isPresent()) {
+				savedCnt++;
+				storedFiles.add(storedFile.get());
+			}
 		}
-		return storedFiles;
+		return (savedCnt != 0) ? storedFiles : Collections.emptyList();
 	}
 
 	@Override
-	public <T extends ImageAttachable> StoredFile store(MultipartFile multipartFile, T attached) {
+	public <T extends ImageAttachable> Optional<StoredFile> store(MultipartFile multipartFile, T attached) {
 		if (isFileNotPresent(multipartFile)) {
-			return null;
+			return Optional.empty();
 		}
 
 		String originalFilename = multipartFile.getOriginalFilename();
@@ -55,7 +62,7 @@ public class MultipartFileManager implements FileManager {
 		String fileUrl = fileStore.save(multipartFile, storedFileName);
 		StoredFile savedFile = fileRepository.save(attached.attach(originalFilename, fileUrl));
 
-		return savedFile;
+		return Optional.of(savedFile);
 	}
 
 	@Override
