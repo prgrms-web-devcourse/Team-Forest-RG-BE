@@ -24,12 +24,14 @@ public class CriticalMessageSender {
 	private static final String SLACK_AUTH_TOKEN = System.getenv("SLACK_AUTH_TOKEN");
 
 	public static void send(Exception exception) throws Exception {
-		String body = createMessageBodyFrom(exception);
-		send(body);
+		String stackTraceMessage = createStackTraceMessage(exception);
+		String messageBody = createMessageBodyFrom(stackTraceMessage);
+		sendHttpRequest(messageBody);
 	}
 
 	public static void send(String message) throws Exception {
-		sendHttpRequest(message);
+		var messageBody = createMessageBodyFrom(message);
+		sendHttpRequest(messageBody);
 	}
 
 	private static void sendHttpRequest(String body) throws Exception {
@@ -53,21 +55,23 @@ public class CriticalMessageSender {
 		// Http 요청을 보내고 응답을 inputStream에 받아 온다.
 		// 이 메서드를 사용하지 않으면 http 요청을 보내지 않기 때문에, 무조건 사용
 		conn.getInputStream();
-
 		conn.disconnect();
 	}
 
-	private static String createMessageBodyFrom(Exception exception) throws JsonProcessingException {
+	private static String createMessageBodyFrom(String message) throws JsonProcessingException {
 		ObjectMapper json = new ObjectMapper();
-		var stackStream = new ByteArrayOutputStream();
-		exception.printStackTrace(new PrintStream(stackStream));
 		String emoji = ":meow_sad:\t";
 		StringBuilder emojiBuffer = new StringBuilder();
 		emojiBuffer.append(emoji.repeat(20));
-		emojiBuffer.append("\n").append(stackStream.toString(StandardCharsets.UTF_8)).append("\n");
+		emojiBuffer.append("\n").append(message).append("\n");
 		emojiBuffer.append(emoji.repeat(20));
-
 		return json.writeValueAsString(Map.of("channel", SLACK_CHANNEL_ID, "text", emojiBuffer));
+	}
+
+	private static String createStackTraceMessage(Exception exception) {
+		var stackStream = new ByteArrayOutputStream();
+		exception.printStackTrace(new PrintStream(stackStream));
+		return stackStream.toString(StandardCharsets.UTF_8);
 	}
 
 }
