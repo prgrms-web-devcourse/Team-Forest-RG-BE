@@ -1,4 +1,4 @@
-package com.prgrms.rg.domain.notification.model;
+package com.prgrms.rg.domain.notification.model.sse;
 
 import java.util.Map;
 

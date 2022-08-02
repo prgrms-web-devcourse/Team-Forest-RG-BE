@@ -1,4 +1,4 @@
-package com.prgrms.rg.infrastructure.notification.sse;
+package com.prgrms.rg.infrastructure.repository;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -7,7 +7,7 @@ import java.util.stream.Collectors;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
-import com.prgrms.rg.domain.notification.model.SseEmitterRepository;
+import com.prgrms.rg.domain.notification.model.sse.SseEmitterRepository;
 
 @Component
 public class MemorySseEmitterRepository implements SseEmitterRepository {
