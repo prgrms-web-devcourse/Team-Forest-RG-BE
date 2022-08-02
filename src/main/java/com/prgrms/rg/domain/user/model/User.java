@@ -9,8 +9,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.OneToOne;
 
-import com.prgrms.rg.domain.common.file.ImageAttachable;
-import com.prgrms.rg.domain.common.file.StoredFile;
+import com.prgrms.rg.domain.common.file.model.ImageAttachable;
+import com.prgrms.rg.domain.common.file.model.StoredFile;
 import com.prgrms.rg.domain.common.model.BaseTimeEntity;
 import com.prgrms.rg.domain.common.model.metadata.Bicycle;
 import com.prgrms.rg.domain.user.model.information.MannerInfo;
