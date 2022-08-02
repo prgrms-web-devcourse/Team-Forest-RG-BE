@@ -31,13 +31,12 @@ public class RidingSubSection implements ImageAttachable {
 	private String title;
 
 	//1-500자
-	//TODO message 상위까지 전달 됨 ?
 	@Size(min = 1, max = 500, message = "contents의 제약 조건에 위배됩니다.")
 	@Column(name = "content")
 	private String content;
 
 	//0-5개의 사진. 사진 용량 체크
-	@OneToMany(mappedBy = "post", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+	@OneToMany(mappedBy = "subInformation", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
 	private List<SubImage> images = new ArrayList<>();
 
 	@Override
