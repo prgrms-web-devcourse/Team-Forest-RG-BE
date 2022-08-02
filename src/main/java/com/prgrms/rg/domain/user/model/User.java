@@ -11,6 +11,8 @@ import javax.persistence.OneToOne;
 
 import com.prgrms.rg.domain.common.model.BaseTimeEntity;
 import com.prgrms.rg.domain.common.model.metadata.Bicycle;
+import com.prgrms.rg.domain.user.model.information.MannerInfo;
+import com.prgrms.rg.domain.user.model.information.RiderInfo;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -45,6 +47,26 @@ public class User extends BaseTimeEntity {
 
 	public boolean addBicycle(Bicycle bicycle) {
 		return profile.addBicycle(this, bicycle);
+	}
+
+	public String getNickname() {
+		return nickname.get();
+	}
+
+	public ProfileImage getImage() {
+		return profileImage;
+	}
+
+	public String getIntroduction() {
+		return introduction.get();
+	}
+
+	public RiderInfo getRiderInformation() {
+		return profile.information();
+	}
+
+	public MannerInfo getMannerInfo() {
+		return manner.information();
 	}
 
 	@Override

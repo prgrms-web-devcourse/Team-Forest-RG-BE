@@ -32,9 +32,13 @@ public class UserBicycle {
 	@JoinColumn(name = "bicycle_id")
 	private Bicycle bicycle;
 
-	UserBicycle(User user, Bicycle bicycle) {
+	public UserBicycle(User user, Bicycle bicycle) {
 		this.user = user;
 		this.bicycle = bicycle;
+	}
+
+	String getName() {
+		return bicycle.getName();
 	}
 
 	@Override

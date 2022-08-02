@@ -6,6 +6,8 @@ import java.time.LocalDate;
 
 import javax.persistence.Embeddable;
 
+import com.prgrms.rg.domain.user.model.information.MannerInfo;
+
 import lombok.NoArgsConstructor;
 
 //TODO: 비즈니스 로직이 명확해진 이후 테스트 추가
@@ -32,6 +34,10 @@ public class Manner {
 
 	public static Manner of(short point, short noShow, LocalDate banned) {
 		return new Manner(point, noShow, banned);
+	}
+
+	MannerInfo information() {
+		return new MannerInfo(mannerLevel(), noShow, bannedUntil);
 	}
 
 	MannerLevel mannerLevel() {
