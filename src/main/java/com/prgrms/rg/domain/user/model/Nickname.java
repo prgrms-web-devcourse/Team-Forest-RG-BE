@@ -26,7 +26,7 @@ public class Nickname {
 	private static final String ALLOWED_CHARSET = "한글과 알파벳";
 	private static final String CHARSET_VALIDATION_MESSAGE = "닉네임은 " + ALLOWED_CHARSET + "만 허용됩니다.";
 
-	Nickname(String nickname) {
+	public Nickname(String nickname) {
 		validateNicknameLength(nickname);
 		validateNicknameCharacter(nickname);
 		this.nickname = nickname;
