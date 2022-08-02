@@ -1,4 +1,4 @@
-package com.prgrms.rg.domain.common.file;
+package com.prgrms.rg.domain.common.file.application.impl;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -7,6 +7,13 @@ import java.util.UUID;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
+
+import com.prgrms.rg.domain.common.file.application.FileManager;
+import com.prgrms.rg.domain.common.file.application.FileStore;
+import com.prgrms.rg.domain.common.file.application.IllegalFileExtensionException;
+import com.prgrms.rg.domain.common.file.model.FileRepository;
+import com.prgrms.rg.domain.common.file.model.ImageAttachable;
+import com.prgrms.rg.domain.common.file.model.StoredFile;
 
 import lombok.RequiredArgsConstructor;
 

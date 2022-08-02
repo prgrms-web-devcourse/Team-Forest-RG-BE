@@ -1,8 +1,11 @@
-package com.prgrms.rg.domain.common.file;
+package com.prgrms.rg.domain.common.file.application;
 
 import java.util.List;
 
 import org.springframework.web.multipart.MultipartFile;
+
+import com.prgrms.rg.domain.common.file.model.ImageAttachable;
+import com.prgrms.rg.domain.common.file.model.StoredFile;
 
 public interface FileManager {
 	<T extends ImageAttachable> List<StoredFile> store(List<MultipartFile> multipartFiles, T attached);
