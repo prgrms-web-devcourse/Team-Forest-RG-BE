@@ -4,8 +4,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.prgrms.rg.domain.user.application.UserService;
-import com.prgrms.rg.web.user.results.UserInfoResult;
+import com.prgrms.rg.domain.user.application.UserReadService;
+import com.prgrms.rg.web.user.results.UserProfileResult;
 
 import lombok.RequiredArgsConstructor;
 
@@ -13,10 +13,10 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class UserRestControllerV1 implements UserRestController {
 
-	private final UserService userService;
+	private final UserReadService userService;
 
 	@GetMapping("/api/v1/users/{userId}")
-	public UserInfoResult getUserInformation(@PathVariable(name = "userId") Long userId) {
-		return UserInfoResult.of(userService.getUserInformation(userId));
+	public UserProfileResult getUserInformation(@PathVariable(name = "userId") Long userId) {
+		return UserProfileResult.of(userService.getUserProfilePageInfo(userId));
 	}
 }

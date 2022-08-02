@@ -1,12 +1,12 @@
 package com.prgrms.rg.web.user.results;
 
-import com.prgrms.rg.domain.user.model.User;
 import com.prgrms.rg.domain.user.model.information.MannerInfo;
+import com.prgrms.rg.domain.user.model.information.UserProfilePageInfo;
 
 import lombok.Data;
 
 @Data
-public class UserInfoResult {
+public class UserProfileResult {
 
 	private String nickname;
 	private RiderInfoResult profile;
@@ -14,7 +14,7 @@ public class UserInfoResult {
 	private String introduction;
 	private MannerInfo manner;
 
-	private UserInfoResult(String nickname, RiderInfoResult profile, ImageInfoResult image,
+	private UserProfileResult(String nickname, RiderInfoResult profile, ImageInfoResult image,
 		String introduction,
 		MannerInfo manner) {
 		this.nickname = nickname;
@@ -24,8 +24,8 @@ public class UserInfoResult {
 		this.manner = manner;
 	}
 
-	public static UserInfoResult of(User user) {
-		return new UserInfoResult(user.getNickname(), RiderInfoResult.of(user.getRiderInformation()),
-			ImageInfoResult.of(user.getImage()), user.getIntroduction(), user.getMannerInfo());
+	public static UserProfileResult of(UserProfilePageInfo info) {
+		return new UserProfileResult(info.getNickname(), RiderInfoResult.of(info.getProfile()),
+			ImageInfoResult.of(info.getImage()), info.getIntroduction(), info.getManner());
 	}
 }

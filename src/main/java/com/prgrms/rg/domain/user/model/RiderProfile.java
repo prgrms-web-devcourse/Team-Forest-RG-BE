@@ -1,5 +1,6 @@
 package com.prgrms.rg.domain.user.model;
 
+import static javax.persistence.EnumType.*;
 import static lombok.AccessLevel.*;
 
 import java.time.Year;
@@ -10,6 +11,8 @@ import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Embeddable;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.OneToMany;
 
 import com.prgrms.rg.domain.common.model.metadata.Bicycle;
@@ -26,6 +29,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = PROTECTED)
 public class RiderProfile {
 	private Year ridingStartYear;
+	@Enumerated(value = STRING)
 	private RidingLevel level;
 	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
 	private Set<UserBicycle> bicycles = new HashSet<>();

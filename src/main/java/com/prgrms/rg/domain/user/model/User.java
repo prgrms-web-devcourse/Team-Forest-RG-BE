@@ -15,6 +15,7 @@ import com.prgrms.rg.domain.common.model.BaseTimeEntity;
 import com.prgrms.rg.domain.common.model.metadata.Bicycle;
 import com.prgrms.rg.domain.user.model.information.MannerInfo;
 import com.prgrms.rg.domain.user.model.information.RiderInfo;
+import com.prgrms.rg.domain.user.model.information.UserImageInfo;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -55,8 +56,8 @@ public class User extends BaseTimeEntity implements ImageAttachable {
 		return nickname.get();
 	}
 
-	public ProfileImage getImage() {
-		return profileImage;
+	public UserImageInfo getImage() {
+		return new UserImageInfo(profileImage.getUrl(), profileImage.getOriginalFileName());
 	}
 
 	public String getIntroduction() {

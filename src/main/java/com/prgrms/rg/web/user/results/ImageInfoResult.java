@@ -1,6 +1,6 @@
 package com.prgrms.rg.web.user.results;
 
-import com.prgrms.rg.domain.user.model.ProfileImage;
+import com.prgrms.rg.domain.user.model.information.UserImageInfo;
 
 import lombok.Data;
 
@@ -15,7 +15,7 @@ public class ImageInfoResult {
 		this.fileName = fileName;
 	}
 
-	public static ImageInfoResult of(ProfileImage image) {
-		return new ImageInfoResult(image.getUrl(), image.getOriginalFileName());
+	public static ImageInfoResult of(UserImageInfo image) {
+		return new ImageInfoResult(image.getFileUrl(), image.getOriginalFilename());
 	}
 }
