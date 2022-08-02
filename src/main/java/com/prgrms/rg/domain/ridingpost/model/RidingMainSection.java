@@ -43,9 +43,9 @@ public class RidingMainSection {
 	@Column(name = "riding_date", nullable = false)
 	private LocalDateTime ridingDate;
 
-	@Min(value = 0L)
+	@Min(value = 0)
 	@Column(name = "fee")
-	private Long fee = 0L;
+	private int fee = 0;
 
 	@JoinColumn(name = "address_code", nullable = false)
 	@ManyToOne(fetch = FetchType.LAZY)
@@ -62,7 +62,7 @@ public class RidingMainSection {
 	private Coordinate departurePlace;
 
 	@Builder
-	public RidingMainSection(String title, int estimatedTime, LocalDateTime ridingDate, Long fee,
+	public RidingMainSection(String title, int estimatedTime, LocalDateTime ridingDate, int fee,
 		AddressCode addressCode, List<String> routes) {
 		setTitle(title);
 		setEstimatedTime(estimatedTime);

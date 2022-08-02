@@ -39,15 +39,11 @@ public class RidingConditionBicycle {
 			return false;
 
 		RidingConditionBicycle that = (RidingConditionBicycle)o;
-		if (!post.equals(that.post))
-			return false;
 		return bicycle.equals(that.bicycle);
 	}
 
 	@Override
 	public int hashCode() {
-		int result = post.hashCode();
-		result = 31 * result + bicycle.hashCode();
-		return result;
+		return bicycle.hashCode();
 	}
 }
