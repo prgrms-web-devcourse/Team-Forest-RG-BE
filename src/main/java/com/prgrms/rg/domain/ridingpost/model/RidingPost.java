@@ -1,6 +1,7 @@
 package com.prgrms.rg.domain.ridingpost.model;
 
 import java.util.Objects;
+
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -16,15 +17,14 @@ import com.prgrms.rg.domain.common.file.StoredFile;
 import com.prgrms.rg.domain.user.model.User;
 
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
-@Setter(value = AccessLevel.PRIVATE)
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
-public class RidingPost extends BaseTimeEntity implements ImageAttachable{
+public class RidingPost extends BaseTimeEntity implements ImageAttachable {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -46,16 +46,14 @@ public class RidingPost extends BaseTimeEntity implements ImageAttachable{
 	@Embedded
 	private RidingConditionSection ridingConditionSection;
 
-	public static RidingPost createPost(User ridingLeader,
-		RidingMainSection ridingMainSection,
+	@Builder
+	public RidingPost(User leader, RidingMainSection ridingMainSection,
 		RidingParticipantSection ridingParticipantSection,
 		RidingConditionSection ridingConditionSection) {
-		RidingPost post = new RidingPost();
-		post.assignLeader(ridingLeader);
-		post.setRidingMainSection(ridingMainSection);
-		post.setRidingParticipantSection(ridingParticipantSection);
-		post.setRidingConditionSection(ridingConditionSection);
-		return post;
+		assignLeader(leader);
+		this.ridingMainSection = ridingMainSection;
+		this.ridingParticipantSection = ridingParticipantSection;
+		this.ridingConditionSection = ridingConditionSection;
 	}
 
 	private void assignLeader(User leader) {
@@ -71,7 +69,7 @@ public class RidingPost extends BaseTimeEntity implements ImageAttachable{
 	public boolean equals(Object o) {
 		if (this == o)
 			return true;
-		if (o instanceof RidingPost)
+		if (!(o instanceof RidingPost))
 			return false;
 		RidingPost that = (RidingPost)o;
 		return id.equals(that.id);
@@ -85,7 +83,7 @@ public class RidingPost extends BaseTimeEntity implements ImageAttachable{
 	@Override
 	public StoredFile attach(String fileName, String fileUrl) {
 		var image = new RidingThumbnailImage(fileName, fileUrl, this);
-		setThumbnail(image);
+		this.thumbnail = image;
 		return image;
 	}
 
