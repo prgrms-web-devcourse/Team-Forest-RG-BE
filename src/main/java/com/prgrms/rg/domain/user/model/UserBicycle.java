@@ -11,6 +11,8 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
+import com.prgrms.rg.domain.common.model.metadata.Bicycle;
+
 import lombok.NoArgsConstructor;
 
 /**
@@ -30,7 +32,7 @@ public class UserBicycle {
 	@JoinColumn(name = "bicycle_id")
 	private Bicycle bicycle;
 
-	UserBicycle(User user, Bicycle bicycle) {
+	public UserBicycle(User user, Bicycle bicycle) {
 		this.user = user;
 		this.bicycle = bicycle;
 	}

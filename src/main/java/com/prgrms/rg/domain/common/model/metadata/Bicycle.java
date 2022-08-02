@@ -1,4 +1,4 @@
-package com.prgrms.rg.domain.user.model;
+package com.prgrms.rg.domain.common.model.metadata;
 
 import static lombok.AccessLevel.*;
 

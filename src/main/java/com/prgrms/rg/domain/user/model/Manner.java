@@ -26,24 +26,22 @@ public class Manner {
 		this.banned = banned;
 	}
 
-	static Manner create() {
+	public static Manner create() {
 		return new Manner((short)0, (short)0, null);
 	}
 
-	static Manner of(short point, short noShow, LocalDate banned) {
+	public static Manner of(short point, short noShow, LocalDate banned) {
 		return new Manner(point, noShow, banned);
 	}
 
-	MannerLevel mannerLevel() {
+	public MannerLevel mannerLevel() {
 		return MannerLevel.of(point);
 	}
 
 	void addNoShowCount() {
 		noShow++;
 		if (noShow % NO_SHOW_LIMIT == 0) {
-			banned =
-				(banned == null || banned.isBefore(LocalDate.now()))
-					? LocalDate.now().plusDays(NO_SHOW_BAN_DURATION) : banned.plusDays(NO_SHOW_BAN_DURATION);
+			banned = ((banned == null || banned.isBefore(LocalDate.now())) ? LocalDate.now() : banned).plusDays(NO_SHOW_BAN_DURATION);
 		}
 	}
 
@@ -56,7 +54,7 @@ public class Manner {
 			"\n}";
 	}
 
-	enum MannerLevel {
+	public enum MannerLevel {
 		//TODO: 명칭 통일
 		NORMAL, FOUR_LEGS_BICYCLE, THREE_LEGS_BICYCLE, TWO_LEGS_BICYCLE, LEGENDARY_RIDER;
 

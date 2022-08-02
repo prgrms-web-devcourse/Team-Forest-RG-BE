@@ -19,7 +19,7 @@ public class Introduction {
 	@Column
 	private String introduction;
 
-	Introduction(String introduction) {
+	public Introduction(String introduction) {
 		validateLength(introduction);
 		this.introduction = introduction;
 	}
