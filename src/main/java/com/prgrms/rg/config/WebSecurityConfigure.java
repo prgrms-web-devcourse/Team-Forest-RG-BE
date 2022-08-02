@@ -1,13 +1,9 @@
 package com.prgrms.rg.config;
 
-import javax.annotation.PostConstruct;
-import javax.annotation.PreDestroy;
 import javax.servlet.http.HttpServletResponse;
-import javax.sql.DataSource;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.jdbc.core.JdbcOperations;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -146,32 +142,6 @@ public class WebSecurityConfigure extends WebSecurityConfigurerAdapter {
 			 */
 			.addFilterAfter(jwtAuthenticationFilter(), SecurityContextPersistenceFilter.class)
 		;
-	}
-
-	@PostConstruct
-	public void setSchema() {
-		var datasource = getApplicationContext().getBean(DataSource.class);
-		new JdbcTemplate(datasource).update("CREATE TABLE oauth2_authorized_client\n"
-			+ "(\n"
-			+ "    client_registration_id  varchar(100)                            NOT NULL,\n"
-			+ "    principal_name          varchar(200)                            NOT NULL,\n"
-			+ "    access_token_type       varchar(100)                            NOT NULL,\n"
-			+ "    access_token_value      blob                                    NOT NULL,\n"
-			+ "    access_token_issued_at  timestamp                               NOT NULL,\n"
-			+ "    access_token_expires_at timestamp                               NOT NULL,\n"
-			+ "    access_token_scopes     varchar(1000) DEFAULT NULL,\n"
-			+ "    refresh_token_value     blob          DEFAULT NULL,\n"
-			+ "    refresh_token_issued_at timestamp     DEFAULT NULL,\n"
-			+ "    created_at              timestamp     DEFAULT CURRENT_TIMESTAMP NOT NULL,\n"
-			+ "    PRIMARY KEY (client_registration_id, principal_name)\n"
-			+ ");");
-	}
-
-	@PreDestroy
-	public void preDestroy() {
-		var datasource = getApplicationContext().getBean(DataSource.class);
-		new JdbcTemplate(datasource).update("DROP TABLE oauth2_authorized_client");
-
 	}
 
 }
