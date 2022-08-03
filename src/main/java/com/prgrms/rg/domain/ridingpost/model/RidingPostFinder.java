@@ -13,7 +13,7 @@ public class RidingPostFinder {
 
 	public RidingPost find(Long ridingPostId) {
 		return ridingPostRepository.findById(ridingPostId)
-			.orElseThrow(RidingPostNotFoundException::new);
+			.orElseThrow(() -> new RidingPostNotFoundException(ridingPostId));
 	}
 
 }
