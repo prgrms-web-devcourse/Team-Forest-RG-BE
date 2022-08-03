@@ -1,6 +1,5 @@
 package com.prgrms.rg.domain.ridingpost.application.impl;
 
-
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -8,6 +7,7 @@ import com.prgrms.rg.domain.ridingpost.model.RidingCreateManagement;
 import com.prgrms.rg.domain.ridingpost.application.RidingPostService;
 import com.prgrms.rg.domain.ridingpost.application.command.RidingCreateCommand;
 import com.prgrms.rg.domain.ridingpost.model.RidingPostRepository;
+import com.prgrms.rg.domain.user.application.NoSuchUserException;
 import com.prgrms.rg.domain.user.model.User;
 import com.prgrms.rg.domain.user.model.UserRepository;
 
@@ -23,8 +23,7 @@ public class RidingPostServiceImpl implements RidingPostService {
 
 	@Transactional
 	public Long createRidingPost(Long userId, RidingCreateCommand command) {
-		//todo exception 처리
-		User user = userRepository.findById(userId).orElseThrow();
+		User user = userRepository.findById(userId).orElseThrow(() -> new NoSuchUserException(userId));
 
 		//post, subsection 저장
 		var savedPost = ridingPostRepository.save(createManagement.createRidingPost(user, command));
