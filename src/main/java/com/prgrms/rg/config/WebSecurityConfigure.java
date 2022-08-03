@@ -2,7 +2,9 @@ package com.prgrms.rg.config;
 
 import javax.servlet.http.HttpServletResponse;
 
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.jdbc.core.JdbcOperations;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
@@ -20,11 +22,13 @@ import org.springframework.security.oauth2.client.web.OAuth2AuthorizedClientRepo
 import org.springframework.security.oauth2.core.endpoint.OAuth2AuthorizationRequest;
 import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.security.web.context.SecurityContextPersistenceFilter;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import com.prgrms.rg.domain.auth.jwt.Jwt;
 import com.prgrms.rg.domain.auth.jwt.JwtAuthenticationFilter;
 import com.prgrms.rg.domain.auth.model.HttpCookieOAuth2AuthorizationRequestRepository;
-import com.prgrms.rg.domain.auth.model.OAuth2AuthenticationSuccessHandler;
 import com.prgrms.rg.domain.user.application.UserService;
 
 import lombok.extern.slf4j.Slf4j;
@@ -85,19 +89,35 @@ public class WebSecurityConfigure extends WebSecurityConfigurerAdapter {
 	public OAuth2AuthorizedClientRepository authorizedClientRepository() {
 		return new AuthenticatedPrincipalOAuth2AuthorizedClientRepository(authorizedClientService());
 	}
+	//
+	// public OAuth2AuthenticationSuccessHandler oauth2AuthenticationSuccessHandler() {
+	// 	return new OAuth2AuthenticationSuccessHandler(jwt(), getApplicationContext().getBean(UserService.class));
+	// }
 
-	public OAuth2AuthenticationSuccessHandler oauth2AuthenticationSuccessHandler() {
-		return new OAuth2AuthenticationSuccessHandler(jwt(), getApplicationContext().getBean(UserService.class));
+
+	public CorsConfigurationSource corsConfigurationSource() {
+		CorsConfiguration configuration = new CorsConfiguration();
+		configuration.addAllowedOrigin("http://192.168.219.108:3000/");
+		configuration.addAllowedHeader("*");
+		configuration.addAllowedMethod("*");
+		configuration.setAllowCredentials(true);
+		UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+		source.registerCorsConfiguration("/**", configuration);
+		return source;
 	}
 
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 
 		http
+			.httpBasic().disable()
+			.cors().configurationSource(corsConfigurationSource())
+			.and()
 			.authorizeRequests()
-			.antMatchers("/user/me").hasAnyRole("USER")
+			.antMatchers("/user/me").hasAnyRole()
 			.anyRequest().permitAll()
 			.and()
+
 			/**
 			 * formLogin, csrf, headers, http-basic, rememberMe, logout filter 비활성화
 			 */
@@ -122,15 +142,15 @@ public class WebSecurityConfigure extends WebSecurityConfigurerAdapter {
 			/**
 			 * OAuth2 설정
 			 */
-			.oauth2Login()
-			.authorizationEndpoint()
-			.authorizationRequestRepository(authorizationRequestRepository())
-			.and()
-			.successHandler(oauth2AuthenticationSuccessHandler())
-			.authorizedClientService(authorizedClientService())
-			.authorizedClientRepository(
-				authorizedClientRepository())
-			.and()
+			// .oauth2Login()
+			// .authorizationEndpoint()
+			// // .authorizationRequestRepository(authorizationRequestRepository())
+			// .and()
+			// .successHandler(oauth2AuthenticationSuccessHandler())
+			// // .authorizedClientService(authorizedClientService()) 서비스를 Repository에서 DI받아서 상관없을듯합니다
+			// .authorizedClientRepository(
+			// 	authorizedClientRepository())
+			// .and()
 			/**
 			 * 예외처리 핸들러
 			 */

@@ -6,6 +6,7 @@ import java.util.Objects;
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
+import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Lob;
@@ -15,7 +16,7 @@ import javax.persistence.Table;
 @Table(name = "oauth2_authorized_client")
 public class OAuth2AuthorizedClient {
 
-	@Id
+	@EmbeddedId
 	private Key primaryKey;
 
 	@Column(length = 100, nullable = false, name = "access_token_type")
@@ -43,6 +44,14 @@ public class OAuth2AuthorizedClient {
 
 	@Column(name = "created_at", columnDefinition = "timestamp default CURRENT_TIMESTAMP not null")
 	private LocalDateTime createdAt;
+
+	public Key getPrimaryKey() {
+		return primaryKey;
+	}
+
+	public void setPrimaryKey(Key primaryKey) {
+		this.primaryKey = primaryKey;
+	}
 
 	@Embeddable
 	static class Key implements Serializable {

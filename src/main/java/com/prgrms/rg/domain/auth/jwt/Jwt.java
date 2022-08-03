@@ -9,10 +9,13 @@ import com.auth0.jwt.interfaces.DecodedJWT;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
-import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
 
 public final class Jwt {
 
@@ -46,6 +49,7 @@ public final class Jwt {
     }
     builder.withClaim("user_id", claims.userId);
     builder.withClaim("role", claims.role);
+    builder.withSubject(String.valueOf(claims.userId));
     return builder.sign(algorithm);
   }
 
