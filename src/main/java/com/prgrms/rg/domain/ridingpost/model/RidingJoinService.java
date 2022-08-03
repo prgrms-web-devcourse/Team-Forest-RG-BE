@@ -4,10 +4,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.prgrms.rg.domain.common.event.DomainEventPublisher;
-import com.prgrms.rg.domain.ridingpost.model.dummy.RidingPost;
 import com.prgrms.rg.domain.ridingpost.model.event.RidingJoinEvent;
+import com.prgrms.rg.domain.user.application.UserReadService;
 import com.prgrms.rg.domain.user.model.User;
-import com.prgrms.rg.domain.user.model.UserFinder;
 
 import lombok.RequiredArgsConstructor;
 
@@ -16,7 +15,7 @@ import lombok.RequiredArgsConstructor;
 @Transactional(readOnly = true)
 public class RidingJoinService {
 	private final RidingPostFinder postFinder;
-	private final UserFinder userFinder;
+	private final UserReadService userReadService;
 	private final RidingParticipantRepository ridingParticipantRepository;
 	private final DomainEventPublisher eventPublisher;
 
@@ -27,7 +26,7 @@ public class RidingJoinService {
 
 	@Transactional
 	public void joinUserToRiding(Long userId, Long ridingPostId) {
-		User user = userFinder.find(userId);
+		User user = userReadService.getUserEntityById(userId);
 		RidingPost post = postFinder.find(ridingPostId);
 		if (ridingParticipantRepository.existsByUserAndPost(user, post))
 			throw new RidingJoinFailException("user already join riding");

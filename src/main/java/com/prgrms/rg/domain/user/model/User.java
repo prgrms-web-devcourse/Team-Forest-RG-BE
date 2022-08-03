@@ -52,6 +52,10 @@ public class User extends BaseTimeEntity implements ImageAttachable {
 		return profile.addBicycle(this, bicycle);
 	}
 
+	public Long getId() {
+		return this.id;
+	}
+
 	public String getNickname() {
 		return nickname.get();
 	}

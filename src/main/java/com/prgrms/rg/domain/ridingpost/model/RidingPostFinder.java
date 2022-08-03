@@ -3,8 +3,6 @@ package com.prgrms.rg.domain.ridingpost.model;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.prgrms.rg.domain.ridingpost.model.dummy.RidingPost;
-
 import lombok.RequiredArgsConstructor;
 
 @Component

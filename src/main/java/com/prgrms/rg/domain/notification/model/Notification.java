@@ -8,7 +8,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
-import com.prgrms.rg.domain.ridingpost.model.dummy.RidingPost;
+import com.prgrms.rg.domain.ridingpost.model.RidingPost;
 import com.prgrms.rg.domain.user.model.User;
 
 import lombok.AccessLevel;
