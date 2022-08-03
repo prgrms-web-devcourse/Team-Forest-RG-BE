@@ -19,7 +19,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public abstract class AttachedImage {
 
-	public AttachedImage(String originalFileName, String url) {
+	protected AttachedImage(String originalFileName, String url) {
 		this.originalFileName = originalFileName;
 		this.url = url;
 	}
