@@ -8,9 +8,11 @@ import javax.persistence.Id;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
 @NoArgsConstructor(access = PROTECTED)
+@Setter(value = PRIVATE)
 public class Bicycle {
 
 	//TODO: 코드에 따라 id 값 부여
@@ -18,6 +20,10 @@ public class Bicycle {
 
 	public Bicycle(Long id, String name) {
 		this.id = id;
+		this.name = name;
+	}
+
+	public Bicycle(String name) {
 		this.name = name;
 	}
 

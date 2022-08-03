@@ -19,7 +19,7 @@ public class RidingConditionCreateCommand {
 	public RidingConditionSection toSection(RidingPost post) {
 		List<Bicycle> bicycleList = new ArrayList<>();
 		for (String typeName : bicycleTypes) {
-			bicycleList.add(Bicycle.of(typeName));
+			bicycleList.add(new Bicycle(typeName));
 		}
 
 		return new RidingConditionSection(post, RidingLevel.valueOf(level), bicycleList);
