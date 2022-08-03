@@ -22,7 +22,6 @@ public class RidingConditionCreateCommand {
 			bicycleList.add(Bicycle.of(typeName));
 		}
 
-		//ridingyear 제거
-		return new RidingConditionSection(post, RidingLevel.valueOf(level), 0, bicycleList);
+		return new RidingConditionSection(post, RidingLevel.valueOf(level), bicycleList);
 	}
 }
