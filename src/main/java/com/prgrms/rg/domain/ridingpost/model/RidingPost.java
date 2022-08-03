@@ -48,7 +48,8 @@ public class RidingPost extends BaseTimeEntity implements ImageAttachable {
 	private RidingConditionSection ridingConditionSection;
 
 	@Builder
-	public RidingPost(User leader, RidingMainSection ridingMainSection,
+	public RidingPost(User leader,
+		RidingMainSection ridingMainSection,
 		RidingParticipantSection ridingParticipantSection,
 		RidingConditionSection ridingConditionSection) {
 		assignLeader(leader);
@@ -60,6 +61,10 @@ public class RidingPost extends BaseTimeEntity implements ImageAttachable {
 	private void assignLeader(User leader) {
 		this.leader = leader;
 		addParticipant(leader);
+	}
+
+	public void assignConditionSection(RidingConditionSection ridingConditionSection) {
+		this.ridingConditionSection = ridingConditionSection;
 	}
 
 	public void addParticipant(User participant) {

@@ -47,6 +47,12 @@ public class RidingSubSection implements ImageAttachable {
 	@OneToMany(mappedBy = "subInformation", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
 	private List<SubImage> images = new ArrayList<>();
 
+	public RidingSubSection(RidingPost post, String title, String content) {
+		this.post = post;
+		this.title = title;
+		this.content = content;
+	}
+
 	@Override
 	public StoredFile attach(String fileName, String fileUrl) {
 		var image = new SubImage(fileName, fileUrl, this);

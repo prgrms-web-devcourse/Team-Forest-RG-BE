@@ -63,13 +63,14 @@ public class RidingMainSection {
 
 	@Builder
 	public RidingMainSection(String title, int estimatedTime, LocalDateTime ridingDate, int fee,
-		AddressCode addressCode, List<String> routes) {
+		AddressCode addressCode, List<String> routes, Coordinate departurePlace) {
 		setTitle(title);
 		setEstimatedTime(estimatedTime);
 		setFee(fee);
 		setAddressCode(addressCode);
 		setRidingDate(ridingDate);
 		setRoutes(routes);
+		setDeparturePlace(departurePlace);
 	}
 
 	public List<String> getRoutes() {

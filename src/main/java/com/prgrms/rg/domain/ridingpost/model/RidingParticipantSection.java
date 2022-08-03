@@ -28,12 +28,12 @@ public class RidingParticipantSection {
 	private int participantCount = 1;
 
 	@Range(min = 5, max = 30)
-	@Column(name = "max_participant_count", nullable = false)
-	private int maxParticipantCount;
-
-	@Range(min = 5, max = 30)
 	@Column(name = "min_participant_count", nullable = false)
 	private int minParticipantCount;
+
+	@Range(min = 5, max = 30)
+	@Column(name = "max_participant_count", nullable = false)
+	private int maxParticipantCount;
 
 	@Column(name = "riding_status")
 	@Enumerated(EnumType.STRING)
@@ -42,7 +42,7 @@ public class RidingParticipantSection {
 	@OneToMany(mappedBy = "post", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
 	private List<RidingParticipant> participants = new ArrayList<>();
 
-	public RidingParticipantSection(int maxParticipantCount, int minParticipantCount) {
+	public RidingParticipantSection(int minParticipantCount, int maxParticipantCount) {
 		setMinMaxParticipantCount(minParticipantCount, maxParticipantCount);
 	}
 
