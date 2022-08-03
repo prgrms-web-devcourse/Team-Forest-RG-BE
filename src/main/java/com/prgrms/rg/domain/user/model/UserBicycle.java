@@ -37,6 +37,10 @@ public class UserBicycle {
 		this.bicycle = bicycle;
 	}
 
+	String getName() {
+		return bicycle.getName();
+	}
+
 	@Override
 	public boolean equals(Object o) {
 		if (this == o)

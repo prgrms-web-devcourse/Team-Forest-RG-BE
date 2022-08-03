@@ -32,6 +32,10 @@ public class Nickname {
 		this.nickname = nickname;
 	}
 
+	String get() {
+		return nickname;
+	}
+
 	private void validateNicknameLength(String nickname) {
 		int length = nickname.getBytes(StandardCharsets.UTF_8).length;
 		checkArgument(length >= NICKNAME_MINIMAL_BYTE_LENGTH
