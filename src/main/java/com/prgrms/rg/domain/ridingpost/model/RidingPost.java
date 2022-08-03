@@ -13,7 +13,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 
 import com.prgrms.rg.domain.common.file.model.ImageAttachable;
-import com.prgrms.rg.domain.common.file.model.StoredFile;
+import com.prgrms.rg.domain.common.file.model.AttachedImage;
 import com.prgrms.rg.domain.common.model.BaseTimeEntity;
 import com.prgrms.rg.domain.user.model.User;
 
@@ -82,7 +82,7 @@ public class RidingPost extends BaseTimeEntity implements ImageAttachable {
 	}
 
 	@Override
-	public StoredFile attach(String fileName, String fileUrl) {
+	public AttachedImage attach(String fileName, String fileUrl) {
 		var image = new RidingThumbnailImage(fileName, fileUrl, this);
 		this.thumbnail = image;
 		return image;

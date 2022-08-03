@@ -1,4 +1,4 @@
-package com.prgrms.rg.domain.common.file.application;
+package com.prgrms.rg.domain.common.file.application.impl;
 
 import java.util.UUID;
 
@@ -6,25 +6,30 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.prgrms.rg.domain.common.file.model.ImageRepository;
-import com.prgrms.rg.domain.common.file.model.StoredImage;
+import com.prgrms.rg.domain.common.file.application.AjaxImageManager;
+import com.prgrms.rg.domain.common.file.application.FileStore;
+import com.prgrms.rg.domain.common.file.application.exception.EmptyFileException;
+import com.prgrms.rg.domain.common.file.application.exception.IllegalFileExtensionException;
+import com.prgrms.rg.domain.common.file.application.exception.IllegalImageIdException;
+import com.prgrms.rg.domain.common.file.model.TemporaryImage;
+import com.prgrms.rg.domain.common.file.model.TemporaryImageRepository;
 
 import lombok.RequiredArgsConstructor;
 
+@Transactional
 @Component
 @RequiredArgsConstructor
-public class MultipartImageManager implements ImageManager {
+public class AjaxMultipartImageFileManager implements AjaxImageManager {
 
 	private final FileStore fileStore;
-	private final ImageRepository imageRepository;
+	private final TemporaryImageRepository imageRepository;
 
 	private static final String[] SUPPORTING_EXTENSIONS = {
 		"png", "jpg"
 	};
 
 	@Override
-	@Transactional
-	public StoredImage store(MultipartFile multipartFile) {
+	public TemporaryImage store(MultipartFile multipartFile) {
 		if (isFileNotPresent(multipartFile)) {
 			throw new EmptyFileException();
 		}
@@ -33,14 +38,14 @@ public class MultipartImageManager implements ImageManager {
 		String storedFileName = generateFileNameOf(originalFilename);
 
 		String fileUrl = fileStore.save(multipartFile, storedFileName);
-		StoredImage savedImage = imageRepository.save(new StoredImage(originalFilename, fileUrl));
-
-		return savedImage;
+		return imageRepository.save(new TemporaryImage(originalFilename, fileUrl));
 	}
 
 	@Override
-	@Transactional
 	public void delete(Long imageId) {
+		TemporaryImage savedImage = imageRepository.findById(imageId)
+			.orElseThrow(() -> new IllegalImageIdException(imageId));
+		fileStore.delete(savedImage.getUrl());
 		imageRepository.deleteById(imageId);
 	}
 

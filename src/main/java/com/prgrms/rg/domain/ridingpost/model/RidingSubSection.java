@@ -14,8 +14,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.validation.constraints.Size;
 
+import com.prgrms.rg.domain.common.file.model.AttachedImage;
 import com.prgrms.rg.domain.common.file.model.ImageAttachable;
-import com.prgrms.rg.domain.common.file.model.StoredFile;
 
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -48,7 +48,7 @@ public class RidingSubSection implements ImageAttachable {
 	private List<SubImage> images = new ArrayList<>();
 
 	@Override
-	public StoredFile attach(String fileName, String fileUrl) {
+	public AttachedImage attach(String fileName, String fileUrl) {
 		var image = new SubImage(fileName, fileUrl, this);
 		images.add(image);
 		return image;

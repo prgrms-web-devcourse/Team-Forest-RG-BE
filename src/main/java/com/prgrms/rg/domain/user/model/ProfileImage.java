@@ -6,14 +6,14 @@ import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 
-import com.prgrms.rg.domain.common.file.model.StoredFile;
+import com.prgrms.rg.domain.common.file.model.AttachedImage;
 
 import lombok.NoArgsConstructor;
 
 //TODO: Kakao 회원가입과 연동
 @Entity
 @NoArgsConstructor(access = PROTECTED)
-public class ProfileImage extends StoredFile {
+public class ProfileImage extends AttachedImage {
 
 	@OneToOne
 	@JoinColumn(name = "user_id")

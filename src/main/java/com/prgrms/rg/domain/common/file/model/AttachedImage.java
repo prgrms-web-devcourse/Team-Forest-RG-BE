@@ -7,19 +7,19 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
 
-import com.prgrms.rg.infrastructure.file.FileDeleteEntityListener;
+import com.prgrms.rg.infrastructure.file.ImageDeleteEntityListener;
 
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-@EntityListeners(FileDeleteEntityListener.class)
+@EntityListeners(ImageDeleteEntityListener.class)
 @MappedSuperclass
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public abstract class StoredFile {
+public abstract class AttachedImage {
 
-	public StoredFile(String originalFileName, String url) {
+	public AttachedImage(String originalFileName, String url) {
 		this.originalFileName = originalFileName;
 		this.url = url;
 	}

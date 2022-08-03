@@ -4,14 +4,14 @@ import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.ManyToOne;
 
-import com.prgrms.rg.domain.common.file.model.StoredFile;
+import com.prgrms.rg.domain.common.file.model.AttachedImage;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
-public class SubImage extends StoredFile {
+public class SubImage extends AttachedImage {
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	private RidingSubSection subInformation;

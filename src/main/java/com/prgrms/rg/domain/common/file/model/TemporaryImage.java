@@ -8,18 +8,17 @@ import javax.persistence.EntityListeners;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
-import com.prgrms.rg.infrastructure.file.FileDeleteEntityListener;
+import com.prgrms.rg.infrastructure.file.ImageDeleteEntityListener;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-@EntityListeners(FileDeleteEntityListener.class)
 @Entity
 @Getter
 @NoArgsConstructor(access = PROTECTED)
-public class StoredImage {
+public class TemporaryImage {
 
-	public StoredImage(String originalFileName, String url) {
+	public TemporaryImage(String originalFileName, String url) {
 		this.originalFileName = originalFileName;
 		this.url = url;
 	}

@@ -5,7 +5,7 @@ import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 
-import com.prgrms.rg.domain.common.file.model.StoredFile;
+import com.prgrms.rg.domain.common.file.model.AttachedImage;
 
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -14,7 +14,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class RidingThumbnailImage extends StoredFile {
+public class RidingThumbnailImage extends AttachedImage {
 
 	@OneToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "post_id", nullable = false)

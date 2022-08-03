@@ -9,8 +9,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.OneToOne;
 
+import com.prgrms.rg.domain.common.file.model.AttachedImage;
 import com.prgrms.rg.domain.common.file.model.ImageAttachable;
-import com.prgrms.rg.domain.common.file.model.StoredFile;
 import com.prgrms.rg.domain.common.model.BaseTimeEntity;
 import com.prgrms.rg.domain.common.model.metadata.Bicycle;
 import com.prgrms.rg.domain.user.model.information.MannerInfo;
@@ -85,7 +85,7 @@ public class User extends BaseTimeEntity implements ImageAttachable {
 	}
 
 	@Override
-	public StoredFile attach(String fileName, String fileUrl) {
+	public AttachedImage attach(String fileName, String fileUrl) {
 		profileImage = new ProfileImage(fileName, fileUrl, this);
 		return profileImage;
 	}

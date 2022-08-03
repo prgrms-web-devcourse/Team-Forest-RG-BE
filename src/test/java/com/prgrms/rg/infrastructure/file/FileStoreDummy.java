@@ -4,7 +4,7 @@ import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.prgrms.rg.domain.common.file.application.FileIOException;
+import com.prgrms.rg.domain.common.file.application.exception.FileIOException;
 import com.prgrms.rg.domain.common.file.application.FileStore;
 
 /**
