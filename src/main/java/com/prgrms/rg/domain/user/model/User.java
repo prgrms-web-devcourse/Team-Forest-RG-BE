@@ -10,7 +10,7 @@ import javax.persistence.Id;
 import javax.persistence.OneToOne;
 
 import com.prgrms.rg.domain.common.file.model.AttachedImage;
-import com.prgrms.rg.domain.common.file.model.ImageAttachable;
+import com.prgrms.rg.domain.common.file.model.ImageOwner;
 import com.prgrms.rg.domain.common.model.BaseTimeEntity;
 import com.prgrms.rg.domain.common.model.metadata.Bicycle;
 import com.prgrms.rg.domain.user.model.information.MannerInfo;
@@ -25,7 +25,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor(access = PRIVATE)
 @NoArgsConstructor(access = PROTECTED)
-public class User extends BaseTimeEntity implements ImageAttachable {
+public class User extends BaseTimeEntity implements ImageOwner {
 
 	@Id
 	@GeneratedValue(strategy = IDENTITY)

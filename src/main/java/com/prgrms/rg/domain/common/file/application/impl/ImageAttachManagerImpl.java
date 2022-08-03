@@ -10,7 +10,7 @@ import com.prgrms.rg.domain.common.file.application.ImageAttachManger;
 import com.prgrms.rg.domain.common.file.application.exception.IllegalImageIdException;
 import com.prgrms.rg.domain.common.file.model.AttachedImage;
 import com.prgrms.rg.domain.common.file.model.AttachedImageRepository;
-import com.prgrms.rg.domain.common.file.model.ImageAttachable;
+import com.prgrms.rg.domain.common.file.model.ImageOwner;
 import com.prgrms.rg.domain.common.file.model.TemporaryImage;
 import com.prgrms.rg.domain.common.file.model.TemporaryImageRepository;
 
@@ -28,7 +28,7 @@ public class ImageAttachManagerImpl implements ImageAttachManger {
 	private final AttachedImageRepository attachedImageRepository;
 
 	@Override
-	public <T extends ImageAttachable> List<AttachedImage> store(List<Long> temporaryImageIds, T owner) {
+	public <T extends ImageOwner> List<AttachedImage> store(List<Long> temporaryImageIds, T owner) {
 		List<AttachedImage> images = new ArrayList<>();
 		for (Long temporaryImageId : temporaryImageIds) {
 			images.add(store(temporaryImageId, owner));
@@ -37,7 +37,7 @@ public class ImageAttachManagerImpl implements ImageAttachManger {
 	}
 
 	@Override
-	public <T extends ImageAttachable> AttachedImage store(Long temporaryImageId, T owner) {
+	public <T extends ImageOwner> AttachedImage store(Long temporaryImageId, T owner) {
 		TemporaryImage storedImage = temporaryImageRepository.findById(temporaryImageId)
 			.orElseThrow(() -> new IllegalImageIdException(temporaryImageId));
 
@@ -49,7 +49,7 @@ public class ImageAttachManagerImpl implements ImageAttachManger {
 	}
 
 	@Override
-	public <T1 extends AttachedImage, T2 extends ImageAttachable> void delete(List<T1> images, T2 attached) {
+	public <T1 extends AttachedImage, T2 extends ImageOwner> void delete(List<T1> images, T2 attached) {
 		if (isImagesNotPresent(images)) {
 			return;
 		}
@@ -62,7 +62,7 @@ public class ImageAttachManagerImpl implements ImageAttachManger {
 	}
 
 	@Override
-	public <T1 extends AttachedImage, T2 extends ImageAttachable> void delete(T1 image, T2 attached) {
+	public <T1 extends AttachedImage, T2 extends ImageOwner> void delete(T1 image, T2 attached) {
 		if (image == null) {
 			return;
 		}

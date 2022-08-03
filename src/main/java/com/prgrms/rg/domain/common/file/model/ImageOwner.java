@@ -5,7 +5,7 @@ package com.prgrms.rg.domain.common.file.model;
  * attach(String fileName, String fileUrl)메서드로 이미지 객체와 연관관계를 맺어주며,
  * 해당 메서드의 호출은 FileManager가 수행합니다.
  */
-public interface ImageAttachable {
+public interface ImageOwner {
 	AttachedImage attach(String fileName, String fileUrl);
 
 	/**

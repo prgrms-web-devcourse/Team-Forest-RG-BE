@@ -15,7 +15,7 @@ import javax.persistence.OneToMany;
 import javax.validation.constraints.Size;
 
 import com.prgrms.rg.domain.common.file.model.AttachedImage;
-import com.prgrms.rg.domain.common.file.model.ImageAttachable;
+import com.prgrms.rg.domain.common.file.model.ImageOwner;
 
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -24,7 +24,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class RidingSubSection implements ImageAttachable {
+public class RidingSubSection implements ImageOwner {
 
 	private static final int MAX_IMAGE_LIST_SIZE = 5;
 

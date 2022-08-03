@@ -12,7 +12,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 
-import com.prgrms.rg.domain.common.file.model.ImageAttachable;
+import com.prgrms.rg.domain.common.file.model.ImageOwner;
 import com.prgrms.rg.domain.common.file.model.AttachedImage;
 import com.prgrms.rg.domain.common.model.BaseTimeEntity;
 import com.prgrms.rg.domain.user.model.User;
@@ -25,7 +25,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
-public class RidingPost extends BaseTimeEntity implements ImageAttachable {
+public class RidingPost extends BaseTimeEntity implements ImageOwner {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
