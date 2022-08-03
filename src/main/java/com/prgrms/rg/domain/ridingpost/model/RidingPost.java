@@ -1,7 +1,10 @@
 package com.prgrms.rg.domain.ridingpost.model;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -10,6 +13,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
 import com.prgrms.rg.domain.common.file.model.ImageAttachable;
@@ -47,11 +51,15 @@ public class RidingPost extends BaseTimeEntity implements ImageAttachable {
 	@Embedded
 	private RidingConditionSection ridingConditionSection;
 
+	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	private List<RidingSubSection> subSectionList = new ArrayList<>();
+
 	@Builder
 	public RidingPost(User leader,
 		RidingMainSection ridingMainSection,
 		RidingParticipantSection ridingParticipantSection,
-		RidingConditionSection ridingConditionSection) {
+		RidingConditionSection ridingConditionSection
+		) {
 		assignLeader(leader);
 		this.ridingMainSection = ridingMainSection;
 		this.ridingParticipantSection = ridingParticipantSection;
@@ -65,6 +73,11 @@ public class RidingPost extends BaseTimeEntity implements ImageAttachable {
 
 	public void assignConditionSection(RidingConditionSection ridingConditionSection) {
 		this.ridingConditionSection = ridingConditionSection;
+	}
+
+	public void addSubSection(RidingSubSection subSection) {
+		subSectionList.add(subSection);
+		subSection.assignPost(this);
 	}
 
 	public void addParticipant(User participant) {
