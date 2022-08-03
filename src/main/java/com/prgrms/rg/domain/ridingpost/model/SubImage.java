@@ -16,6 +16,12 @@ public class SubImage extends StoredFile {
 	@ManyToOne(fetch = FetchType.LAZY)
 	private RidingSubSection subInformation;
 
+	//TODO storedFile
+	public SubImage(Long imageId, RidingSubSection subInformation) {
+		super(imageId);
+		this.subInformation = subInformation;
+	}
+
 	public SubImage(String originalFileName, String url, RidingSubSection subInformation) {
 		super(originalFileName, url);
 		this.subInformation = subInformation;

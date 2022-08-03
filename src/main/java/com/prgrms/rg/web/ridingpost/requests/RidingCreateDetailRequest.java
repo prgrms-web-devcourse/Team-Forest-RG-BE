@@ -13,6 +13,7 @@ public class RidingCreateDetailRequest {
 
 	private String content;
 
+	//todo validation - list 길이 제한
 	private List<Long> images;
 
 	public RidingSubCreateCommand toCommand() {

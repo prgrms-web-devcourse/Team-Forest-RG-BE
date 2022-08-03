@@ -19,6 +19,10 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public abstract class StoredFile {
 
+	public StoredFile(Long id) {
+		this.id = id;
+	}
+
 	public StoredFile(String originalFileName, String url) {
 		this.originalFileName = originalFileName;
 		this.url = url;
