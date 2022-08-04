@@ -2,6 +2,7 @@ package com.prgrms.rg.config;
 
 import javax.servlet.http.HttpServletResponse;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -71,10 +72,9 @@ public class WebSecurityConfigure extends WebSecurityConfigurerAdapter {
 
 	public CorsConfigurationSource corsConfigurationSource() {
 		CorsConfiguration configuration = new CorsConfiguration();
-		configuration.addAllowedOrigin("http://192.168.0.37:3000/");
+		configuration.addAllowedOrigin("*"); // 나중에 바꾸기
 		configuration.addAllowedHeader("*");
 		configuration.addAllowedMethod("*");
-		configuration.setAllowCredentials(true);
 		UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
 		source.registerCorsConfiguration("/**", configuration);
 		return source;

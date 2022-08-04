@@ -8,8 +8,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class OAuthLoginRequest {
 	private String authorizationCode;
-
-	public OAuthLoginRequest(String authorizationCode) {
+	private String fromUrl;
+	public OAuthLoginRequest(String authorizationCode, String fromUrl) {
 		this.authorizationCode = authorizationCode;
+		this.fromUrl = fromUrl;
 	}
 }
