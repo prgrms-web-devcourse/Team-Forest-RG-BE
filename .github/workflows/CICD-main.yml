@@ -25,6 +25,24 @@ jobs:
         with:
           java-version: '11'
           distribution: 'temurin'
+      - name: utilize yaml writer module
+        uses: mikefarah/yq@master
+        env:
+          AWS_ACCESS_KEY: ${{ secrets.AWS_ACCESS_KEY }}
+          AWS_SECRET_KEY: ${{ secrets.AWS_SECRET_KEY }}
+          AWS_S3_REGION: ${{ secrets.AWS_S3_REGION }}
+          AWS_S3_BUCKET: ${{ secrets.AWS_S3_BUCKET }}
+          ## aws 프로파일이 아닌 프로덕션 전용 profile에 aws 관련 정보 주입
+          YML_PATH: src/main/resources/application-prod.yml
+        with:
+          cmd: |
+            yq -i '
+              .cloud.aws.credentials.access-key = strenv(AWS_ACCESS_KEY) |
+              .cloud.aws.credentials.secret-key = strenv(AWS_SECRET_KEY) |
+              .cloud.aws.region.static = strenv(AWS_S3_REGION) |
+              .cloud.aws.s3.bucket = strenv(AWS_S3_BUCKET) |
+              .cloud.aws.stack.auto = false
+            ' $YML_PATH
 
       - name: Build with Gradle
         run: |
@@ -45,6 +63,10 @@ jobs:
           push: true
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/rg:latest
           context: .
+          build-args: |
+            PINPOINT_HOST=${{ secrets.PINPOINT_HOST }}
+            SLACK_CHANNEL_NAME=${{ secrets.SLACK_CHANNEL_NAME }}
+            SLACK_AUTH_TOKEN=${{ secrets.SLACK_AUTH_TOKEN }}
 
       - name: Install SSH Key
         uses: shimataro/ssh-key-action@v2
@@ -56,7 +78,7 @@ jobs:
       - name: Adding Known Hosts
         run: ssh-keyscan -H ${{secrets.SERVER_SSH_HOST}} >> ~/.ssh/known_hosts
 
-      - name : Command Cloud to Run New Image
+      - name: Command Cloud to Run New Image
         env:
           SERVER_SCRIPT: ./config/server_script_env
         run: |

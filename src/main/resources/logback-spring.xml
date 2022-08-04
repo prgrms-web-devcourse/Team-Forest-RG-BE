@@ -2,7 +2,7 @@
 <configuration>
     <property name="LOG_PATTERN" value="%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} -- %msg%n"/>
 
-    <springProfile name="default, test">
+    <springProfile name="!prod">
         <appender name="CONSOLE_LOG" class="ch.qos.logback.core.ConsoleAppender">
             <encoder>
                 <pattern>${LOG_PATTERN}</pattern>
@@ -54,7 +54,7 @@
         </appender>
     </springProfile>
 
-    <springProfile name="default, test">
+    <springProfile name="!prod">
         <root level="info">
             <appender-ref ref="CONSOLE_LOG"/>
         </root>
