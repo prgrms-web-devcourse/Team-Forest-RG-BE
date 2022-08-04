@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.prgrms.rg.domain.ridingpost.model.RidingJoinService;
+import com.prgrms.rg.domain.ridingpost.application.RidingJoinService;
 
 import lombok.RequiredArgsConstructor;
 

@@ -25,9 +25,6 @@ public class NotificationPushService {
 	private final SseNotificationSender notificationSender;
 	private final RidingPostFinder postFinder;
 
-	// 알림 엔티티를 생성해 db에 저장하고
-	// 사용자의 emitter를 찾아서
-	// 알림을 보냅니다
 	@TransactionalEventListener(phase = AFTER_COMMIT, fallbackExecution = true)
 	@Transactional(propagation = Propagation.REQUIRES_NEW)
 	public void handleRidingJoinEvent(RidingJoinEvent event) {
@@ -36,5 +33,4 @@ public class NotificationPushService {
 		Notification notification = notificationService.createRidingJoinNotification(host.getId(), post.getId());
 		notificationSender.sendNotification(host.getId(), notification, RIDING_JOIN_EVENT);
 	}
-
 }
