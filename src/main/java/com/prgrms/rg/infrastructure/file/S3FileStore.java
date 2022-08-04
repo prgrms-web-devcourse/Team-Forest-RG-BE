@@ -12,8 +12,8 @@ import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
-import com.prgrms.rg.domain.common.file.application.FileIOException;
 import com.prgrms.rg.domain.common.file.application.FileStore;
+import com.prgrms.rg.domain.common.file.application.exception.FileIOException;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

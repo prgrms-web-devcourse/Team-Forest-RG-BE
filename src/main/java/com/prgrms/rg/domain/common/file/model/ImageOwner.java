@@ -1,14 +1,12 @@
 package com.prgrms.rg.domain.common.file.model;
 
-import com.prgrms.rg.domain.common.file.model.StoredFile;
-
 /**
  * 이미지를 붙일 수 있는 타입입니다.
  * attach(String fileName, String fileUrl)메서드로 이미지 객체와 연관관계를 맺어주며,
  * 해당 메서드의 호출은 FileManager가 수행합니다.
  */
-public interface ImageAttachable {
-	StoredFile attach(String fileName, String fileUrl);
+public interface ImageOwner {
+	AttachedImage attach(TemporaryImage storedImage);
 
 	/**
 	 * 새로운 사진 엔티티를 설정하기 위해서 기존 사진을 지우는 연관관계 편의 메서드입니다.

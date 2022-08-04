@@ -1,4 +1,4 @@
-package com.prgrms.rg.domain.common.file.application;
+package com.prgrms.rg.domain.common.file.application.exception;
 
 public class
 IllegalFileExtensionException extends IllegalArgumentException {
