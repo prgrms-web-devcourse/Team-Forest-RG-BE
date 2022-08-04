@@ -27,7 +27,7 @@ public class UserController {
 	@PostMapping("/oauth/login")
 	public OAuthLoginResult loginOAuth(@RequestBody OAuthLoginRequest loginRequest) throws Exception {
 		log.info("{} : loginRequest" , loginRequest.getAuthorizationCode());
-		return userService.joinOAuth(loginRequest.getAuthorizationCode());
+		return userService.joinOAuth(loginRequest.getAuthorizationCode(),loginRequest.getFromUrl());
 		//token
 		//신규회원인지
 	}

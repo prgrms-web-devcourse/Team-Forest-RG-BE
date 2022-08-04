@@ -9,5 +9,5 @@ import com.prgrms.rg.web.user.results.OAuthLoginResult;
 
 public interface UserService {
 	Optional<User> findUserById(Long id);
-	OAuthLoginResult joinOAuth(String authorizationCode) throws Exception;
+	OAuthLoginResult joinOAuth(String authorizationCode, String fromUrl) throws Exception;
 }

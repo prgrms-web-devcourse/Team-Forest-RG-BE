@@ -17,6 +17,8 @@ import javax.transaction.Transactional;
 
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.message.BasicNameValuePair;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -31,14 +33,26 @@ import com.prgrms.rg.web.user.results.OAuthLoginResult;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+
 @Service
 @RequiredArgsConstructor
 @Slf4j
-
 public class UserServiceImpl implements UserService {
 	private final UserRepository userRepository;
 	private final JwtTokenProvider jwtTokenProvider;
 
+	@Value("${spring.security.oauth2.client.registration.kakao.client-id}")
+	private String clientId;
+	@Value("${spring.security.oauth2.client.registration.kakao.client-secret}")
+	private String clientSecret;
+	@Value("${spring.security.oauth2.client.registration.kakao.authorization-grant-type}")
+	private String grantType;
+	@Value("${spring.security.oauth2.client.registration.kakao.redirect-uri}")
+	private String redirectUrl;
+	@Value("${spring.security.oauth2.client.provider.kakao.token-uri}")
+	private String tokenUrl;
+	@Value("${spring.security.oauth2.client.provider.kakao.user-info-uri}")
+	private String userInfoUrl;
 	@Override
 	@Transactional
 	public Optional<User> findUserById(Long id) {
@@ -48,7 +62,7 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	@Transactional
-	public OAuthLoginResult joinOAuth(String authorizationCode) throws Exception {
+	public OAuthLoginResult joinOAuth(String authorizationCode, String fromUrl) throws Exception {
 		checkArgument(authorizationCode != null, "authorizationCode must be provided");
 		String accessToken = convertAuthorizationCodeToAccessToken(authorizationCode);
 		ConcurrentHashMap<String, String> oauthInformation = convertAccessTokenToOAuthInformation(accessToken);
@@ -61,7 +75,7 @@ public class UserServiceImpl implements UserService {
 				log.warn("Already exists: {} for (provider: {}, providerId: {})", user, provider,
 					providerId);
 				String token = generateToken(user);
-				return OAuthLoginResult.of(token, false);
+				return OAuthLoginResult.of(token, false, fromUrl);
 			})
 			.orElseGet(() -> { // 없다면
 				@SuppressWarnings("unchecked")
@@ -75,7 +89,7 @@ public class UserServiceImpl implements UserService {
 					.manner(Manner.create())
 					.build());
 				String token = generateToken(user);
-				return OAuthLoginResult.of(token, true);
+				return OAuthLoginResult.of(token, true, fromUrl);
 			});
 	}
 
@@ -85,16 +99,16 @@ public class UserServiceImpl implements UserService {
 		// access 토큰 받는 요청 보내기 (POST)
 		var urlEncodedBody = new String(new UrlEncodedFormEntity(
 			List.of(
-				new BasicNameValuePair("client_id", "8f248aa7874df072e8d15b2d0b284108"),
-				new BasicNameValuePair("client_secret", "tbGLY0lEfvxkrgFWfssEaXpWTS73nPJa"),
+				new BasicNameValuePair("client_id", clientId),
+				new BasicNameValuePair("client_secret", clientSecret),
 				new BasicNameValuePair("code", authorizationCode),
-				new BasicNameValuePair("grant_type", "authorization_code"),
-				new BasicNameValuePair("redirect_url", "http://192.168.0.37:3000/login")
+				new BasicNameValuePair("grant_type", grantType),
+				new BasicNameValuePair("redirect_url", redirectUrl)
 			)
 		).getContent().readAllBytes());
 
 		HttpRequest request = HttpRequest
-			.newBuilder(URI.create("https://kauth.kakao.com/oauth/token"))
+			.newBuilder(URI.create(tokenUrl))
 			.POST(HttpRequest.BodyPublishers.ofString(urlEncodedBody))
 			.header("Content-Type", "application/x-www-form-urlencoded; charset=utf-8")
 			.build();
@@ -110,7 +124,7 @@ public class UserServiceImpl implements UserService {
 		// User정보 받는 요청 보내기 (GET + Header)
 		ConcurrentHashMap<String, String> concurrentHashMap = new ConcurrentHashMap<>();
 		HttpClient client = HttpClient.newHttpClient();
-		HttpRequest request = HttpRequest.newBuilder(URI.create("https://kapi.kakao.com/v2/user/me"))
+		HttpRequest request = HttpRequest.newBuilder(URI.create(userInfoUrl))
 			.GET()
 			.setHeader("Authorization", "Bearer " + accessToken)
 			.setHeader("Content-Type", "application/json;charset=utf-8")
