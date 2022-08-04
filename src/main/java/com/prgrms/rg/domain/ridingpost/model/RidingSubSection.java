@@ -48,6 +48,15 @@ public class RidingSubSection implements ImageOwner {
 	@OneToMany(mappedBy = "subInformation", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
 	private List<SubImage> images = new ArrayList<>();
 
+	public RidingSubSection(String title, String content) {
+		this.title = title;
+		this.content = content;
+	}
+
+	public void assignPost(RidingPost post) {
+		this.post = post;
+	}
+
 	@Override
 	public AttachedImage attach(TemporaryImage storedImage) {
 		var image = new SubImage(storedImage, this);

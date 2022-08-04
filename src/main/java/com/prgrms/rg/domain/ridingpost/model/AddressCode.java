@@ -15,7 +15,7 @@ import lombok.NoArgsConstructor;
 public class AddressCode {
 
 	@Id
-	private Long code;
+	private int code;
 
 	//도
 	@Column(name = "area")
@@ -28,5 +28,9 @@ public class AddressCode {
 	//군, 구
 	@Column(name = "district")
 	private String district;
+
+	public AddressCode(int code) {
+		this.code = code;
+	}
 
 }
