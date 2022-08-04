@@ -1,16 +1,17 @@
 package com.prgrms.rg.domain.ridingpost.model;
 
 import static com.google.common.base.Preconditions.*;
+import static com.prgrms.rg.domain.ridingpost.model.RidingStatus.*;
+import static javax.persistence.CascadeType.*;
+import static javax.persistence.FetchType.*;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
-import javax.persistence.FetchType;
 import javax.persistence.OneToMany;
 
 import org.hibernate.validator.constraints.Range;
@@ -28,21 +29,20 @@ public class RidingParticipantSection {
 	private int participantCount = 1;
 
 	@Range(min = 5, max = 30)
-	@Column(name = "max_participant_count", nullable = false)
-	private int maxParticipantCount;
-
-	@Range(min = 5, max = 30)
 	@Column(name = "min_participant_count", nullable = false)
 	private int minParticipantCount;
 
+	@Range(min = 5, max = 30)
+	@Column(name = "max_participant_count", nullable = false)
+	private int maxParticipantCount;
+
 	@Column(name = "riding_status")
 	@Enumerated(EnumType.STRING)
-	private RidingStatus status = RidingStatus.IN_PROGRESS;
-
-	@OneToMany(mappedBy = "post", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
+	private RidingStatus status = IN_PROGRESS;
+	@OneToMany(mappedBy = "post", cascade = ALL, fetch = LAZY, orphanRemoval = true)
 	private List<RidingParticipant> participants = new ArrayList<>();
 
-	public RidingParticipantSection(int maxParticipantCount, int minParticipantCount) {
+	public RidingParticipantSection(int minParticipantCount, int maxParticipantCount) {
 		setMinMaxParticipantCount(minParticipantCount, maxParticipantCount);
 	}
 
@@ -62,13 +62,13 @@ public class RidingParticipantSection {
 		if (participantCount >= maxParticipantCount) {
 			status = RidingStatus.CLOSED;
 		} else {
-			status = RidingStatus.IN_PROGRESS;
+			status = IN_PROGRESS;
 		}
 	}
 
 	private void setMinMaxParticipantCount(int minParticipantCount, int maxParticipantCount) {
 		checkArgument(minParticipantCount <= maxParticipantCount
-			&& maxParticipantCount <= participantCount);
+			&& maxParticipantCount >= participantCount);
 
 		this.minParticipantCount = minParticipantCount;
 		this.maxParticipantCount = maxParticipantCount;
