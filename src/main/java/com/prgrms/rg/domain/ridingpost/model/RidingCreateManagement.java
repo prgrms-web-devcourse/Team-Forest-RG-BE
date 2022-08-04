@@ -1,11 +1,11 @@
 package com.prgrms.rg.domain.ridingpost.model;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Objects;
 
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 
+import com.prgrms.rg.domain.common.file.application.ImageAttachManger;
 import com.prgrms.rg.domain.ridingpost.application.command.RidingCreateCommand;
 import com.prgrms.rg.domain.ridingpost.application.command.RidingSubCreateCommand;
 import com.prgrms.rg.domain.user.model.User;
@@ -15,6 +15,8 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 @Component
 public class RidingCreateManagement {
+
+	private final ImageAttachManger imageManager;
 
 	public RidingPost createRidingPost(User leader, RidingCreateCommand command) {
 
@@ -27,10 +29,10 @@ public class RidingCreateManagement {
 			.ridingParticipantSection(participantSection)
 			.build();
 
-		//todo image
-		new RidingThumbnailImage(command.getThumbnailId(), post);
+		if (!Objects.isNull(command.getThumbnailId())) {
+			imageManager.store(command.getThumbnailId(), post);
+		}
 
-		//post mapping -> 내부에서
 		command.getConditionCommand().toSection(post);
 		if (!CollectionUtils.isEmpty(command.getSubCommand())) {
 			for (RidingSubCreateCommand subCommand : command.getSubCommand()) {
@@ -43,10 +45,8 @@ public class RidingCreateManagement {
 	private RidingSubSection createSubSection(RidingSubCreateCommand command) {
 		var section = new RidingSubSection(command.getTitle(), command.getContent());
 
-		//todo image
-		List<SubImage> imageList = new ArrayList<>();
-		for (Long imageId : command.getImageIdList()) {
-			imageList.add(new SubImage(imageId, section));
+		if (!CollectionUtils.isEmpty(command.getImageIdList()) && command.getImageIdList().size() <= 5) {
+			imageManager.store(command.getImageIdList(), section);
 		}
 		return section;
 	}
