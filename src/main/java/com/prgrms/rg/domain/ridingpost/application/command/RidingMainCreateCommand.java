@@ -31,7 +31,7 @@ public class RidingMainCreateCommand {
 	public RidingMainSection toSection() {
 		return RidingMainSection.builder()
 			.title(title)
-			.estimatedTime(estimatedTime).ridingDate(ridingDate).fee(fee).addressCode(addressCode)
+			.estimatedMinutes(estimatedTime).ridingDate(ridingDate).fee(fee).addressCode(addressCode)
 			.routes(routes).departurePlace(departurePlace).build();
 	}
 }

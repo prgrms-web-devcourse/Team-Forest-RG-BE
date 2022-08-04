@@ -9,15 +9,14 @@ public class RidingCreateCommand {
 
 	private final Long thumbnailId;
 
-	//main
 	private final RidingMainCreateCommand mainCommand;
 
-	//participant
+	//참여자 정보
 	private final RidingParticipantCreateCommand participantCommand;
 
-	//condition
+	//조건(bicycle, level)
 	private final RidingConditionCreateCommand conditionCommand;
 
-	//sub
+	//sub-section
 	private final List<RidingSubCreateCommand> subCommand;
 }

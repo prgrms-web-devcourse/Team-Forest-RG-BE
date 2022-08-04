@@ -1,13 +1,15 @@
 package com.prgrms.rg.domain.ridingpost.model;
 
+import static javax.persistence.CascadeType.*;
+import static javax.persistence.FetchType.*;
+import static lombok.AccessLevel.*;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -22,13 +24,12 @@ import com.prgrms.rg.domain.common.file.model.TemporaryImage;
 import com.prgrms.rg.domain.common.model.BaseTimeEntity;
 import com.prgrms.rg.domain.user.model.User;
 
-import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Getter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor(access = PROTECTED)
 @Entity
 public class RidingPost extends BaseTimeEntity implements ImageOwner {
 
@@ -37,7 +38,7 @@ public class RidingPost extends BaseTimeEntity implements ImageOwner {
 	private Long id;
 
 	@JoinColumn(name = "host_id", nullable = false)
-	@ManyToOne(optional = false, fetch = FetchType.LAZY)
+	@ManyToOne(optional = false, fetch = LAZY)
 	private User leader;
 
 	@OneToOne(mappedBy = "post")
@@ -52,7 +53,7 @@ public class RidingPost extends BaseTimeEntity implements ImageOwner {
 	@Embedded
 	private RidingConditionSection ridingConditionSection;
 
-	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "post")
+	@OneToMany(fetch = LAZY, cascade = ALL, mappedBy = "post")
 	private List<RidingSubSection> subSectionList = new ArrayList<>();
 
 	@Builder

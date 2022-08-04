@@ -18,7 +18,6 @@ public class RidingCreateMainRequest {
 	private int minParticipantCount;
 	private int maxParticipantCount;
 	private int regionCode;
-	//사용해도 ㄱㅊ나
 	private Coordinate departurePlace;
 	private String level;
 	private List<String> bicycleTypes;
