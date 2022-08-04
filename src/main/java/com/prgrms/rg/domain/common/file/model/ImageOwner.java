@@ -6,7 +6,7 @@ package com.prgrms.rg.domain.common.file.model;
  * 해당 메서드의 호출은 FileManager가 수행합니다.
  */
 public interface ImageOwner {
-	AttachedImage attach(String fileName, String fileUrl);
+	AttachedImage attach(TemporaryImage storedImage);
 
 	/**
 	 * 새로운 사진 엔티티를 설정하기 위해서 기존 사진을 지우는 연관관계 편의 메서드입니다.

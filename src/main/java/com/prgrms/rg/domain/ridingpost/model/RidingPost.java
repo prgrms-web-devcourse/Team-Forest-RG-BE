@@ -14,6 +14,7 @@ import javax.persistence.OneToOne;
 
 import com.prgrms.rg.domain.common.file.model.ImageOwner;
 import com.prgrms.rg.domain.common.file.model.AttachedImage;
+import com.prgrms.rg.domain.common.file.model.TemporaryImage;
 import com.prgrms.rg.domain.common.model.BaseTimeEntity;
 import com.prgrms.rg.domain.user.model.User;
 
@@ -82,8 +83,8 @@ public class RidingPost extends BaseTimeEntity implements ImageOwner {
 	}
 
 	@Override
-	public AttachedImage attach(String fileName, String fileUrl) {
-		var image = new RidingThumbnailImage(fileName, fileUrl, this);
+	public AttachedImage attach(TemporaryImage storedImage) {
+		var image = new RidingThumbnailImage(storedImage.getId(), storedImage.getOriginalFileName(), storedImage.getUrl(), this);
 		this.thumbnail = image;
 		return image;
 	}

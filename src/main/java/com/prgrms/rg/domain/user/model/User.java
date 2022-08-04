@@ -11,6 +11,7 @@ import javax.persistence.OneToOne;
 
 import com.prgrms.rg.domain.common.file.model.AttachedImage;
 import com.prgrms.rg.domain.common.file.model.ImageOwner;
+import com.prgrms.rg.domain.common.file.model.TemporaryImage;
 import com.prgrms.rg.domain.common.model.BaseTimeEntity;
 import com.prgrms.rg.domain.common.model.metadata.Bicycle;
 import com.prgrms.rg.domain.user.model.information.MannerInfo;
@@ -85,8 +86,8 @@ public class User extends BaseTimeEntity implements ImageOwner {
 	}
 
 	@Override
-	public AttachedImage attach(String fileName, String fileUrl) {
-		profileImage = new ProfileImage(fileName, fileUrl, this);
+	public AttachedImage attach(TemporaryImage storedImage) {
+		profileImage = new ProfileImage(storedImage, this);
 		return profileImage;
 	}
 

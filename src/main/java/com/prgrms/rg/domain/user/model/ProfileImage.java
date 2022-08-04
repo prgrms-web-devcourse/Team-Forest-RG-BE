@@ -7,6 +7,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 
 import com.prgrms.rg.domain.common.file.model.AttachedImage;
+import com.prgrms.rg.domain.common.file.model.ImageOwner;
+import com.prgrms.rg.domain.common.file.model.TemporaryImage;
 
 import lombok.NoArgsConstructor;
 
@@ -19,8 +21,13 @@ public class ProfileImage extends AttachedImage {
 	@JoinColumn(name = "user_id")
 	private User user;
 
-	public ProfileImage(String originalFileName, String url, User user) {
-		super(originalFileName, url);
+	public ProfileImage(TemporaryImage storedImage, User user) {
+		super(storedImage.getId(), storedImage.getOriginalFileName(), storedImage.getUrl());
 		this.user = user;
+	}
+
+	@Override
+	public ImageOwner getAttached() {
+		return user;
 	}
 }

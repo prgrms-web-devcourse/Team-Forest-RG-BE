@@ -5,6 +5,8 @@ import javax.persistence.FetchType;
 import javax.persistence.ManyToOne;
 
 import com.prgrms.rg.domain.common.file.model.AttachedImage;
+import com.prgrms.rg.domain.common.file.model.ImageOwner;
+import com.prgrms.rg.domain.common.file.model.TemporaryImage;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
@@ -16,8 +18,13 @@ public class SubImage extends AttachedImage {
 	@ManyToOne(fetch = FetchType.LAZY)
 	private RidingSubSection subInformation;
 
-	public SubImage(String originalFileName, String url, RidingSubSection subInformation) {
-		super(originalFileName, url);
+	public SubImage(TemporaryImage storedImage, RidingSubSection subInformation) {
+		super(storedImage.getId(), storedImage.getOriginalFileName(), storedImage.getUrl());
 		this.subInformation = subInformation;
+	}
+
+	@Override
+	public ImageOwner getAttached() {
+		return subInformation;
 	}
 }

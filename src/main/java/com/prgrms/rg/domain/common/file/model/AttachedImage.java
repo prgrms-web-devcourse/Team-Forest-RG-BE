@@ -1,9 +1,6 @@
 package com.prgrms.rg.domain.common.file.model;
 
-import static javax.persistence.GenerationType.*;
-
 import javax.persistence.EntityListeners;
-import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
 
@@ -19,15 +16,15 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public abstract class AttachedImage {
 
-	protected AttachedImage(String originalFileName, String url) {
+	protected AttachedImage(Long id, String originalFileName, String url) {
 		this.originalFileName = originalFileName;
 		this.url = url;
 	}
 
 	@Id
-	@GeneratedValue(strategy = IDENTITY)
 	private Long id;
 
 	protected String originalFileName;
 	protected String url;
+	public abstract ImageOwner getAttached();
 }

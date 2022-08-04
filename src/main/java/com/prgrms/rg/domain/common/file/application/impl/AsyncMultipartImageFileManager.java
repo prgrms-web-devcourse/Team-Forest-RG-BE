@@ -11,6 +11,8 @@ import com.prgrms.rg.domain.common.file.application.FileStore;
 import com.prgrms.rg.domain.common.file.application.exception.EmptyFileException;
 import com.prgrms.rg.domain.common.file.application.exception.IllegalFileExtensionException;
 import com.prgrms.rg.domain.common.file.application.exception.IllegalImageIdException;
+import com.prgrms.rg.domain.common.file.model.AttachedImage;
+import com.prgrms.rg.domain.common.file.model.AttachedImageRepository;
 import com.prgrms.rg.domain.common.file.model.TemporaryImage;
 import com.prgrms.rg.domain.common.file.model.TemporaryImageRepository;
 
@@ -23,6 +25,7 @@ public class AsyncMultipartImageFileManager implements AsyncImageManager {
 
 	private final FileStore fileStore;
 	private final TemporaryImageRepository imageRepository;
+	private final AttachedImageRepository attachedImageRepository;
 
 	private static final String[] SUPPORTING_EXTENSIONS = {
 		"png", "jpg"
@@ -43,10 +46,17 @@ public class AsyncMultipartImageFileManager implements AsyncImageManager {
 
 	@Override
 	public void delete(Long imageId) {
-		TemporaryImage savedImage = imageRepository.findById(imageId)
-			.orElseThrow(() -> new IllegalImageIdException(imageId));
-		fileStore.delete(savedImage.getUrl());
-		imageRepository.deleteById(imageId);
+		TemporaryImage savedImage;
+		try {
+			savedImage = imageRepository.findById(imageId)
+				.orElseThrow(() -> new IllegalImageIdException(imageId));
+			fileStore.delete(savedImage.getUrl());
+			imageRepository.deleteById(imageId);
+		} catch (IllegalImageIdException e) {
+			AttachedImage savedAttachImage = attachedImageRepository.findById(imageId).orElseThrow(() -> new IllegalImageIdException(imageId));
+			savedAttachImage.getAttached().removeCurrentImage();
+			attachedImageRepository.deleteById(imageId);
+		}
 	}
 
 	private boolean isFileNotPresent(MultipartFile multipartFile) {

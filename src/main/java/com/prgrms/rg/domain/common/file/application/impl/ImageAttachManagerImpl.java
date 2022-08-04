@@ -41,8 +41,7 @@ public class ImageAttachManagerImpl implements ImageAttachManger {
 		TemporaryImage storedImage = temporaryImageRepository.findById(temporaryImageId)
 			.orElseThrow(() -> new IllegalImageIdException(temporaryImageId));
 
-		AttachedImage attachedImage = attachedImageRepository.save(
-			owner.attach(storedImage.getOriginalFileName(), storedImage.getUrl()));
+		AttachedImage attachedImage = attachedImageRepository.save(owner.attach(storedImage));
 		temporaryImageRepository.deleteById(temporaryImageId);
 
 		return attachedImage;

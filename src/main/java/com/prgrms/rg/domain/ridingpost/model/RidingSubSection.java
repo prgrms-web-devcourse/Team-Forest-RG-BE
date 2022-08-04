@@ -16,6 +16,7 @@ import javax.validation.constraints.Size;
 
 import com.prgrms.rg.domain.common.file.model.AttachedImage;
 import com.prgrms.rg.domain.common.file.model.ImageOwner;
+import com.prgrms.rg.domain.common.file.model.TemporaryImage;
 
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -48,8 +49,8 @@ public class RidingSubSection implements ImageOwner {
 	private List<SubImage> images = new ArrayList<>();
 
 	@Override
-	public AttachedImage attach(String fileName, String fileUrl) {
-		var image = new SubImage(fileName, fileUrl, this);
+	public AttachedImage attach(TemporaryImage storedImage) {
+		var image = new SubImage(storedImage, this);
 		images.add(image);
 		return image;
 	}
