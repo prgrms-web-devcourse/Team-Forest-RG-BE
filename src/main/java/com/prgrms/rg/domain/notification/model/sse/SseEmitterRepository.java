@@ -1,4 +1,4 @@
-package com.prgrms.rg.domain.notification.model;
+package com.prgrms.rg.domain.notification.model.sse;
 
 import java.util.Map;
 
@@ -10,6 +10,8 @@ public interface SseEmitterRepository {
 	void saveEventCache(String emitterId, Object event);
 
 	Map<String, SseEmitter> findAllEmitterStartWithByMemberId(String memberId);
+
+	Map<String, SseEmitter> findEmitterByUserId(Long userId);
 
 	Map<String, Object> findAllEventCacheStartWithByMemberId(String memberId);
 
