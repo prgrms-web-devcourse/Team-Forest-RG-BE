@@ -68,7 +68,7 @@ public class RidingParticipantSection {
 
 	private void setMinMaxParticipantCount(int minParticipantCount, int maxParticipantCount) {
 		checkArgument(minParticipantCount <= maxParticipantCount
-			&& maxParticipantCount <= participantCount);
+			&& maxParticipantCount >= participantCount);
 
 		this.minParticipantCount = minParticipantCount;
 		this.maxParticipantCount = maxParticipantCount;

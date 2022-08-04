@@ -51,7 +51,7 @@ public class RidingPost extends BaseTimeEntity implements ImageAttachable {
 	@Embedded
 	private RidingConditionSection ridingConditionSection;
 
-	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "post")
 	private List<RidingSubSection> subSectionList = new ArrayList<>();
 
 	@Builder
@@ -60,10 +60,10 @@ public class RidingPost extends BaseTimeEntity implements ImageAttachable {
 		RidingParticipantSection ridingParticipantSection,
 		RidingConditionSection ridingConditionSection
 		) {
-		assignLeader(leader);
 		this.ridingMainSection = ridingMainSection;
 		this.ridingParticipantSection = ridingParticipantSection;
 		this.ridingConditionSection = ridingConditionSection;
+		assignLeader(leader);
 	}
 
 	private void assignLeader(User leader) {

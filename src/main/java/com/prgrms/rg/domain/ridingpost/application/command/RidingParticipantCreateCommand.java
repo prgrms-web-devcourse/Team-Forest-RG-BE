@@ -11,6 +11,6 @@ public class RidingParticipantCreateCommand {
 	private final int maxParticipantCount;
 
 	public RidingParticipantSection toSection() {
-		return new RidingParticipantSection(maxParticipantCount, minParticipantCount);
+		return new RidingParticipantSection(minParticipantCount, maxParticipantCount);
 	}
 }
