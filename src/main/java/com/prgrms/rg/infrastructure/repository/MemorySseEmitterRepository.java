@@ -1,5 +1,6 @@
-package com.prgrms.rg.infrastructure.notification.sse;
+package com.prgrms.rg.infrastructure.repository;
 
+import java.util.Collections;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
@@ -7,7 +8,7 @@ import java.util.stream.Collectors;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
-import com.prgrms.rg.domain.notification.model.SseEmitterRepository;
+import com.prgrms.rg.domain.notification.model.sse.SseEmitterRepository;
 
 @Component
 public class MemorySseEmitterRepository implements SseEmitterRepository {
@@ -30,6 +31,12 @@ public class MemorySseEmitterRepository implements SseEmitterRepository {
 		return emitters.entrySet().stream()
 			.filter(entry -> entry.getKey().startsWith(memberId))
 			.collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+	}
+
+	@Override
+	public Map<String, SseEmitter> findEmitterByUserId(Long userId) {
+		SseEmitter emitter = emitters.get(userId.toString());
+		return Collections.singletonMap(userId.toString(), emitter);
 	}
 
 	@Override
