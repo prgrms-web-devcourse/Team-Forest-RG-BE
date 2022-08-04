@@ -20,7 +20,7 @@ jobs:
           mysql user: 'dev'
           mysql password: 'dev'
       - name: Write Security yml
-      - run: |
+        run: |
           echo ${{ secrets.OAUTH_SECRET }} >> src/main/resources/application-security.yml
 
       - name: Set up JDK 11
