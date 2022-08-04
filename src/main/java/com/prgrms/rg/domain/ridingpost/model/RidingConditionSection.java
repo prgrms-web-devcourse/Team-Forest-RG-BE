@@ -1,5 +1,6 @@
 package com.prgrms.rg.domain.ridingpost.model;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -9,7 +10,6 @@ import javax.persistence.Embeddable;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.OneToMany;
-import javax.validation.constraints.Min;
 
 import com.prgrms.rg.domain.common.model.metadata.Bicycle;
 import com.prgrms.rg.domain.common.model.metadata.RidingLevel;
@@ -27,16 +27,12 @@ public class RidingConditionSection {
 	@Column(name = "level", nullable = false)
 	private RidingLevel level;
 
-	@Min(value = 0)
-	@Column(name = "riding_year", nullable = false)
-	private int ridingYear;
-
 	@OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
-	private Set<RidingConditionBicycle> bicycleList;
+	private Set<RidingConditionBicycle> bicycleList = new HashSet<>();
 
-	public RidingConditionSection(RidingPost post, RidingLevel level, int ridingYear, List<Bicycle> bicycleList) {
+	public RidingConditionSection(RidingPost post, RidingLevel level, List<Bicycle> bicycleList) {
+		post.assignConditionSection(this);
 		setLevel(level);
-		setRidingYear(ridingYear);
 		setBicycleList(post, bicycleList);
 	}
 
