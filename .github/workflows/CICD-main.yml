@@ -45,6 +45,7 @@ jobs:
             ' $YML_PATH
       - name: Write Security yml
         run: |
+          touch src/main/resources/application-security.yml
           echo ${{ secrets.OAUTH_SECRET }} >> src/main/resources/application-security.yml
 
       - name: Build with Gradle
