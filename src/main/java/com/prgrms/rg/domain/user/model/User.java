@@ -16,8 +16,9 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import com.prgrms.rg.domain.common.file.model.ImageAttachable;
-import com.prgrms.rg.domain.common.file.model.StoredFile;
+import com.prgrms.rg.domain.common.file.model.AttachedImage;
+import com.prgrms.rg.domain.common.file.model.ImageOwner;
+import com.prgrms.rg.domain.common.file.model.TemporaryImage;
 import com.prgrms.rg.domain.common.model.BaseTimeEntity;
 import com.prgrms.rg.domain.common.model.metadata.Bicycle;
 import com.prgrms.rg.domain.user.model.information.MannerInfo;
@@ -34,7 +35,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor(access = PRIVATE)
 @NoArgsConstructor(access = PROTECTED)
 @Getter
-public class User extends BaseTimeEntity implements UserDetails, ImageAttachable {
+public class User extends BaseTimeEntity implements UserDetails, ImageOwner {
 
 	@Id
 	@GeneratedValue(strategy = IDENTITY)
@@ -55,9 +56,6 @@ public class User extends BaseTimeEntity implements UserDetails, ImageAttachable
 
 	@Embedded
 	private Introduction introduction;
-
-	// @Embedded
-	// private Manner manner;
 
 	private String provider;
 
@@ -140,8 +138,8 @@ public class User extends BaseTimeEntity implements UserDetails, ImageAttachable
 	}
 
 	@Override
-	public StoredFile attach(String fileName, String fileUrl) {
-		profileImage = new ProfileImage(fileName, fileUrl, this);
+	public AttachedImage attach(TemporaryImage storedImage) {
+		profileImage = new ProfileImage(storedImage, this);
 		return profileImage;
 	}
 
