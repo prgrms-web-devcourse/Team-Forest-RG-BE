@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.prgrms.rg.domain.auth.jwt.JwtAuthentication;
 import com.prgrms.rg.domain.ridingpost.application.RidingJoinService;
 
 import lombok.RequiredArgsConstructor;
@@ -17,8 +18,8 @@ public class RidingJoinController {
 
 	@PostMapping("/api/v1/ridingposts/{postId}/join")
 	ResponseEntity<String> join(@PathVariable Long postId,
-		@AuthenticationPrincipal JwtToken token) {
-		ridingJoinService.joinUserToRiding(token.getUserId(), postId);
+		@AuthenticationPrincipal JwtAuthentication auth) {
+		ridingJoinService.joinUserToRiding(auth.userId, postId);
 		return ResponseEntity.ok("Riding join success");
 	}
 }

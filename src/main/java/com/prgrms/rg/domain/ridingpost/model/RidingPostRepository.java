@@ -4,4 +4,5 @@ import java.util.Optional;
 
 public interface RidingPostRepository {
 	Optional<RidingPost> findById(Long postId);
+	RidingPost save(RidingPost post);
 }

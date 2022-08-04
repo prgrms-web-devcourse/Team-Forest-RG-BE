@@ -2,6 +2,8 @@ package com.prgrms.rg.domain.common.file.application;
 
 import org.springframework.web.multipart.MultipartFile;
 
+import com.prgrms.rg.domain.common.file.application.exception.FileIOException;
+
 public interface FileStore {
 	/**
 	 * 파일을 저장합니다.
