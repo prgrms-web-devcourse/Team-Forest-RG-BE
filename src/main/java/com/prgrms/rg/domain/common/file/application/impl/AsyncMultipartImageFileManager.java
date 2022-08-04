@@ -6,7 +6,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.prgrms.rg.domain.common.file.application.AjaxImageManager;
+import com.prgrms.rg.domain.common.file.application.AsyncImageManager;
 import com.prgrms.rg.domain.common.file.application.FileStore;
 import com.prgrms.rg.domain.common.file.application.exception.EmptyFileException;
 import com.prgrms.rg.domain.common.file.application.exception.IllegalFileExtensionException;
@@ -19,7 +19,7 @@ import lombok.RequiredArgsConstructor;
 @Transactional
 @Component
 @RequiredArgsConstructor
-public class AjaxMultipartImageFileManager implements AjaxImageManager {
+public class AsyncMultipartImageFileManager implements AsyncImageManager {
 
 	private final FileStore fileStore;
 	private final TemporaryImageRepository imageRepository;

@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.prgrms.rg.domain.common.file.application.AjaxImageManager;
+import com.prgrms.rg.domain.common.file.application.AsyncImageManager;
 import com.prgrms.rg.domain.common.file.model.TemporaryImage;
 
 import lombok.RequiredArgsConstructor;
@@ -15,7 +15,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class ImageRestControllerV1 implements ImageRestController{
 
-	private final AjaxImageManager imageManager;
+	private final AsyncImageManager imageManager;
 
 	@PostMapping("/api/v1/images")
 	public TemporaryImage storeImage(MultipartFile image) {
