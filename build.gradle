@@ -44,6 +44,9 @@ dependencies {
     implementation 'org.projectlombok:lombok:1.18.22'
     implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE'
 
+    implementation 'org.apache.commons:commons-lang3:3.9'
+    implementation group: 'com.auth0', name: 'java-jwt', version: '3.16.0'
+
     compileOnly 'org.projectlombok:lombok'
     runtimeOnly 'mysql:mysql-connector-java'
     annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'

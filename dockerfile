@@ -1,6 +1,6 @@
 FROM openjdk:11
 
-# PINPOINT_HOST 는 외부 시스템에서 가져옵니다. (build-time arg)
+# 시스템으로 부터 build 실행 명령 --build-arg 매개변수로 가져올 변수들. (build-time arg)
 ARG PINPOINT_HOST
 ARG SLACK_CHANNEL_NAME
 ARG SLACK_AUTH_TOKEN

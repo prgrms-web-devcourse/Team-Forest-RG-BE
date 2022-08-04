@@ -22,10 +22,19 @@ public class CriticalMessageSender {
 
 	private static final String SLACK_CHANNEL_ID = System.getenv("SLACK_CHANNEL_NAME");
 	private static final String SLACK_AUTH_TOKEN = System.getenv("SLACK_AUTH_TOKEN");
+	private static final String SYSTEM_PROFILE = System.getProperty("spring.profiles.active");
 
 	public static void send(Exception exception) throws Exception {
-		String body = createMessageBodyFrom(exception);
-		sendHttpRequest(body);
+		String stackTraceMessage = createStackTraceMessage(exception);
+		send(stackTraceMessage);
+	}
+
+	public static void send(String message) throws Exception {
+		if (SYSTEM_PROFILE == null || !SYSTEM_PROFILE.matches("prod")) {
+			return;
+		}
+		var messageBody = createMessageBodyFrom(message);
+		sendHttpRequest(messageBody);
 	}
 
 	private static void sendHttpRequest(String body) throws Exception {
@@ -49,21 +58,23 @@ public class CriticalMessageSender {
 		// Http 요청을 보내고 응답을 inputStream에 받아 온다.
 		// 이 메서드를 사용하지 않으면 http 요청을 보내지 않기 때문에, 무조건 사용
 		conn.getInputStream();
-
 		conn.disconnect();
 	}
 
-	private static String createMessageBodyFrom(Exception exception) throws JsonProcessingException {
+	private static String createMessageBodyFrom(String message) throws JsonProcessingException {
 		ObjectMapper json = new ObjectMapper();
-		var stackStream = new ByteArrayOutputStream();
-		exception.printStackTrace(new PrintStream(stackStream));
 		String emoji = ":meow_sad:\t";
 		StringBuilder emojiBuffer = new StringBuilder();
 		emojiBuffer.append(emoji.repeat(20));
-		emojiBuffer.append("\n").append(stackStream.toString(StandardCharsets.UTF_8)).append("\n");
+		emojiBuffer.append("\n").append(message).append("\n");
 		emojiBuffer.append(emoji.repeat(20));
-
 		return json.writeValueAsString(Map.of("channel", SLACK_CHANNEL_ID, "text", emojiBuffer));
+	}
+
+	private static String createStackTraceMessage(Exception exception) {
+		var stackStream = new ByteArrayOutputStream();
+		exception.printStackTrace(new PrintStream(stackStream));
+		return stackStream.toString(StandardCharsets.UTF_8);
 	}
 
 }

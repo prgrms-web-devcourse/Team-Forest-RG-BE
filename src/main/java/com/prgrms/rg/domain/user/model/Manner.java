@@ -43,7 +43,7 @@ public class Manner {
 	MannerLevel mannerLevel() {
 		return MannerLevel.of(point);
 	}
-
+	
 	void addNoShowCount() {
 		noShow++;
 		if (noShow % NO_SHOW_LIMIT == 0) {
@@ -59,4 +59,5 @@ public class Manner {
 			"\n\tbanned=" + bannedUntil +
 			"\n}";
 	}
+
 }
