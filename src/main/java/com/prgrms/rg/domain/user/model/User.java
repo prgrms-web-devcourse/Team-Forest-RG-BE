@@ -10,12 +10,19 @@ import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.OneToOne;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import com.prgrms.rg.domain.common.file.model.ImageAttachable;
+import com.prgrms.rg.domain.common.file.model.StoredFile;
 import com.prgrms.rg.domain.common.model.BaseTimeEntity;
+import com.prgrms.rg.domain.common.model.metadata.Bicycle;
+import com.prgrms.rg.domain.user.model.information.MannerInfo;
+import com.prgrms.rg.domain.user.model.information.RiderInfo;
+import com.prgrms.rg.domain.user.model.information.UserImageInfo;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -27,7 +34,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor(access = PRIVATE)
 @NoArgsConstructor(access = PROTECTED)
 @Getter
-public class User extends BaseTimeEntity implements UserDetails {
+public class User extends BaseTimeEntity implements UserDetails, ImageAttachable {
 
 	@Id
 	@GeneratedValue(strategy = IDENTITY)
@@ -39,7 +46,10 @@ public class User extends BaseTimeEntity implements UserDetails {
 	@Embedded
 	private RiderProfile profile;
 
-	private String profileImage;
+	private String profileImages;
+
+	@OneToOne(mappedBy = "user")
+	private ProfileImage profileImage;
 
 	//TODO: 연락처 추가
 
@@ -53,22 +63,13 @@ public class User extends BaseTimeEntity implements UserDetails {
 
 	private String providerId;
 
-	private String isJoined;
+	private String isRegistered;
+
+	@Embedded
+	private Manner manner;
 
 	public boolean addBicycle(Bicycle bicycle) {
 		return profile.addBicycle(this, bicycle);
-	}
-
-	@Override
-	public String toString() {
-		return "User{" +
-			"id=" + id +
-			", nickname=" + nickname +
-			", profile=" + profile +
-			", profileImage=" + profileImage +
-			", introduction=" + introduction +
-			// ", manner=" + manner +
-			'}';
 	}
 
 	@Override
@@ -104,5 +105,48 @@ public class User extends BaseTimeEntity implements UserDetails {
 	@Override
 	public boolean isEnabled() {
 		return this.provider != null && this.providerId != null;
+	}
+
+	public String getNickname() {
+		return nickname.get();
+	}
+
+	public UserImageInfo getImage() {
+		return new UserImageInfo(profileImage.getUrl(), profileImage.getOriginalFileName());
+	}
+
+	public String getIntroduction() {
+		return introduction.get();
+	}
+
+	public RiderInfo getRiderInformation() {
+		return profile.information();
+	}
+
+	public MannerInfo getMannerInfo() {
+		return manner.information();
+	}
+
+	@Override
+	public String toString() {
+		return "User{" +
+			"id=" + id +
+			", nickname=" + nickname +
+			", profile=" + profile +
+			", profileImage=" + profileImages +
+			", introduction=" + introduction +
+			", manner=" + manner +
+			'}';
+	}
+
+	@Override
+	public StoredFile attach(String fileName, String fileUrl) {
+		profileImage = new ProfileImage(fileName, fileUrl, this);
+		return profileImage;
+	}
+
+	@Override
+	public void removeCurrentImage() {
+		profileImages = null;
 	}
 }

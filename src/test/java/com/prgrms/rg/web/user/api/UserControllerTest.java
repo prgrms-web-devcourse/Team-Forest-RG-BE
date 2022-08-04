@@ -36,7 +36,7 @@ class UserControllerTest {
 
 		// 임시 사용자 생성 및 토큰 주입
 		var template = new JdbcTemplate(dataSource);
-		template.update("INSERT INTO user(id,nickname) VALUES(3,'kms')");
+		template.update("INSERT INTO user(id,nickname,no_show,point) VALUES(3,'kms',0,0)");
 
 		var token = tokenProvider.createToken("ROLE_USER", 3L);
 

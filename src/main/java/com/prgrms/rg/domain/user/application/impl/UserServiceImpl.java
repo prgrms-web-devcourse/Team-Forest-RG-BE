@@ -22,6 +22,7 @@ import org.springframework.stereotype.Service;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.prgrms.rg.domain.auth.jwt.JwtTokenProvider;
 import com.prgrms.rg.domain.user.application.UserService;
+import com.prgrms.rg.domain.user.model.Manner;
 import com.prgrms.rg.domain.user.model.Nickname;
 import com.prgrms.rg.domain.user.model.User;
 import com.prgrms.rg.domain.user.model.UserRepository;
@@ -33,6 +34,7 @@ import lombok.extern.slf4j.Slf4j;
 @Service
 @RequiredArgsConstructor
 @Slf4j
+
 public class UserServiceImpl implements UserService {
 	private final UserRepository userRepository;
 	private final JwtTokenProvider jwtTokenProvider;
@@ -67,9 +69,10 @@ public class UserServiceImpl implements UserService {
 				String profileImage = oauthInformation.get("profile_image");
 				User user = userRepository.save(User.builder()
 					.nickname(new Nickname(nickname))
-					.profileImage(profileImage)
+					.profileImages(profileImage)
 					.providerId(providerId)
 					.provider(provider)
+					.manner(Manner.create())
 					.build());
 				String token = generateToken(user);
 				return OAuthLoginResult.of(token, true);
