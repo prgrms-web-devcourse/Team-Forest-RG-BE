@@ -12,7 +12,7 @@ import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 @RestController(value = "/api/v1")
-public class RestRidingPostController {
+public class RestRidingPostCreateController {
 
 	private final RidingPostService ridingPostService;
 
