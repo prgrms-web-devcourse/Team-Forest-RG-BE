@@ -15,9 +15,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = PROTECTED)
 public class Nickname {
 
-	@Column(nullable = false, unique = true, length = 16)
-	private String nickname;
-
 	private static final short NICKNAME_MINIMAL_BYTE_LENGTH = 6;
 	private static final short NICKNAME_MAXIMUM_BYTE_LENGTH = 24;
 	private static final String LENGTH_VALIDATION_MESSAGE = "닉네임은 " + NICKNAME_MINIMAL_BYTE_LENGTH + "바이트 이상, "
@@ -25,6 +22,8 @@ public class Nickname {
 	private static final Pattern CHARSET_REGEX = Pattern.compile("(^[ㄱ-ㅎ가-힣a-zA-Z]*$)");
 	private static final String ALLOWED_CHARSET = "한글과 알파벳";
 	private static final String CHARSET_VALIDATION_MESSAGE = "닉네임은 " + ALLOWED_CHARSET + "만 허용됩니다.";
+	@Column(nullable = false, unique = true, length = 16)
+	private String nickname;
 
 	public Nickname(String nickname) {
 		validateNicknameLength(nickname);
