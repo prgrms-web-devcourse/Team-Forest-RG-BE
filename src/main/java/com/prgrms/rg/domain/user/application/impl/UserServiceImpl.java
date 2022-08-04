@@ -4,14 +4,12 @@ import static com.google.common.base.Preconditions.*;
 import static org.apache.commons.lang3.ObjectUtils.*;
 
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -19,11 +17,10 @@ import javax.transaction.Transactional;
 
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.message.BasicNameValuePair;
-
 import org.springframework.stereotype.Service;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.prgrms.rg.config.JwtConfigure;
-import com.prgrms.rg.domain.auth.jwt.Jwt;
+import com.prgrms.rg.domain.auth.jwt.JwtTokenProvider;
 import com.prgrms.rg.domain.user.application.UserService;
 import com.prgrms.rg.domain.user.model.Nickname;
 import com.prgrms.rg.domain.user.model.User;
@@ -38,7 +35,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class UserServiceImpl implements UserService {
 	private final UserRepository userRepository;
-	private final JwtConfigure jwtConfigure;
+	private final JwtTokenProvider jwtTokenProvider;
 
 	@Override
 	@Transactional
@@ -46,7 +43,6 @@ public class UserServiceImpl implements UserService {
 		checkArgument(isNotEmpty(id), "id must be provided.");
 		return userRepository.findById(id);
 	}
-
 
 	@Override
 	@Transactional
@@ -58,13 +54,12 @@ public class UserServiceImpl implements UserService {
 		String provider = "kakao";
 		String providerId = oauthInformation.get("id");
 
-
 		return userRepository.findByProviderAndProviderId(provider, providerId)
 			.map(user -> { // 이미 유저가 있다면
 				log.warn("Already exists: {} for (provider: {}, providerId: {})", user, provider,
 					providerId);
 				String token = generateToken(user);
-				return OAuthLoginResult.of(token,true);
+				return OAuthLoginResult.of(token, true);
 			})
 			.orElseGet(() -> { // 없다면
 				@SuppressWarnings("unchecked")
@@ -77,7 +72,7 @@ public class UserServiceImpl implements UserService {
 					.provider(provider)
 					.build());
 				String token = generateToken(user);
-				return OAuthLoginResult.of(token,false);
+				return OAuthLoginResult.of(token, false);
 			});
 	}
 
@@ -129,14 +124,6 @@ public class UserServiceImpl implements UserService {
 	}
 
 	private String generateToken(User user) {
-		return jwt().sign(Jwt.Claims.of(user.getId(), "ROLE_USER"));
-	}
-
-	private Jwt jwt() {
-		return new Jwt(
-			jwtConfigure.getIssuer(),
-			jwtConfigure.getClientSecret(),
-			jwtConfigure.getExpirySeconds()
-		);
+		return jwtTokenProvider.createToken("ROLE_USER", user.getId());
 	}
 }

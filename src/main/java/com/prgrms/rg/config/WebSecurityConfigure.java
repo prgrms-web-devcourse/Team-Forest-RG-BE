@@ -4,8 +4,6 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
-import org.springframework.jdbc.core.JdbcOperations;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -13,13 +11,6 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.oauth2.client.JdbcOAuth2AuthorizedClientService;
-import org.springframework.security.oauth2.client.OAuth2AuthorizedClientService;
-import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository;
-import org.springframework.security.oauth2.client.web.AuthenticatedPrincipalOAuth2AuthorizedClientRepository;
-import org.springframework.security.oauth2.client.web.AuthorizationRequestRepository;
-import org.springframework.security.oauth2.client.web.OAuth2AuthorizedClientRepository;
-import org.springframework.security.oauth2.core.endpoint.OAuth2AuthorizationRequest;
 import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.security.web.context.SecurityContextPersistenceFilter;
 import org.springframework.web.cors.CorsConfiguration;
@@ -28,8 +19,7 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import com.prgrms.rg.domain.auth.jwt.Jwt;
 import com.prgrms.rg.domain.auth.jwt.JwtAuthenticationFilter;
-import com.prgrms.rg.domain.auth.model.HttpCookieOAuth2AuthorizationRequestRepository;
-import com.prgrms.rg.domain.user.application.UserService;
+import com.prgrms.rg.domain.auth.jwt.JwtTokenProvider;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -48,6 +38,12 @@ public class WebSecurityConfigure extends WebSecurityConfigurerAdapter {
 	public void configure(WebSecurity web) {
 		web.ignoring().antMatchers("/assets/**", "/h2-console/**");
 	}
+
+	// @PostConstruct
+	// public void utilizeJwt() {
+	//
+	// 	var provider = getApplicationContext().getBean(JwtTokenProvider.class);
+	// }
 
 	public AccessDeniedHandler accessDeniedHandler() {
 		return (request, response, e) -> {
@@ -70,30 +66,14 @@ public class WebSecurityConfigure extends WebSecurityConfigurerAdapter {
 		);
 	}
 
+	@Bean
+	public JwtTokenProvider jwtTokenProvider() {
+		return new JwtTokenProvider(jwt());
+	}
+
 	public JwtAuthenticationFilter jwtAuthenticationFilter() {
 		return new JwtAuthenticationFilter(jwtConfigure.getHeader(), jwt());
 	}
-
-	public AuthorizationRequestRepository<OAuth2AuthorizationRequest> authorizationRequestRepository() {
-		return new HttpCookieOAuth2AuthorizationRequestRepository();
-	}
-
-	public OAuth2AuthorizedClientService authorizedClientService(
-	) {
-		JdbcOperations jdbcOperations = getApplicationContext().getBean(JdbcOperations.class);
-		ClientRegistrationRepository clientRegistrationRepository = getApplicationContext().getBean(
-			ClientRegistrationRepository.class);
-		return new JdbcOAuth2AuthorizedClientService(jdbcOperations, clientRegistrationRepository);
-	}
-
-	public OAuth2AuthorizedClientRepository authorizedClientRepository() {
-		return new AuthenticatedPrincipalOAuth2AuthorizedClientRepository(authorizedClientService());
-	}
-	//
-	// public OAuth2AuthenticationSuccessHandler oauth2AuthenticationSuccessHandler() {
-	// 	return new OAuth2AuthenticationSuccessHandler(jwt(), getApplicationContext().getBean(UserService.class));
-	// }
-
 
 	public CorsConfigurationSource corsConfigurationSource() {
 		CorsConfiguration configuration = new CorsConfiguration();
@@ -114,11 +94,11 @@ public class WebSecurityConfigure extends WebSecurityConfigurerAdapter {
 			.cors().configurationSource(corsConfigurationSource())
 			.and()
 			.authorizeRequests()
-			.antMatchers("/user/me").hasAnyRole()
+			.antMatchers("/user/me").hasAnyRole("USER")
 			.anyRequest().permitAll()
 			.and()
 
-			/**
+			/*
 			 * formLogin, csrf, headers, http-basic, rememberMe, logout filter 비활성화
 			 */
 			.formLogin()
@@ -133,31 +113,19 @@ public class WebSecurityConfigure extends WebSecurityConfigurerAdapter {
 			.disable()
 			.logout()
 			.disable()
-			/**
+			/*
 			 * Session 사용하지 않음
 			 */
 			.sessionManagement()
 			.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
 			.and()
-			/**
-			 * OAuth2 설정
-			 */
-			// .oauth2Login()
-			// .authorizationEndpoint()
-			// // .authorizationRequestRepository(authorizationRequestRepository())
-			// .and()
-			// .successHandler(oauth2AuthenticationSuccessHandler())
-			// // .authorizedClientService(authorizedClientService()) 서비스를 Repository에서 DI받아서 상관없을듯합니다
-			// .authorizedClientRepository(
-			// 	authorizedClientRepository())
-			// .and()
-			/**
+			/*
 			 * 예외처리 핸들러
 			 */
 			.exceptionHandling()
 			.accessDeniedHandler(accessDeniedHandler())
 			.and()
-			/**
+			/*
 			 * Jwt 필터
 			 */
 			.addFilterAfter(jwtAuthenticationFilter(), SecurityContextPersistenceFilter.class)
