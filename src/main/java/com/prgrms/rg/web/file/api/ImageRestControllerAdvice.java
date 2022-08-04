@@ -22,14 +22,6 @@ public class ImageRestControllerAdvice {
 		return "비어 있는 파일이기에 저장이 불가합니다.";
 	}
 
-	//TODO: 알림 전송하거나, 다른 핸들러로 전송
-	@ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-	@ExceptionHandler
-	public String handleFileIOException(FileIOException e) {
-		log.info(e.getMessage(), e);
-		return "파일을 저장하는 과정에서 입출력 에러가 발생하였습니다.";
-	}
-
 	@ResponseStatus(HttpStatus.BAD_REQUEST)
 	@ExceptionHandler
 	public String handleIllegalFileExtensionException(IllegalFileExtensionException e) {
