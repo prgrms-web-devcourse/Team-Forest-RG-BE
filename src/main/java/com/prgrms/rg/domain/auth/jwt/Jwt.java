@@ -7,7 +7,6 @@ import java.util.Map;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
-import com.auth0.jwt.JWTCreator;
 import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTVerificationException;
@@ -39,20 +38,6 @@ public final class Jwt {
 			.withClaimPresence("iat")
 			.withClaimPresence("exp")
 			.build();
-	}
-
-	public String sign(Claims claims) {
-		Date now = new Date();
-		JWTCreator.Builder builder = com.auth0.jwt.JWT.create();
-		builder.withIssuer(issuer);
-		builder.withIssuedAt(now);
-		if (expirySeconds > 0) {
-			builder.withExpiresAt(new Date(now.getTime() + expirySeconds * 1_000L));
-		}
-		builder.withClaim("userId", claims.userId);
-		builder.withClaim("role", claims.role);
-		builder.withSubject(String.valueOf(claims.userId));
-		return builder.sign(algorithm);
 	}
 
 	public Claims verify(String token) throws JWTVerificationException {

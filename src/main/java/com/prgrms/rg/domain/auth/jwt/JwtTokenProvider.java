@@ -39,30 +39,8 @@ public class JwtTokenProvider {
 			.sign(Algorithm.HMAC512(secretKey));
 	}
 
-	// // 인증 성공시 SecurityContextHolder에 저장할 Authentication 객체 생성
-	// public Authentication getAuthentication(String token) {
-	// 	UserDetails userDetails = userDetailsService.loadUserByUsername(this.getUserPk(token));
-	// 	return new UsernamePasswordAuthenticationToken(userDetails, "", userDetails.getAuthorities());
-	// }
-
-	// // Jwt Token에서 User PK 추출
-	// public String getUserPk(String token) {
-	// 	return Jwts.parser().setSigningKey(secretKey)
-	// 		.parseClaimsJws(token).getBody().getSubject();
-	// }
-
 	public String resolveToken(HttpServletRequest req) {
 		return req.getHeader("X-AUTH-TOKEN");
 	}
-
-	// // Jwt Token의 유효성 및 만료 기간 검사
-	// public boolean validateToken(String jwtToken) {
-	// 	try {
-	// 		Jws<Claims> claims = Jwts.parser().setSigningKey(secretKey).parseClaimsJws(jwtToken);
-	// 		return !claims.getBody().getExpiration().before(new Date());
-	// 	} catch (Exception e) {
-	// 		return false;
-	// 	}
-	// }
 
 }

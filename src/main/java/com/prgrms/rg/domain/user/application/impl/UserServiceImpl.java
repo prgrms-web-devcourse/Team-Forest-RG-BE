@@ -59,7 +59,7 @@ public class UserServiceImpl implements UserService {
 				log.warn("Already exists: {} for (provider: {}, providerId: {})", user, provider,
 					providerId);
 				String token = generateToken(user);
-				return OAuthLoginResult.of(token, true);
+				return OAuthLoginResult.of(token, false);
 			})
 			.orElseGet(() -> { // 없다면
 				@SuppressWarnings("unchecked")
@@ -72,7 +72,7 @@ public class UserServiceImpl implements UserService {
 					.provider(provider)
 					.build());
 				String token = generateToken(user);
-				return OAuthLoginResult.of(token, false);
+				return OAuthLoginResult.of(token, true);
 			});
 	}
 
@@ -86,7 +86,7 @@ public class UserServiceImpl implements UserService {
 				new BasicNameValuePair("client_secret", "tbGLY0lEfvxkrgFWfssEaXpWTS73nPJa"),
 				new BasicNameValuePair("code", authorizationCode),
 				new BasicNameValuePair("grant_type", "authorization_code"),
-				new BasicNameValuePair("redirect_url", "http://192.168.219.108:3000/login")
+				new BasicNameValuePair("redirect_url", "http://192.168.0.37:3000/login")
 			)
 		).getContent().readAllBytes());
 

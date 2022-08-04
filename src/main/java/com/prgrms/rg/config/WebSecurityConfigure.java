@@ -39,12 +39,6 @@ public class WebSecurityConfigure extends WebSecurityConfigurerAdapter {
 		web.ignoring().antMatchers("/assets/**", "/h2-console/**");
 	}
 
-	// @PostConstruct
-	// public void utilizeJwt() {
-	//
-	// 	var provider = getApplicationContext().getBean(JwtTokenProvider.class);
-	// }
-
 	public AccessDeniedHandler accessDeniedHandler() {
 		return (request, response, e) -> {
 			Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -77,7 +71,7 @@ public class WebSecurityConfigure extends WebSecurityConfigurerAdapter {
 
 	public CorsConfigurationSource corsConfigurationSource() {
 		CorsConfiguration configuration = new CorsConfiguration();
-		configuration.addAllowedOrigin("http://192.168.219.108:3000/");
+		configuration.addAllowedOrigin("http://192.168.0.37:3000/");
 		configuration.addAllowedHeader("*");
 		configuration.addAllowedMethod("*");
 		configuration.setAllowCredentials(true);
@@ -94,7 +88,7 @@ public class WebSecurityConfigure extends WebSecurityConfigurerAdapter {
 			.cors().configurationSource(corsConfigurationSource())
 			.and()
 			.authorizeRequests()
-			.antMatchers("/user/me").hasAnyRole("USER")
+			.antMatchers("/user/me").authenticated()
 			.anyRequest().permitAll()
 			.and()
 
