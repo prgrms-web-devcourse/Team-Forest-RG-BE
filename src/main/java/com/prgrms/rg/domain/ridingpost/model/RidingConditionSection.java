@@ -1,5 +1,6 @@
 package com.prgrms.rg.domain.ridingpost.model;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -27,7 +28,7 @@ public class RidingConditionSection {
 	private RidingLevel level;
 
 	@OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
-	private Set<RidingConditionBicycle> bicycleList;
+	private Set<RidingConditionBicycle> bicycleList = new HashSet<>();
 
 	public RidingConditionSection(RidingPost post, RidingLevel level, List<Bicycle> bicycleList) {
 		post.assignConditionSection(this);
