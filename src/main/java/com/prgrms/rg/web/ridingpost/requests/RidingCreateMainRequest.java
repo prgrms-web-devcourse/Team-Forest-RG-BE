@@ -3,6 +3,8 @@ package com.prgrms.rg.web.ridingpost.requests;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import javax.validation.constraints.Pattern;
+
 import com.prgrms.rg.domain.ridingpost.model.Coordinate;
 
 import lombok.Data;
@@ -12,7 +14,9 @@ public class RidingCreateMainRequest {
 
 	private String title;
 	private LocalDateTime ridingDate;
-	private int estimatedTime;
+
+	// todo ~시 ~분 @Pattern()
+	private String estimatedTime;
 	private List<String> routes;
 	private int fee;
 	private int minParticipantCount;

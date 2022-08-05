@@ -36,9 +36,8 @@ public class RidingMainSection {
 	@Column(name = "title", nullable = false)
 	private String title;
 
-	@Min(value = 0L)
-	@Column(name = "estimated_minutes", nullable = false)
-	private int estimatedMinutes;
+	@Column(name = "estimated_time", nullable = false)
+	private String estimatedTime;
 
 	@Column(name = "riding_date", nullable = false)
 	private LocalDateTime ridingDate;
@@ -62,10 +61,10 @@ public class RidingMainSection {
 	private Coordinate departurePlace;
 
 	@Builder
-	public RidingMainSection(String title, int estimatedMinutes, LocalDateTime ridingDate, int fee,
+	public RidingMainSection(String title, String estimatedTime, LocalDateTime ridingDate, int fee,
 		AddressCode addressCode, List<String> routes, Coordinate departurePlace) {
 		setTitle(title);
-		setEstimatedMinutes(estimatedMinutes);
+		setEstimatedTime(estimatedTime);
 		setFee(fee);
 		setAddressCode(addressCode);
 		setRidingDate(ridingDate);

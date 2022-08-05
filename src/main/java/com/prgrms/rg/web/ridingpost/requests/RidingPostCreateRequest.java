@@ -14,7 +14,7 @@ public class RidingPostCreateRequest {
 
 	private RidingCreateMainRequest information;
 
-	private List<RidingCreateDetailRequest> details;
+	private List<RidingCreateDetailRequest> detail;
 
 	public RidingCreateCommand toCommand() {
 		var mainCommand = RidingMainCreateCommand.builder()
@@ -30,7 +30,7 @@ public class RidingPostCreateRequest {
 		var conditionCommand = new RidingConditionCreateCommand(information.getLevel(), information.getBicycleTypes());
 
 		var subCommandList =
-			details.stream().map(RidingCreateDetailRequest::toCommand).collect(Collectors.toList());
+			detail.stream().map(RidingCreateDetailRequest::toCommand).collect(Collectors.toList());
 
 		return new RidingCreateCommand(information.getThumbnail(), mainCommand, participantCommand, conditionCommand, subCommandList);
 	}
