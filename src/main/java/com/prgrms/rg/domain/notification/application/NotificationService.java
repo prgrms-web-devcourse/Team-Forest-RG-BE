@@ -1,9 +1,7 @@
 package com.prgrms.rg.domain.notification.application;
-import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
-
+import com.prgrms.rg.domain.notification.model.Notification;
 
 public interface NotificationService {
-	SseEmitter subscribe(String userId, String lastEventId);
-
+	Notification createRidingJoinNotification(Long hostId, Long ridingPostId);
 }

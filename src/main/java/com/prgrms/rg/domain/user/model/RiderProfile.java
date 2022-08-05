@@ -28,8 +28,10 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = PROTECTED)
 public class RiderProfile {
 	private Year ridingStartYear;
+
 	@Enumerated(value = STRING)
 	private RidingLevel level;
+
 	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
 	private Set<UserBicycle> bicycles = new HashSet<>();
 
@@ -37,6 +39,7 @@ public class RiderProfile {
 		서버 쪽에서는 그것을 시작 년도로 치환, 저장하여 사용자 편의성을 높이기로 하였음
 	 */
 	//TODO: User 생성자에서 UserBicycle 추가 불가능?
+
 	public RiderProfile(int ridingYears, RidingLevel level) {
 		this.ridingStartYear = Year.now().minusYears(ridingYears);
 		this.level = level;

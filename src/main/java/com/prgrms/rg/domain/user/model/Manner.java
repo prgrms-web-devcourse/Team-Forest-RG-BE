@@ -44,6 +44,7 @@ public class Manner {
 		return MannerLevel.of(point);
 	}
 
+
 	void addNoShowCount() {
 		noShow++;
 		if (noShow % NO_SHOW_LIMIT == 0) {

@@ -30,7 +30,7 @@ public class CriticalMessageSender {
 	}
 
 	public static void send(String message) throws Exception {
-		if (SYSTEM_PROFILE == null || !SYSTEM_PROFILE.matches("prod")) {
+		if (SYSTEM_PROFILE == null || !SYSTEM_PROFILE.contains("prod")) {
 			return;
 		}
 		var messageBody = createMessageBodyFrom(message);
