@@ -1,5 +1,6 @@
 package com.prgrms.rg.web.ridingpost.api;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -17,9 +18,9 @@ public class RestRidingPostCreateController {
 	private final RidingPostService ridingPostService;
 
 	@PostMapping(value = "/ridingposts")
-	public Long createRidingPost(@AuthenticationPrincipal Long userId, @RequestBody RidingPostCreateRequest ridingRequest) {
+	public ResponseEntity<Long> createRidingPost(@AuthenticationPrincipal Long userId, @RequestBody RidingPostCreateRequest ridingRequest) {
 
 		//return type : post id
-		return ridingPostService.createRidingPost(userId, ridingRequest.toCommand());
+		return ResponseEntity.ok(ridingPostService.createRidingPost(userId, ridingRequest.toCommand()));
 	}
 }
