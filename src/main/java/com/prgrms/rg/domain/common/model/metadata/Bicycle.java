@@ -1,8 +1,10 @@
 package com.prgrms.rg.domain.common.model.metadata;
 
+import static com.google.common.base.Preconditions.*;
 import static lombok.AccessLevel.*;
 
 import java.util.Map;
+import java.util.Objects;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -19,10 +21,14 @@ public class Bicycle {
 
 	//TODO: 코드에 따라 id 값 부여
 	//TODO: 어느 도메인에 속한 것일까?
+	//todo 데이터 확정 후 수정하기
 	private static final Map<String, Bicycle> bicycleList = Map.of(
-		"MTV", new Bicycle(1L, "MTV"),
+		"MTB", new Bicycle(1L, "MTB"),
 		"로드", new Bicycle(2L, "로드"),
-		"따릉이", new Bicycle(3L, "따릉이")
+		"따릉이", new Bicycle(3L, "따릉이"),
+		"픽시", new Bicycle(4L, "픽시"),
+		"하이브리드", new Bicycle(5L, "하이브리드"),
+		"기타", new Bicycle(6L, "기타")
 	);
 
 	public Bicycle(Long id, String name) {
@@ -31,8 +37,10 @@ public class Bicycle {
 	}
 
 	public static Bicycle from(String name) {
-		//return check
-		return bicycleList.get(name);
+		var mapValue = bicycleList.get(name);
+		checkArgument(!Objects.isNull(mapValue));
+
+		return mapValue;
 	}
 
 	@Id
