@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.prgrms.rg.domain.auth.jwt.JwtAuthentication;
 import com.prgrms.rg.domain.ridingpost.application.RidingPostService;
 import com.prgrms.rg.web.ridingpost.requests.RidingPostCreateRequest;
 
@@ -18,9 +19,9 @@ public class RestRidingPostCreateController {
 	private final RidingPostService ridingPostService;
 
 	@PostMapping(value = "/ridingposts")
-	public ResponseEntity<Long> createRidingPost(@AuthenticationPrincipal Long userId, @RequestBody RidingPostCreateRequest ridingRequest) {
+	public ResponseEntity<Long> createRidingPost(@AuthenticationPrincipal JwtAuthentication auth, @RequestBody RidingPostCreateRequest ridingRequest) {
 
 		//return type : post id
-		return ResponseEntity.ok(ridingPostService.createRidingPost(userId, ridingRequest.toCommand()));
+		return ResponseEntity.ok(ridingPostService.createRidingPost(auth.userId, ridingRequest.toCommand()));
 	}
 }
