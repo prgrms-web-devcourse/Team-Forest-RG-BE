@@ -1,41 +1,32 @@
 package com.prgrms.rg.domain.notification.application.impl;
 
-import java.io.IOException;
-
 import org.springframework.stereotype.Service;
-import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.prgrms.rg.domain.notification.application.NotificationService;
-import com.prgrms.rg.domain.notification.model.NotificationSendFailException;
-import com.prgrms.rg.domain.notification.model.SseEmitterRepository;
+import com.prgrms.rg.domain.notification.model.Notification;
+import com.prgrms.rg.domain.notification.model.NotificationRepository;
+import com.prgrms.rg.domain.ridingpost.model.RidingPost;
+import com.prgrms.rg.domain.ridingpost.model.RidingPostFinder;
+import com.prgrms.rg.domain.user.application.UserReadService;
+import com.prgrms.rg.domain.user.model.User;
 
 import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class NotificationServiceImpl implements NotificationService {
-	private static final Long DEFAULT_TIMEOUT = 60L * 1000 * 60;
+	private final NotificationRepository notificationRepository;
+	private final UserReadService userReadService;
+	private final RidingPostFinder postFinder;
 
-	private final SseEmitterRepository emitterRepository;
-
-	public SseEmitter subscribe(String userId, String lastEventId) {
-		String emitterId = userId + "_" + System.currentTimeMillis();
-		SseEmitter emitter = emitterRepository.save(emitterId, new SseEmitter(DEFAULT_TIMEOUT));
-		emitter.onCompletion(() -> emitterRepository.deleteById(emitterId));
-		emitter.onTimeout(() -> emitterRepository.deleteById(emitterId));
-		sendEvent(emitter, emitterId, "EventStream Created. [userId=" + userId + "]","connection");
-		return emitter;
-	}
-
-	private void sendEvent(SseEmitter emitter, String emitterId, Object data, String eventName) {
-		try {
-			emitter.send(SseEmitter.event()
-				.id(emitterId)
-				.name(eventName)
-				.data(data));
-		} catch (IOException e) {
-			emitterRepository.deleteById(emitterId);
-			throw new NotificationSendFailException(e);
-		}
+	@Override
+	@Transactional
+	public Notification createRidingJoinNotification(Long userId, Long ridingPostId) {
+		User user = userReadService.getUserEntityById(userId);
+		RidingPost post = postFinder.find(ridingPostId);
+		Notification notification = Notification.createRidingJoinNotification(user, post);
+		return notificationRepository.save(notification);
 	}
 }
