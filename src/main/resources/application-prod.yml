@@ -21,7 +21,7 @@ spring:
         format_sql: true
         use_sql_comments: true
 server:
-  port: 8080
+  port: 80
 logging:
   file:
     path: ${LOG_PATH}
