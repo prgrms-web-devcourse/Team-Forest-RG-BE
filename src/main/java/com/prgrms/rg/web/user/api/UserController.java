@@ -10,34 +10,27 @@ import com.prgrms.rg.domain.auth.jwt.JwtAuthentication;
 import com.prgrms.rg.domain.user.application.UserService;
 import com.prgrms.rg.web.user.requests.OAuthLoginRequest;
 import com.prgrms.rg.web.user.results.OAuthLoginResult;
-import com.prgrms.rg.web.user.results.UserDto;
+import com.prgrms.rg.web.user.results.UserMeResult;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-@RestController
+@RestController("api/v1")
 @RequiredArgsConstructor
 @Slf4j
 public class UserController {
 	private final UserService userService;
-	/**
-	 * 보호받는 엔드포인트 - ROLE_USER 또는 ROLE_ADMIN 권한 필요함
-	 */
 
-	@PostMapping("/oauth/login")
+	@PostMapping("/users/oauth/login")
 	public OAuthLoginResult loginOAuth(@RequestBody OAuthLoginRequest loginRequest) throws Exception {
-		log.info("{} : loginRequest" , loginRequest.getAuthorizationCode());
-		return userService.joinOAuth(loginRequest.getAuthorizationCode(),loginRequest.getFromUrl());
-		//token
-		//신규회원인지
+		return userService.joinOAuth(loginRequest.getAuthorizationCode(), loginRequest.getFromUrl());
 	}
 
-
 	@GetMapping("/user/me")
-	public UserDto me(@AuthenticationPrincipal JwtAuthentication authentication) {
+	public UserMeResult me(@AuthenticationPrincipal JwtAuthentication authentication) {
 		return userService.findUserById(authentication.userId)
 			.map(user ->
-				new UserDto(authentication.token, authentication.userId)
+				UserMeResult.of(authentication.token, authentication.userId)
 			)
 			.orElseThrow(() -> new IllegalArgumentException("Could not found user for " + authentication.userId));
 	}
