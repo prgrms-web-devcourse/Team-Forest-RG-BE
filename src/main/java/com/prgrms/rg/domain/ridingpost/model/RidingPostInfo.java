@@ -7,6 +7,7 @@ import java.util.stream.Collectors;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
+import com.prgrms.rg.domain.user.model.ProfileImage;
 import com.prgrms.rg.domain.user.model.User;
 
 import lombok.AccessLevel;
@@ -34,14 +35,15 @@ public class RidingPostInfo {
 	@JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 	@Getter
 	static class LeaderInfo {
-		private final Long leaderId;
-		private final String leaderNickname;
-		private final String leaderProfileImageUrl;
+		private final Long id;
+		private final String nickname;
+		private final String profileImage;
 
 		public LeaderInfo(User leader) {
-			this.leaderId = leader.getId();
-			this.leaderNickname = leader.getNickname();
-			this.leaderProfileImageUrl = leader.getProfileImage().getUrl();
+			ProfileImage profileImage = leader.getProfileImage();
+			this.id = leader.getId();
+			this.nickname = leader.getNickname();
+			this.profileImage = profileImage != null ? profileImage.getUrl() : null;
 		}
 	}
 
@@ -52,7 +54,7 @@ public class RidingPostInfo {
 		private String title;
 		private String thumbnail;
 		private String ridingLevel;
-		private String zone;
+		private ZoneInfo zone;
 		private int fee;
 		private int estimatedTime;
 		private LocalDateTime createdAt;
@@ -74,11 +76,13 @@ public class RidingPostInfo {
 				.map(ridingParticipant -> {
 					return ParticipantInfo.from(ridingParticipant.getUser());
 				}).collect(Collectors.toList());
+			RidingThumbnailImage thumbnail = ridingPost.getThumbnail();
+			String thumbnailUrl = thumbnail != null ? thumbnail.getUrl() : null;
 			return RidingInfo.builder()
 				.title(mainSection.getTitle())
-				.thumbnail(ridingPost.getThumbnail().getUrl())
+				.thumbnail(thumbnailUrl)
 				.ridingLevel(conditionSection.getLevel())
-				.zone(mainSection.getAddressCode().toString())
+				.zone(ZoneInfo.from(mainSection.getAddressCode()))
 				.bicycleType(conditionSection.getBicycleAsStringList())
 				.fee(mainSection.getFee())
 				.estimatedTime(mainSection.getEstimatedMinutes())
@@ -94,6 +98,7 @@ public class RidingPostInfo {
 	}
 
 	@Builder
+	@Getter
 	@AllArgsConstructor(access = AccessLevel.PRIVATE)
 	static class RidingDetail {
 		private String title;
@@ -109,6 +114,7 @@ public class RidingPostInfo {
 		}
 	}
 
+	@Getter
 	@AllArgsConstructor(access = AccessLevel.PRIVATE)
 	static class ParticipantInfo {
 		private final Long id;
@@ -116,7 +122,20 @@ public class RidingPostInfo {
 		private final String profileImage;
 
 		public static ParticipantInfo from(User user) {
-			return new ParticipantInfo(user.getId(), user.getNickname(), user.getImage().getFileUrl());
+			ProfileImage profileImage = user.getProfileImage();
+			String imageUrl = profileImage != null ? profileImage.getUrl() : null;
+			return new ParticipantInfo(user.getId(), user.getNickname(), imageUrl);
+		}
+	}
+
+	@Getter
+	@AllArgsConstructor
+	static class ZoneInfo {
+		private final int code;
+		private final String name;
+
+		public static ZoneInfo from(AddressCode addressCode) {
+			return new ZoneInfo(addressCode.getCode(), addressCode.toString());
 		}
 	}
 }

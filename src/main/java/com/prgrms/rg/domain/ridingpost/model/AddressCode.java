@@ -33,4 +33,8 @@ public class AddressCode {
 		this.code = code;
 	}
 
+	@Override
+	public String toString() {
+		return area + " " + city + " " + district;
+	}
 }
