@@ -28,10 +28,6 @@ public class UserController {
 
 	@GetMapping("/user/me")
 	public UserMeResult me(@AuthenticationPrincipal JwtAuthentication authentication) {
-		return userService.findUserById(authentication.userId)
-			.map(user ->
-				UserMeResult.of(authentication.token, authentication.userId)
-			)
-			.orElseThrow(() -> new IllegalArgumentException("Could not found user for " + authentication.userId));
+		return userService.findUserById(authentication.userId);
 	}
 }

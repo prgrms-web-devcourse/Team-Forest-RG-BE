@@ -13,19 +13,14 @@ import lombok.Setter;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class UserMeResult {
 
-	private String token;
-
 	private Long userId;
+	private String username;
 
-	public static UserMeResult of(String token, Long userId) {
+	public static UserMeResult of(String username, Long userId) {
 		UserMeResult result = new UserMeResult();
-		result.setToken(token);
 		result.setUserId(userId);
+		result.setUsername(username);
 		return result;
-	}
-
-	public String getToken() {
-		return token;
 	}
 
 	public Long getUserId() {
@@ -35,8 +30,8 @@ public class UserMeResult {
 	@Override
 	public String toString() {
 		return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
-			.append("token", token)
 			.append("userId", userId)
+			.append("username", username)
 			.toString();
 	}
 }

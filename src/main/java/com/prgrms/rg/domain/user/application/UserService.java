@@ -6,8 +6,9 @@ import org.springframework.security.oauth2.core.user.OAuth2User;
 
 import com.prgrms.rg.domain.user.model.User;
 import com.prgrms.rg.web.user.results.OAuthLoginResult;
+import com.prgrms.rg.web.user.results.UserMeResult;
 
 public interface UserService {
-	Optional<User> findUserById(Long id);
+	UserMeResult findUserById(Long id);
 	OAuthLoginResult joinOAuth(String authorizationCode, String fromUrl) throws Exception;
 }

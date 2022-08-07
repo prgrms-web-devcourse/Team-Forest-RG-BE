@@ -28,6 +28,7 @@ import com.prgrms.rg.domain.user.model.Nickname;
 import com.prgrms.rg.domain.user.model.User;
 import com.prgrms.rg.domain.user.model.UserRepository;
 import com.prgrms.rg.web.user.results.OAuthLoginResult;
+import com.prgrms.rg.web.user.results.UserMeResult;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -56,9 +57,10 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	@Transactional
-	public Optional<User> findUserById(Long id) {
+	public UserMeResult findUserById(Long id) {
 		checkArgument(isNotEmpty(id), "id must be provided.");
-		return userRepository.findById(id);
+		User user = userRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Could not found user for userId"));
+		return UserMeResult.of(user.getUsername(), user.getId());
 	}
 
 	@Override
