@@ -27,7 +27,7 @@ public class RidingJoinService {
 	public void joinUserToRiding(Long userId, Long ridingPostId) {
 		try {
 			User participant = userReadService.getUserEntityById(userId);
-			RidingPost post = postFinder.getRidingPostEntityById(ridingPostId);
+			RidingPost post = postFinder.getRidingPostById(ridingPostId);
 			checkDuplicateJoin(participant, post);
 			post.addParticipant(participant);
 		} catch (RidingPostNotFoundException e) {
