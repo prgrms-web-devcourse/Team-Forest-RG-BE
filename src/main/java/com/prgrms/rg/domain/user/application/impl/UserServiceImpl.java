@@ -18,6 +18,7 @@ import javax.transaction.Transactional;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.message.BasicNameValuePair;
 import org.springframework.beans.factory.annotation.Value;
+
 import org.springframework.stereotype.Service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -32,6 +33,7 @@ import com.prgrms.rg.web.user.results.UserMeResult;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+
 
 @Service
 @RequiredArgsConstructor
@@ -52,8 +54,6 @@ public class UserServiceImpl implements UserService {
 	private String tokenUrl;
 	@Value("${spring.security.oauth2.client.provider.kakao.user-info-uri}")
 	private String userInfoUrl;
-
-	// private final String provider = "kakao";
 
 	@Override
 	@Transactional
@@ -121,8 +121,9 @@ public class UserServiceImpl implements UserService {
 		IOException, InterruptedException {
 		ConcurrentHashMap<String, String> concurrentHashMap = new ConcurrentHashMap<>();
 		HttpClient client = HttpClient.newHttpClient();
-		HttpRequest request = HttpRequest
-			.newBuilder(URI.create(userInfoUrl))
+
+		HttpRequest request = HttpRequest.newBuilder(URI.create(userInfoUrl))
+
 			.GET()
 			.setHeader("Authorization", "Bearer " + accessToken)
 			.setHeader("Content-Type", "application/json;charset=utf-8")

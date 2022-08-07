@@ -25,4 +25,4 @@ COPY $JAR_PATH/$JAR_NAME /app
 RUN mkdir $LOG_PATH
 
 # profile : prod
-CMD java -jar -javaagent:$PINPOINT_DIR/pinpoint-bootstrap-2.4.0.jar -Dpinpoint.agentId=rg -Dpinpoint.applicationName=rg_server -Dpinpoint.config=$PINPOINT_DIR/pinpoint-root.config -Dspring.profiles.active=prod $JAR_NAME
+CMD java -jar -javaagent:$PINPOINT_DIR/pinpoint-bootstrap-2.4.0.jar -Dpinpoint.agentId=rg -Dpinpoint.applicationName=rg_server -Dpinpoint.config=$PINPOINT_DIR/pinpoint-root.config -Dspring.profiles.active=prod,aws,security $JAR_NAME

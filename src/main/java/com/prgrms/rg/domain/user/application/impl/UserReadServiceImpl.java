@@ -19,7 +19,13 @@ public class UserReadServiceImpl implements UserReadService {
 	private final UserRepository userRepository;
 
 	@Override
+	public User getUserEntityById(Long userId) {
+		return userRepository.findById(userId).orElseThrow(() -> new NoSuchUserException(userId));
+	}
+
+	@Override
 	public UserProfilePageInfo getUserProfilePageInfo(Long userId) {
-		return UserProfilePageInfo.of(userRepository.findById(userId).orElseThrow(() -> new NoSuchUserException(userId)));
+		return UserProfilePageInfo.of(
+			userRepository.findById(userId).orElseThrow(() -> new NoSuchUserException(userId)));
 	}
 }

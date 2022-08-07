@@ -43,6 +43,10 @@ jobs:
               .cloud.aws.s3.bucket = strenv(AWS_S3_BUCKET) |
               .cloud.aws.stack.auto = false
             ' $YML_PATH
+      - name: Write Security yml
+      - run: |
+          echo ${{ secrets.OAUTH_SECRET }} >> src/main/resources/application-security.yml
+
 
       - name: Build with Gradle
         run: |
