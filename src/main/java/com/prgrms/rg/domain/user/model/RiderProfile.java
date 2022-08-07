@@ -47,9 +47,20 @@ public class RiderProfile {
 	}
 
 	public RiderProfile(int ridingYears, RidingLevel level, Set<UserBicycle> bicycles) {
-		this.ridingStartYear = Year.now().minusYears(ridingYears);
+		this.ridingStartYear = ridingYearsToStartingYear(ridingYears);
 		this.level = level;
 		this.bicycles = bicycles;
+	}
+
+	private Year ridingYearsToStartingYear(int ridingYears) {
+		return Year.now().minusYears(ridingYears);
+	}
+
+	public void update(int ridingYears, RidingLevel level, Set<UserBicycle> bicyclesToApply) {
+		this.ridingStartYear = ridingYearsToStartingYear(ridingYears);
+		this.level = level;
+		bicycles.retainAll(bicyclesToApply);
+		bicycles.addAll(bicyclesToApply);
 	}
 
 	public Set<UserBicycle> getBicycles() {

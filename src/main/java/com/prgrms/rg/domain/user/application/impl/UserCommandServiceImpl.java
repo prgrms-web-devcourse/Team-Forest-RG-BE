@@ -16,7 +16,6 @@ import com.prgrms.rg.domain.user.application.exception.DuplicateNicknameExceptio
 import com.prgrms.rg.domain.user.application.exception.NoSuchUserException;
 import com.prgrms.rg.domain.user.model.Introduction;
 import com.prgrms.rg.domain.user.model.Nickname;
-import com.prgrms.rg.domain.user.model.RiderProfile;
 import com.prgrms.rg.domain.user.model.User;
 import com.prgrms.rg.domain.user.model.UserBicycle;
 import com.prgrms.rg.domain.user.model.UserRepository;
@@ -60,8 +59,6 @@ public class UserCommandServiceImpl implements UserCommandService {
 			bicyclesToApply.add(new UserBicycle(user, bicycle));
 		}
 
-		RiderProfile profileToChange = new RiderProfile(command.getRidingYears(),
-			RidingLevel.valueOf(command.getRidingLevel()), bicyclesToApply);
-		user.changeRiderProfile(profileToChange);
+		user.changeRiderProfile(command.getRidingYears(), RidingLevel.valueOf(command.getRidingLevel()), bicyclesToApply);
 	}
 }

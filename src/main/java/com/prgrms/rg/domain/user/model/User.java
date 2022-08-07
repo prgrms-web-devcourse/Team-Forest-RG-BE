@@ -5,6 +5,7 @@ import static lombok.AccessLevel.*;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
@@ -21,6 +22,7 @@ import com.prgrms.rg.domain.common.file.model.ImageOwner;
 import com.prgrms.rg.domain.common.file.model.TemporaryImage;
 import com.prgrms.rg.domain.common.model.BaseTimeEntity;
 import com.prgrms.rg.domain.common.model.metadata.Bicycle;
+import com.prgrms.rg.domain.common.model.metadata.RidingLevel;
 import com.prgrms.rg.domain.user.model.information.MannerInfo;
 import com.prgrms.rg.domain.user.model.information.RiderInfo;
 import com.prgrms.rg.domain.user.model.information.UserImageInfo;
@@ -70,8 +72,8 @@ public class User extends BaseTimeEntity implements UserDetails, ImageOwner {
 		this.nickname = nicknameToChange;
 	}
 
-	public void changeRiderProfile(RiderProfile profileToChange) {
-		this.profile = profileToChange;
+	public void changeRiderProfile(int ridingYears, RidingLevel level, Set<UserBicycle> bicyclesToApply) {
+		this.profile.update(ridingYears, level, bicyclesToApply);
 	}
 
 	public void changeIntroduction(Introduction introduction) {

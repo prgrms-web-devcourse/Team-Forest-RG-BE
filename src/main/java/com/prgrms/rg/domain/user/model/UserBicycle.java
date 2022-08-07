@@ -25,7 +25,7 @@ public class UserBicycle {
 	@Id
 	@GeneratedValue(strategy = IDENTITY)
 	private Long id;
-	@ManyToOne(fetch = LAZY, cascade = ALL)
+	@ManyToOne(fetch = LAZY)
 	@JoinColumn(name = "user_id")
 	private User user;
 	@ManyToOne(fetch = LAZY)

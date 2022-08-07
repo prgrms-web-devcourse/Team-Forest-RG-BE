@@ -12,4 +12,14 @@ public class UserUpdateCommand {
 	private String ridingLevel;
 	private String[] bicycles;
 	private String introduction;
+
+	public UserUpdateCommand(Long id, String nickname, int ridingYears, String ridingLevel, String[] bicycles,
+		String introduction) {
+		this.id = id;
+		this.nickname = nickname;
+		this.ridingYears = ridingYears;
+		this.ridingLevel = ridingLevel;
+		this.bicycles = bicycles;
+		this.introduction = introduction;
+	}
 }

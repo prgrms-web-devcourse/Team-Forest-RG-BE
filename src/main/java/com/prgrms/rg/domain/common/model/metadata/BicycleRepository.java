@@ -11,4 +11,6 @@ public interface BicycleRepository {
 	List<Bicycle> findAll();
 
 	String findNameById(Long id);
+
+	Bicycle save(Bicycle bicycle);
 }
