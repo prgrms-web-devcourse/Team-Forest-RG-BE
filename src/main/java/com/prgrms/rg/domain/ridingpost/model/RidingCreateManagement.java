@@ -17,10 +17,13 @@ import lombok.RequiredArgsConstructor;
 public class RidingCreateManagement {
 
 	private final ImageAttachManger imageManager;
+	private final AddressCodeFinder addressFinder;
 
 	public RidingPost createRidingPost(User leader, RidingCreateCommand command) {
 
 		var mainSection = command.getMainCommand().toSection();
+		mainSection.checkAddressCode(addressFinder);
+
 		var participantSection = command.getParticipantCommand().toSection();
 
 		var post = RidingPost.builder()
@@ -33,7 +36,10 @@ public class RidingCreateManagement {
 			imageManager.store(command.getThumbnailId(), post);
 		}
 
+		//condition section - post mapping
 		command.getConditionCommand().toSection(post);
+
+		//post-subsection mapping
 		if (!CollectionUtils.isEmpty(command.getSubCommand())) {
 			for (RidingSubCreateCommand subCommand : command.getSubCommand()) {
 				post.addSubSection(createSubSection(subCommand));
@@ -45,6 +51,7 @@ public class RidingCreateManagement {
 	private RidingSubSection createSubSection(RidingSubCreateCommand command) {
 		var section = new RidingSubSection(command.getTitle(), command.getContent());
 
+		//section - image mapping
 		if (!CollectionUtils.isEmpty(command.getImageIdList()) && command.getImageIdList().size() <= 5) {
 			imageManager.store(command.getImageIdList(), section);
 		}

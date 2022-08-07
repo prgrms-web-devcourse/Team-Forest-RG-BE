@@ -81,4 +81,9 @@ public class RidingMainSection {
 		checkArgument(ridingDate.isAfter(LocalDateTime.now()));
 		this.ridingDate = ridingDate;
 	}
+
+	public void checkAddressCode(AddressCodeFinder codeFinder) {
+		this.addressCode = codeFinder.find(addressCode.getCode());
+	}
+
 }
