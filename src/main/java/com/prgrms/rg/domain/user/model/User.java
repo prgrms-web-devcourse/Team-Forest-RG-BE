@@ -114,7 +114,8 @@ public class User extends BaseTimeEntity implements UserDetails, ImageOwner {
 	}
 
 	public UserImageInfo getImage() {
-		return new UserImageInfo(profileImage.getUrl(), profileImage.getOriginalFileName());
+		return (profileImage != null) ? new UserImageInfo(profileImage.getUrl(), profileImage.getOriginalFileName())
+			: UserImageInfo.defaultImage();
 	}
 
 	public String getIntroduction() {
