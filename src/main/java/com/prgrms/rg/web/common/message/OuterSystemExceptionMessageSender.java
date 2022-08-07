@@ -1,4 +1,4 @@
-package com.prgrms.rg.web.global.message;
+package com.prgrms.rg.web.common.message;
 
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
@@ -16,6 +16,7 @@ import lombok.extern.slf4j.Slf4j;
 public class OuterSystemExceptionMessageSender implements ExceptionMessageSender {
 	@Override
 	public void send(Exception exception) {
+		log.warn(exception.getMessage(), exception);
 		try {
 			CriticalMessageSender.send(exception);
 		} catch (Exception messageException) {

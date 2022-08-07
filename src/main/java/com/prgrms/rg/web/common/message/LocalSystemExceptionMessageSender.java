@@ -1,4 +1,4 @@
-package com.prgrms.rg.web.global.message;
+package com.prgrms.rg.web.common.message;
 
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;

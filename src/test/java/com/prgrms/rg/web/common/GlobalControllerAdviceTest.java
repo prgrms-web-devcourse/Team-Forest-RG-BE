@@ -1,4 +1,4 @@
-package com.prgrms.rg.web.global;
+package com.prgrms.rg.web.common;
 
 import static org.mockito.BDDMockito.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -14,9 +14,9 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import com.prgrms.rg.testutil.ControllerTest;
 import com.prgrms.rg.testutil.FakeRestController;
-import com.prgrms.rg.web.global.message.ExceptionMessageSender;
+import com.prgrms.rg.web.common.message.ExceptionMessageSender;
 
-@ControllerTest(controllers = {GlobalControllerAdvice.class, FakeRestController.class})
+@ControllerTest(controllers = {FakeRestController.class})
 class GlobalControllerAdviceTest {
 
 	@Autowired
@@ -26,8 +26,8 @@ class GlobalControllerAdviceTest {
 	ExceptionMessageSender exceptionMessageSender;
 
 	@Test
-	@DisplayName("다른 ControllerAdvice에서 처리하지 못한 예외들을 처리하고, 500 InternalServerError 메시지를 응답한다.")
-	void send_message_when_system_runs_on_production_environment() throws Exception {
+	@DisplayName("다른 ControllerAdvice에서 처리하지 못한 예외들을 개발자에게 전송하고, 클라이언트에게 500 InternalServerError 메시지를 응답한다.")
+	void handle_exception_send_response_with_internal_server_error() throws Exception {
 
 		// Given
 		// When

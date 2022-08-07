@@ -1,4 +1,4 @@
-package com.prgrms.rg.web.global.results;
+package com.prgrms.rg.web.common.results;
 
 import lombok.Data;
 

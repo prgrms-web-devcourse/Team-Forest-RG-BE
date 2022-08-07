@@ -18,7 +18,7 @@ import org.springframework.core.annotation.AliasFor;
 
 import com.prgrms.rg.config.JpaConfiguration;
 import com.prgrms.rg.config.JwtConfigure;
-import com.prgrms.rg.web.global.message.LocalSystemExceptionMessageSender;
+import com.prgrms.rg.web.common.message.LocalSystemExceptionMessageSender;
 
 /**
  * <p>Database, Jpa 관련 Bean들을 필요로 하지 않는 Controller 테스트를 작성하기 위한 annotation 입니다.</p>
@@ -44,6 +44,6 @@ import com.prgrms.rg.web.global.message.LocalSystemExceptionMessageSender;
 	excludeFilters = {@Filter(type = FilterType.ASSIGNABLE_TYPE, classes = JpaConfiguration.class)})
 public @interface ControllerTest {
 	@AliasFor(annotation = WebMvcTest.class, attribute = "controllers")
-	Class<?>[] controllers() default {};
+	Class<?>[] controllers();
 
 }
