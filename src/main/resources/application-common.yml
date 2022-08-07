@@ -1,4 +1,4 @@
-# 테스트 전용 profile
+# local, test 환경에서 공유하는 설정들을 모아놨습니다.
 
 spring:
   datasource:
@@ -17,4 +17,7 @@ spring:
       hibernate:
         format_sql: true
         use_sql_comments: true
-
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 10MB
