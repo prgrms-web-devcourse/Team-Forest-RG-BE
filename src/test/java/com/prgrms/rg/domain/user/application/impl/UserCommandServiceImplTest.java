@@ -2,6 +2,7 @@ package com.prgrms.rg.domain.user.application.impl;
 
 import static com.prgrms.rg.domain.common.model.metadata.RidingLevel.*;
 import static org.assertj.core.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.List;
 
@@ -18,6 +19,7 @@ import com.prgrms.rg.domain.common.model.metadata.Bicycle;
 import com.prgrms.rg.domain.common.model.metadata.BicycleRepository;
 import com.prgrms.rg.domain.user.application.UserCommandService;
 import com.prgrms.rg.domain.user.application.command.UserUpdateCommand;
+import com.prgrms.rg.domain.user.application.exception.DuplicateNicknameException;
 import com.prgrms.rg.domain.user.model.Introduction;
 import com.prgrms.rg.domain.user.model.Manner;
 import com.prgrms.rg.domain.user.model.Nickname;
@@ -83,5 +85,32 @@ class UserCommandServiceImplTest {
 		List<String> changedBicycles = afterEdited.getRiderInformation().getBicycles();
 		assertThat(changedBicycles).containsAll(List.of("따릉이", "MTB")).doesNotContain("로드");
 		assertThat(afterEdited.getIntroduction()).isEqualTo("반갑습니다.");
+	}
+
+	@Test
+	@DisplayName("중복 닉네임으로 변경할 수 없음")
+	void edit_user_duplicate_nickname_fail() {
+		//Given
+		User user = userRepository.save(User.builder()
+			.nickname(new Nickname("RGRider"))
+			.profile(new RiderProfile(5, MASTER))
+			.introduction(new Introduction("한강 라이딩을 즐겨합니다."))
+			.manner(Manner.create())
+			.build());
+		User userWithDuplicateNickname = userRepository.save(User.builder()
+			.nickname(new Nickname("changedName"))
+			.profile(new RiderProfile(5, MASTER))
+			.introduction(new Introduction("한강 라이딩을 즐겨합니다."))
+			.manner(Manner.create())
+			.build());
+
+		UserUpdateCommand command = new UserUpdateCommand(user.getId(), "changedName", 5
+			, MASTER.name(), new String[] {}, "한강 라이딩을 즐겨합니다.");
+
+		em.flush();
+		em.clear();
+
+		//When
+		assertThrows(DuplicateNicknameException.class, () -> sut.edit(command));
 	}
 }
