@@ -66,6 +66,18 @@ public class User extends BaseTimeEntity implements UserDetails, ImageOwner {
 	@Embedded
 	private Manner manner;
 
+	public void changeNickname(Nickname nicknameToChange) {
+		this.nickname = nicknameToChange;
+	}
+
+	public void changeRiderProfile(RiderProfile profileToChange) {
+		this.profile = profileToChange;
+	}
+
+	public void changeIntroduction(Introduction introduction) {
+		this.introduction = introduction;
+	}
+
 	public boolean addBicycle(Bicycle bicycle) {
 		return profile.addBicycle(this, bicycle);
 	}

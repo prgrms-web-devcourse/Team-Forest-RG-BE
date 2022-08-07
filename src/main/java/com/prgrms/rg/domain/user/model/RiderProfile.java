@@ -5,6 +5,7 @@ import static lombok.AccessLevel.*;
 
 import java.time.Year;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -43,6 +44,16 @@ public class RiderProfile {
 	public RiderProfile(int ridingYears, RidingLevel level) {
 		this.ridingStartYear = Year.now().minusYears(ridingYears);
 		this.level = level;
+	}
+
+	public RiderProfile(int ridingYears, RidingLevel level, Set<UserBicycle> bicycles) {
+		this.ridingStartYear = Year.now().minusYears(ridingYears);
+		this.level = level;
+		this.bicycles = bicycles;
+	}
+
+	public Set<UserBicycle> getBicycles() {
+		return Collections.unmodifiableSet(bicycles);
 	}
 
 	boolean addBicycle(User user, Bicycle bicycle) {

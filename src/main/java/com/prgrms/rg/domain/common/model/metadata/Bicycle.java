@@ -4,6 +4,7 @@ import static lombok.AccessLevel.*;
 
 import java.util.Map;
 
+import javax.persistence.Cacheable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -12,8 +13,10 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+@Cacheable
 @Entity
 @NoArgsConstructor(access = PROTECTED)
+@Getter
 @Setter(value = PRIVATE)
 public class Bicycle {
 
@@ -37,7 +40,6 @@ public class Bicycle {
 
 	@Id
 	private Long id;
-	@Getter
 	@Column(unique = true, nullable = false)
 	private String name;
 
