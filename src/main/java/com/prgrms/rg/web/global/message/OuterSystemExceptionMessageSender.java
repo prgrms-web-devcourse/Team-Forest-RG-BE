@@ -7,6 +7,9 @@ import com.prgrms.rg.infrastructure.cloud.CriticalMessageSender;
 
 import lombok.extern.slf4j.Slf4j;
 
+/**
+ * 배포 환경 예외 메시지를 외부 시스템에 전송합니다.
+ */
 @Component
 @Profile("prod")
 @Slf4j
