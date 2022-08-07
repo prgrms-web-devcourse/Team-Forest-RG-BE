@@ -18,7 +18,7 @@ import javax.transaction.Transactional;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.message.BasicNameValuePair;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.context.properties.ConfigurationProperties;
+
 import org.springframework.stereotype.Service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -29,6 +29,7 @@ import com.prgrms.rg.domain.user.model.Nickname;
 import com.prgrms.rg.domain.user.model.User;
 import com.prgrms.rg.domain.user.model.UserRepository;
 import com.prgrms.rg.web.user.results.OAuthLoginResult;
+import com.prgrms.rg.web.user.results.UserMeResult;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -53,11 +54,13 @@ public class UserServiceImpl implements UserService {
 	private String tokenUrl;
 	@Value("${spring.security.oauth2.client.provider.kakao.user-info-uri}")
 	private String userInfoUrl;
+
 	@Override
 	@Transactional
-	public Optional<User> findUserById(Long id) {
+	public UserMeResult findUserById(Long id) {
 		checkArgument(isNotEmpty(id), "id must be provided.");
-		return userRepository.findById(id);
+		User user = userRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Could not found user for userId"));
+		return UserMeResult.of(user.getUsername(), user.getId());
 	}
 
 	@Override
@@ -66,18 +69,16 @@ public class UserServiceImpl implements UserService {
 		checkArgument(authorizationCode != null, "authorizationCode must be provided");
 		String accessToken = convertAuthorizationCodeToAccessToken(authorizationCode);
 		ConcurrentHashMap<String, String> oauthInformation = convertAccessTokenToOAuthInformation(accessToken);
-		// 유저 있는지 확인
-		String provider = "kakao";
 		String providerId = oauthInformation.get("id");
-
+		String provider = "kakao";
 		return userRepository.findByProviderAndProviderId(provider, providerId)
-			.map(user -> { // 이미 유저가 있다면
+			.map(user -> {
 				log.warn("Already exists: {} for (provider: {}, providerId: {})", user, provider,
 					providerId);
 				String token = generateToken(user);
 				return OAuthLoginResult.of(token, false, fromUrl);
 			})
-			.orElseGet(() -> { // 없다면
+			.orElseGet(() -> {
 				@SuppressWarnings("unchecked")
 				String nickname = oauthInformation.get("nickname");
 				String profileImage = oauthInformation.get("profile_image");
@@ -96,7 +97,6 @@ public class UserServiceImpl implements UserService {
 	private String convertAuthorizationCodeToAccessToken(String authorizationCode) throws
 		IOException,
 		InterruptedException {
-		// access 토큰 받는 요청 보내기 (POST)
 		var urlEncodedBody = new String(new UrlEncodedFormEntity(
 			List.of(
 				new BasicNameValuePair("client_id", clientId),
@@ -106,14 +106,12 @@ public class UserServiceImpl implements UserService {
 				new BasicNameValuePair("redirect_url", redirectUrl)
 			)
 		).getContent().readAllBytes());
-
+		HttpClient client = HttpClient.newHttpClient();
 		HttpRequest request = HttpRequest
 			.newBuilder(URI.create(tokenUrl))
 			.POST(HttpRequest.BodyPublishers.ofString(urlEncodedBody))
 			.header("Content-Type", "application/x-www-form-urlencoded; charset=utf-8")
 			.build();
-
-		HttpClient client = HttpClient.newHttpClient();
 		var response = client.send(request, HttpResponse.BodyHandlers.ofString(StandardCharsets.UTF_8));
 
 		return new ObjectMapper().readTree(response.body()).get("access_token").asText();
@@ -121,10 +119,11 @@ public class UserServiceImpl implements UserService {
 
 	private ConcurrentHashMap<String, String> convertAccessTokenToOAuthInformation(String accessToken) throws
 		IOException, InterruptedException {
-		// User정보 받는 요청 보내기 (GET + Header)
 		ConcurrentHashMap<String, String> concurrentHashMap = new ConcurrentHashMap<>();
 		HttpClient client = HttpClient.newHttpClient();
+
 		HttpRequest request = HttpRequest.newBuilder(URI.create(userInfoUrl))
+
 			.GET()
 			.setHeader("Authorization", "Bearer " + accessToken)
 			.setHeader("Content-Type", "application/json;charset=utf-8")
