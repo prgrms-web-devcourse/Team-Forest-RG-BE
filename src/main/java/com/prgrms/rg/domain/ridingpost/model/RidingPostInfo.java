@@ -5,8 +5,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.databind.PropertyNamingStrategies;
-import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import com.prgrms.rg.domain.user.model.User;
 
 import lombok.AccessLevel;
@@ -31,9 +29,8 @@ public class RidingPostInfo {
 		return new RidingPostInfo(post);
 	}
 
-	@JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 	@Getter
-	static class LeaderInfo {
+	public static class LeaderInfo {
 		private final Long id;
 		private final String nickname;
 		private final String profileImage;
@@ -45,10 +42,9 @@ public class RidingPostInfo {
 		}
 	}
 
-	@JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 	@Getter
 	@Builder
-	static class RidingInfo {
+	public static class RidingInfo {
 		private String title;
 		private String thumbnail;
 		private String ridingLevel;
@@ -56,6 +52,7 @@ public class RidingPostInfo {
 		private int fee;
 		private int estimatedTime;
 		private LocalDateTime createdAt;
+		private LocalDateTime ridingDate;
 		private List<String> bicycleType;
 		private List<String> ridingCourses;
 		private int maxParticipant;
@@ -80,6 +77,7 @@ public class RidingPostInfo {
 				.title(mainSection.getTitle())
 				.thumbnail(thumbnailUrl)
 				.ridingLevel(conditionSection.getLevel())
+				.ridingDate(mainSection.getRidingDate())
 				.zone(ZoneInfo.from(mainSection.getAddressCode()))
 				.bicycleType(conditionSection.getBicycleAsStringList())
 				.fee(mainSection.getFee())
@@ -98,7 +96,7 @@ public class RidingPostInfo {
 	@Builder
 	@Getter
 	@AllArgsConstructor(access = AccessLevel.PRIVATE)
-	static class RidingDetail {
+	public static class RidingDetail {
 		private String title;
 		private String contents;
 		private List<String> images;
@@ -114,7 +112,7 @@ public class RidingPostInfo {
 
 	@Getter
 	@AllArgsConstructor(access = AccessLevel.PRIVATE)
-	static class ParticipantInfo {
+	public static class ParticipantInfo {
 		private final Long id;
 		private final String nickname;
 		private final String profileImage;
@@ -126,7 +124,7 @@ public class RidingPostInfo {
 
 	@Getter
 	@AllArgsConstructor
-	static class ZoneInfo {
+	public static class ZoneInfo {
 		private final int code;
 		private final String name;
 
