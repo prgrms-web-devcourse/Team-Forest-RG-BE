@@ -7,7 +7,7 @@ import com.prgrms.rg.domain.ridingpost.model.RidingCreateManagement;
 import com.prgrms.rg.domain.ridingpost.application.RidingPostService;
 import com.prgrms.rg.domain.ridingpost.application.command.RidingCreateCommand;
 import com.prgrms.rg.domain.ridingpost.model.RidingPostRepository;
-import com.prgrms.rg.domain.user.application.NoSuchUserException;
+import com.prgrms.rg.domain.user.application.exception.NoSuchUserException;
 import com.prgrms.rg.domain.user.model.User;
 import com.prgrms.rg.domain.user.model.UserRepository;
 

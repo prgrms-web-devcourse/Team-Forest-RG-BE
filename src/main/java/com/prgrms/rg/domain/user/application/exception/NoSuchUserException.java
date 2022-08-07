@@ -1,4 +1,4 @@
-package com.prgrms.rg.domain.user.application;
+package com.prgrms.rg.domain.user.application.exception;
 
 import java.util.NoSuchElementException;
 

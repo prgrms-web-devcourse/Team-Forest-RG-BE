@@ -5,7 +5,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-import com.prgrms.rg.domain.user.application.NoSuchUserException;
+import com.prgrms.rg.domain.user.application.exception.NoSuchUserException;
 
 import lombok.extern.slf4j.Slf4j;
 
