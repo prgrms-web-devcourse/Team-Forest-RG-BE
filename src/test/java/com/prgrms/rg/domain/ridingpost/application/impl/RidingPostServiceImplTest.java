@@ -19,7 +19,6 @@ import com.prgrms.rg.domain.ridingpost.application.command.RidingCreateCommand;
 import com.prgrms.rg.domain.ridingpost.application.command.RidingMainCreateCommand;
 import com.prgrms.rg.domain.ridingpost.application.command.RidingParticipantCreateCommand;
 import com.prgrms.rg.domain.ridingpost.model.AddressCode;
-import com.prgrms.rg.domain.ridingpost.model.RidingPost;
 import com.prgrms.rg.domain.ridingpost.model.RidingPostRepository;
 
 @SpringBootTest
@@ -41,20 +40,21 @@ class RidingPostServiceImplTest {
 		List<String> routes = List.of("start", "end");
 		var mainCreateCommand = RidingMainCreateCommand.builder()
 			.title("testTitle")
-			.estimatedTime(120).ridingDate(LocalDateTime.now().plusDays(10L))
+			.estimatedTime("2시간").ridingDate(LocalDateTime.now().plusDays(10L))
 			.fee(0).addressCode(new AddressCode(11010)).routes(routes).build();
 
 		var createCommand = new RidingCreateCommand(null,
 			mainCreateCommand,
 			new RidingParticipantCreateCommand(6, 10),
-			new RidingConditionCreateCommand("BEGINNER", List.of("MTV")), null
+			new RidingConditionCreateCommand("BEGINNER", List.of("MTB")), null
 		);
 
 	    //when
 		Long savedPostId = ridingPostService.createRidingPost(1L, createCommand);
-		RidingPost savedOne = ridingPostRepository.findById(savedPostId).get();
+		var savedOne = ridingPostRepository.findById(savedPostId);
 
 	    //then
-		assertThat(savedOne.getRidingMainSection(), is(samePropertyValuesAs(mainCreateCommand.toSection())));
+		assertThat(savedOne.isPresent(), is(true));
+		assertThat(savedOne.get().getRidingMainSection(), is(samePropertyValuesAs(mainCreateCommand.toSection())));
 	}
 }
