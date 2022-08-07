@@ -18,4 +18,8 @@ public class Coordinate {
 	@Column(name = "lat")
 	private double lat;
 
+	public Coordinate(double lng, double lat) {
+		this.lng = lng;
+		this.lat = lat;
+	}
 }

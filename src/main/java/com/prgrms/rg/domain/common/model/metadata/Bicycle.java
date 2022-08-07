@@ -21,14 +21,13 @@ public class Bicycle {
 
 	//TODO: 코드에 따라 id 값 부여
 	//TODO: 어느 도메인에 속한 것일까?
-	//todo 데이터 확정 후 수정하기
 	private static final Map<String, Bicycle> bicycleList = Map.of(
 		"MTB", new Bicycle(1L, "MTB"),
 		"로드", new Bicycle(2L, "로드"),
 		"따릉이", new Bicycle(3L, "따릉이"),
 		"픽시", new Bicycle(4L, "픽시"),
 		"하이브리드", new Bicycle(5L, "하이브리드"),
-		"기타", new Bicycle(6L, "기타")
+		"상관없음", new Bicycle(6L, "상관없음")
 	);
 
 	public Bicycle(Long id, String name) {
