@@ -15,7 +15,7 @@ import lombok.NoArgsConstructor;
 public class AddressCode {
 
 	@Id
-	private int code;
+	private Integer code;
 
 	//도
 	@Column(name = "area")
@@ -29,7 +29,7 @@ public class AddressCode {
 	@Column(name = "district")
 	private String district;
 
-	public AddressCode(int code) {
+	public AddressCode(Integer code) {
 		this.code = code;
 	}
 
