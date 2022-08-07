@@ -25,8 +25,3 @@ server:
 logging:
   file:
     path: ${LOG_PATH}
-  level:
-    com:
-      amazonaws:
-        util:
-          EC2MetadataUtils: error
