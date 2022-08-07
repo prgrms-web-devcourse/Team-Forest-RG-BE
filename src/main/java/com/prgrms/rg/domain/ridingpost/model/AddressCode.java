@@ -35,6 +35,6 @@ public class AddressCode {
 
 	@Override
 	public String toString() {
-		return area + " " + city + " " + district;
+		return city + " " + district;
 	}
 }
