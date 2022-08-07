@@ -42,12 +42,12 @@ class UserControllerTest {
 
 		// Given
 		var result = mockMvc.perform(
-			MockMvcRequestBuilders.get("/user/me").header("Authorization", "token " + token));
+			MockMvcRequestBuilders.get("/user/me").header("Authorization", "Bearer " + token));
 		// When
 
 		result.andDo(print())
 			.andExpectAll(status().is2xxSuccessful(),
-				jsonPath("token", instanceOf(String.class)),
+				jsonPath("username", equalTo("kms")),
 				jsonPath("userId", equalTo(3))
 			);
 

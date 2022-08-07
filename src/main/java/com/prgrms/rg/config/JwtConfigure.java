@@ -1,20 +1,19 @@
 package com.prgrms.rg.config;
 
-import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.apache.commons.lang3.builder.ToStringStyle;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 
 @Component
-@ConfigurationProperties(prefix = "jwt")
 public class JwtConfigure {
 
+	@Value("${jwt.header}")
 	private String header;
-
+	@Value("${jwt.issuer}")
 	private String issuer;
-
+	@Value("${jwt.client-secret}")
 	private String clientSecret;
-
+	@Value("${jwt.expiry-seconds}")
 	private int expirySeconds;
 
 	public String getHeader() {
