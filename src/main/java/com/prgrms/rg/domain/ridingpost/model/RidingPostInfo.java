@@ -7,7 +7,6 @@ import java.util.stream.Collectors;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
-import com.prgrms.rg.domain.user.model.ProfileImage;
 import com.prgrms.rg.domain.user.model.User;
 
 import lombok.AccessLevel;
@@ -40,10 +39,9 @@ public class RidingPostInfo {
 		private final String profileImage;
 
 		public LeaderInfo(User leader) {
-			ProfileImage profileImage = leader.getProfileImage();
 			this.id = leader.getId();
 			this.nickname = leader.getNickname();
-			this.profileImage = profileImage != null ? profileImage.getUrl() : null;
+			this.profileImage = leader.getImage().getFileUrl();
 		}
 	}
 
@@ -122,9 +120,7 @@ public class RidingPostInfo {
 		private final String profileImage;
 
 		public static ParticipantInfo from(User user) {
-			ProfileImage profileImage = user.getProfileImage();
-			String imageUrl = profileImage != null ? profileImage.getUrl() : null;
-			return new ParticipantInfo(user.getId(), user.getNickname(), imageUrl);
+			return new ParticipantInfo(user.getId(), user.getNickname(), user.getImage().getFileUrl());
 		}
 	}
 
