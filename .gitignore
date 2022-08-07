@@ -38,3 +38,5 @@ out/
 
 ### aws ###
 *aws.yml
+*security.yml
+spy.log
