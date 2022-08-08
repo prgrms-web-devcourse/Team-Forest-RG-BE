@@ -33,6 +33,8 @@ import lombok.NoArgsConstructor;
 @Entity
 public class RidingPost extends BaseTimeEntity implements ImageOwner {
 
+	private static final String DEFAULT_IMAGE_URL = "https://team-05-storage.s3.ap-northeast-2.amazonaws.com/static/RG_Logo.png";
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
@@ -84,6 +86,10 @@ public class RidingPost extends BaseTimeEntity implements ImageOwner {
 
 	public void addParticipant(User participant) {
 		ridingParticipantSection.addParticipant(this, participant);
+	}
+
+	public String getThumbnail() {
+		return (thumbnail != null) ? thumbnail.getUrl() : DEFAULT_IMAGE_URL;
 	}
 
 	@Override

@@ -1,12 +1,9 @@
 package com.prgrms.rg.domain.ridingpost.application.command;
 
-import java.util.ArrayList;
 import java.util.List;
 
-import com.prgrms.rg.domain.common.model.metadata.Bicycle;
 import com.prgrms.rg.domain.common.model.metadata.RidingLevel;
 import com.prgrms.rg.domain.ridingpost.model.RidingConditionSection;
-import com.prgrms.rg.domain.ridingpost.model.RidingPost;
 
 import lombok.Data;
 
@@ -16,12 +13,7 @@ public class RidingConditionCreateCommand {
 	private final String level;
 	private final List<String> bicycleTypes;
 
-	public RidingConditionSection toSection(RidingPost post) {
-		List<Bicycle> bicycleList = new ArrayList<>();
-		for (String typeName : bicycleTypes) {
-			bicycleList.add(Bicycle.from(typeName));
-		}
-
-		return new RidingConditionSection(post, RidingLevel.valueOf(level), bicycleList);
+	public RidingConditionSection toSection() {
+		return new RidingConditionSection(RidingLevel.valueOf(level));
 	}
 }
