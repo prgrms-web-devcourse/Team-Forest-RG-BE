@@ -58,7 +58,7 @@ public class RidingCreateManagement {
 		}
 
 		//post-subsection mapping
-		if (!CollectionUtils.isEmpty(command.getSubCommand())) {
+		if (!CollectionUtils.isEmpty(command.getSubCommand()) && command.getSubCommand().size() <= 5) {
 			for (RidingSubCreateCommand subCommand : command.getSubCommand()) {
 				post.addSubSection(createSubSection(subCommand));
 			}
@@ -70,7 +70,7 @@ public class RidingCreateManagement {
 		var section = new RidingSubSection(command.getTitle(), command.getContent());
 
 		//section - image mapping
-		if (!CollectionUtils.isEmpty(command.getImageIdList()) && command.getImageIdList().size() <= 5) {
+		if (!CollectionUtils.isEmpty(command.getImageIdList()) && command.getImageIdList().size() <= 2) {
 			imageManager.store(command.getImageIdList(), section);
 		}
 		return section;

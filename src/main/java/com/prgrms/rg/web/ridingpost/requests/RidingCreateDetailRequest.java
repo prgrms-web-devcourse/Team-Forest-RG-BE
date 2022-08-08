@@ -15,7 +15,7 @@ public class RidingCreateDetailRequest {
 
 	private String content;
 
-	@Size(min = 0, max = 5)
+	@Size(min = 0, max = 2)
 	private List<Long> images;
 
 	public RidingSubCreateCommand toCommand() {

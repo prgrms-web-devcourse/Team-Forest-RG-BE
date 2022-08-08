@@ -3,6 +3,8 @@ package com.prgrms.rg.web.ridingpost.requests;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import javax.validation.constraints.Size;
+
 import com.prgrms.rg.domain.ridingpost.application.command.RidingConditionCreateCommand;
 import com.prgrms.rg.domain.ridingpost.application.command.RidingCreateCommand;
 import com.prgrms.rg.domain.ridingpost.application.command.RidingMainCreateCommand;
@@ -18,6 +20,7 @@ public class RidingPostCreateRequest {
 
 	private RidingCreateMainRequest information;
 
+	@Size(min = 0, max = 5)
 	private List<RidingCreateDetailRequest> details;
 
 	public RidingCreateCommand toCommand() {
