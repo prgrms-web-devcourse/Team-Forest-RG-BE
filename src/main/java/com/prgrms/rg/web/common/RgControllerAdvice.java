@@ -12,8 +12,12 @@ import org.springframework.core.annotation.AliasFor;
 import org.springframework.core.annotation.Order;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+/**
+ * 공용 ControllerAdvice 설정이 개별 ControllerAdvice를 덮어 쓰지 않게끔
+ * 우선 순위를 조절한 Annotation입니다. 개별 API 개발시에는 이 애노테이션을 이용하여
+ * RestControllerAdvice로 등록해 주시면 됩니다.
+ */
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
 @ControllerAdvice
