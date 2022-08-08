@@ -14,6 +14,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.prgrms.rg.domain.user.application.UserService;
 import com.prgrms.rg.infrastructure.oauth.Communicator;
@@ -21,6 +22,7 @@ import com.prgrms.rg.web.user.results.OAuthLoginResult;
 
 @SpringBootTest
 @AutoConfigureMockMvc
+@Transactional
 class UserServiceImplTest {
 	@MockBean
 	Communicator communicator;
