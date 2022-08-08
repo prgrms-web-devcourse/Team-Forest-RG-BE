@@ -21,6 +21,8 @@ spring:
     multipart:
       max-file-size: 10MB
       max-request-size: 10MB
+  # 로컬, 테스트용 시큐리티 설정
+  # 배포용 시큐리티 설정 :  application-security.yml(.gitignore)
   security:
     oauth2:
       client:
