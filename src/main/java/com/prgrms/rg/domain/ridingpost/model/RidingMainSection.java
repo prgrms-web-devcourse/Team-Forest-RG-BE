@@ -66,7 +66,7 @@ public class RidingMainSection {
 		setTitle(title);
 		setEstimatedTime(estimatedTime);
 		setFee(fee);
-		setAddressCode(addressCode);
+		assignAddressCode(addressCode);
 		setRidingDate(ridingDate);
 		setRoutes(routes);
 		setDeparturePlace(departurePlace);
@@ -82,8 +82,8 @@ public class RidingMainSection {
 		this.ridingDate = ridingDate;
 	}
 
-	public void checkAddressCode(AddressCodeFinder codeFinder) {
-		this.addressCode = codeFinder.find(addressCode.getCode());
+	public void assignAddressCode(AddressCode code) {
+		this.addressCode = code;
 	}
 
 }

@@ -6,12 +6,12 @@ public enum RidingLevel {
 	INTERMEDIATE("중","일정 수준 이상의 라이딩 스킬을 가진 중급자"),
 	MASTER("상","라이딩에 능숙한 고수");
 
-	private final String name;
+	private final String levelName;
 
 	private final String description;
 
-	RidingLevel(String name, String description) {
-		this.name = name;
+	RidingLevel(String levelName, String description) {
+		this.levelName = levelName;
 		this.description = description;
 	}
 }
