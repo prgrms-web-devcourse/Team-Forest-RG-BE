@@ -13,8 +13,10 @@ import com.prgrms.rg.domain.ridingpost.model.AddressCode;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
+@NoArgsConstructor
 @AllArgsConstructor
 public class RidingPostCreateRequest {
 
