@@ -24,7 +24,8 @@ public class RidingCreateMainRequest {
 	@JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
 	private LocalDateTime ridingDate;
 
-	@Pattern(regexp = "^([1-9]시간 )?([(30)|(60)]분)?$")
+	//string
+	@Pattern(regexp = "^[1-9]시간( 30분)?$|^((30)|(60))분|6시간 이상$")
 	private String estimatedTime;
 	private List<String> routes;
 	private int fee;

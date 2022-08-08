@@ -29,7 +29,6 @@ import com.prgrms.rg.web.ridingpost.requests.RidingCreateMainRequest;
 import com.prgrms.rg.web.ridingpost.requests.RidingPostCreateRequest;
 
 @ControllerTest(controllers = RestRidingPostCreateController.class)
-@AutoConfigureMockMvc
 class RestRidingPostCreateControllerTest {
 
 	@Autowired
@@ -64,7 +63,7 @@ class RestRidingPostCreateControllerTest {
 		//when
 		when(ridingPostService.createRidingPost(1L, body.toCommand())).thenReturn(2L);
 
-		mockMvc.perform(post("/ridingposts")
+		mockMvc.perform(post("/api/v1/ridingposts")
 			.header("Authorization", "token " + token)
 			.content(bodyString)
 			.contentType("application/json")
@@ -91,7 +90,7 @@ class RestRidingPostCreateControllerTest {
 		when(ridingPostService.createRidingPost(anyLong(), any(RidingCreateCommand.class))).thenThrow(new IllegalArgumentException());
 
 	    //then
-		mockMvc.perform(post("/ridingposts")
+		mockMvc.perform(post("/api/v1/ridingposts")
 				.header("Authorization", "token " + token)
 				.content(bodyString)
 				.contentType("application/json")
