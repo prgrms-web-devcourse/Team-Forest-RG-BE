@@ -15,13 +15,13 @@ import com.prgrms.rg.web.user.results.UserMeResult;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-@RestController()
+@RestController("api/v1")
 @RequiredArgsConstructor
 @Slf4j
 public class UserController {
 	private final UserService userService;
 
-	@PostMapping("/oauth/login")
+	@PostMapping("/users/oauth/login")
 	public OAuthLoginResult loginOAuth(@RequestBody OAuthLoginRequest loginRequest) throws Exception {
 		return userService.joinOAuth(loginRequest.getAuthorizationCode());
 	}
