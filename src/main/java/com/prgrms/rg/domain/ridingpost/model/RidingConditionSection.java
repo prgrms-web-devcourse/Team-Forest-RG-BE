@@ -31,10 +31,9 @@ public class RidingConditionSection {
 	@OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
 	private Set<RidingConditionBicycle> bicycleList = new HashSet<>();
 
-	public RidingConditionSection(RidingPost post, RidingLevel level, List<Bicycle> bicycleList) {
-		post.assignConditionSection(this);
+	//todo post-conditionsection mapping 여기서 ?
+	public RidingConditionSection(RidingLevel level) {
 		setLevel(level);
-		setBicycleList(post, bicycleList);
 	}
 
 	public void addBicycle(RidingPost post, Bicycle bicycle) {

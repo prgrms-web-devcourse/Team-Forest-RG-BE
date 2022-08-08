@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-import com.prgrms.rg.domain.ridingpost.model.RidingJoinFailException;
+import com.prgrms.rg.domain.ridingpost.model.exception.RidingJoinFailException;
 
 import lombok.extern.slf4j.Slf4j;
 
