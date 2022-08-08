@@ -33,6 +33,8 @@ import lombok.NoArgsConstructor;
 @Entity
 public class RidingPost extends BaseTimeEntity implements ImageOwner {
 
+	private static final String DEFAULT_IMAGE_URL = "https://programmers.co.kr/assets/icons/apple-icon-6eafc2c4c58a21aef692d6e44ce99d41f999c71789f277317532d0a9c6db8976.png";
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
@@ -84,6 +86,10 @@ public class RidingPost extends BaseTimeEntity implements ImageOwner {
 
 	public void addParticipant(User participant) {
 		ridingParticipantSection.addParticipant(this, participant);
+	}
+
+	public String getThumbnail() {
+		return (thumbnail != null) ? thumbnail.getUrl() : DEFAULT_IMAGE_URL;
 	}
 
 	@Override
