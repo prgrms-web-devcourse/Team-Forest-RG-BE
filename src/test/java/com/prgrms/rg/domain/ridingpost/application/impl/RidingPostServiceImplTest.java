@@ -20,9 +20,12 @@ import com.prgrms.rg.domain.ridingpost.application.command.RidingMainCreateComma
 import com.prgrms.rg.domain.ridingpost.application.command.RidingParticipantCreateCommand;
 import com.prgrms.rg.domain.ridingpost.model.AddressCode;
 import com.prgrms.rg.domain.ridingpost.model.RidingPostRepository;
+import com.prgrms.rg.domain.user.model.Manner;
+import com.prgrms.rg.domain.user.model.Nickname;
+import com.prgrms.rg.domain.user.model.User;
+import com.prgrms.rg.domain.user.model.UserRepository;
 
 @SpringBootTest
-@Transactional
 class RidingPostServiceImplTest {
 
 	@Autowired
@@ -31,12 +34,22 @@ class RidingPostServiceImplTest {
 	@Autowired
 	private RidingPostRepository ridingPostRepository;
 
+	@Autowired
+	private UserRepository userRepository;
+
 	@Test
 	@DisplayName("사진x RidingPost 생성")
+	@Transactional
 	@Sql(scripts = "classpath:data.sql")
 	void createRidingTest(){
 
 	    //given
+		var user = User.builder()
+			.nickname(new Nickname("testNickname"))
+			.manner(Manner.create())
+			.build();
+		User savedUser = userRepository.save(user);
+
 		List<String> routes = List.of("start", "end");
 		var mainCreateCommand = RidingMainCreateCommand.builder()
 			.title("testTitle")
@@ -50,7 +63,7 @@ class RidingPostServiceImplTest {
 		);
 
 	    //when
-		Long savedPostId = ridingPostService.createRidingPost(1L, createCommand);
+		Long savedPostId = ridingPostService.createRidingPost(user.getId(), createCommand);
 		var savedOne = ridingPostRepository.findById(savedPostId);
 
 	    //then

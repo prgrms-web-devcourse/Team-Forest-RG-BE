@@ -17,13 +17,9 @@ public class AddressCode {
 	@Id
 	private Integer code;
 
-	//도
+	//시, 도
 	@Column(name = "area")
 	private String area;
-
-	//시
-	@Column(name = "city")
-	private String city;
 
 	//군, 구
 	@Column(name = "district")
