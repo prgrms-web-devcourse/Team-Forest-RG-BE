@@ -5,5 +5,4 @@ spring:
   profiles:
     active:
       - common
-      - security
       - test

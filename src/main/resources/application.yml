@@ -6,4 +6,3 @@ spring:
     active:
       - common
       - aws
-      - security
