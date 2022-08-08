@@ -4,6 +4,8 @@ import java.util.Date;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.springframework.beans.factory.annotation.Value;
+
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 
@@ -15,7 +17,8 @@ import io.jsonwebtoken.Jwts;
  */
 public class JwtTokenProvider {
 
-	private static final long TOKEN_VALID_MILLISECOND = 1000L * 60 * 60 * 10; // 10시간
+	@Value("${jwt.expiry-seconds}")
+	private long tokenValidMillisecond; // 10시간
 	private final Jwt jwt;
 	private final String secretKey;
 
@@ -31,7 +34,7 @@ public class JwtTokenProvider {
 		claims.put("role", role);
 		claims.put("userId", userId);
 		Date now = new Date();
-		return JWT.create().withExpiresAt(new Date(now.getTime() + TOKEN_VALID_MILLISECOND))
+		return JWT.create().withExpiresAt(new Date(now.getTime() + tokenValidMillisecond * 1000))
 			.withIssuedAt(now)
 			.withClaim("role", role)
 			.withClaim("userId", userId)
