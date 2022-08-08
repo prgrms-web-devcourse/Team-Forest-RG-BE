@@ -1,0 +1,49 @@
+# local, test 환경에서 공유하는 설정들을 모아놨습니다.
+
+spring:
+  datasource:
+    url: "jdbc:mysql://localhost:3306/rg"
+    username: dev
+    password: dev
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  jpa:
+    show-sql: true
+    generate-ddl: true
+    database: mysql
+    open-in-view: false
+    hibernate:
+      ddl-auto: create-drop
+    properties:
+      hibernate:
+        format_sql: true
+        use_sql_comments: true
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 10MB
+  # 로컬, 테스트용 시큐리티 설정
+  # 배포용 시큐리티 설정 :  application-security.yml(.gitignore)
+  security:
+    oauth2:
+      client:
+        registration:
+          kakao:
+            client-name: kakao
+            client-id: testid
+            client-secret: testsecret
+            scope: profile_nickname, profile_image
+            redirect-uri: "redirecturl:/login"
+            authorization-grant-type: authorization_code
+            client-authentication-method: POST
+        provider:
+          kakao:
+            authorization-uri: kakao-uri
+            token-uri: token-uri
+            user-info-uri: user-info-uri
+            user-name-attribute: id
+jwt:
+  header: Authorization
+  issuer: prgrms
+  client-secret: EENY5W0eegTf1nnQB2eDyyCLl5kRS2b8xa5c4qLdS0hmVjtbvo8tOyhPMcAmtPuQ
+  expiry-seconds: 60000
+
