@@ -50,7 +50,7 @@ public class RidingPostInfo {
 		private String ridingLevel;
 		private ZoneInfo zone;
 		private int fee;
-		private int estimatedTime;
+		private String estimatedTime;
 		private LocalDateTime createdAt;
 		private LocalDateTime ridingDate;
 		private List<String> bicycleType;
@@ -71,17 +71,15 @@ public class RidingPostInfo {
 				.map(ridingParticipant -> {
 					return ParticipantInfo.from(ridingParticipant.getUser());
 				}).collect(Collectors.toList());
-			RidingThumbnailImage thumbnail = ridingPost.getThumbnail();
-			String thumbnailUrl = thumbnail != null ? thumbnail.getUrl() : null;
 			return RidingInfo.builder()
 				.title(mainSection.getTitle())
-				.thumbnail(thumbnailUrl)
+				.thumbnail(ridingPost.getThumbnail())
 				.ridingLevel(conditionSection.getLevel())
 				.ridingDate(mainSection.getRidingDate())
 				.zone(ZoneInfo.from(mainSection.getAddressCode()))
 				.bicycleType(conditionSection.getBicycleAsStringList())
 				.fee(mainSection.getFee())
-				.estimatedTime(mainSection.getEstimatedMinutes())
+				.estimatedTime(mainSection.getEstimatedTime())
 				.createdAt(ridingPost.getCreatedAt())
 				.ridingCourses(mainSection.getRoutes())
 				.maxParticipant(participantSection.getMaxParticipantCount())
@@ -97,12 +95,14 @@ public class RidingPostInfo {
 	@Getter
 	@AllArgsConstructor(access = AccessLevel.PRIVATE)
 	public static class RidingDetail {
+		private Long id;
 		private String title;
 		private String contents;
 		private List<String> images;
 
 		public static RidingDetail from(RidingSubSection ridingSubSection) {
 			return RidingDetail.builder()
+				.id(ridingSubSection.getId())
 				.title(ridingSubSection.getTitle())
 				.contents(ridingSubSection.getContent())
 				.images(ridingSubSection.getImageUrlAsList())
