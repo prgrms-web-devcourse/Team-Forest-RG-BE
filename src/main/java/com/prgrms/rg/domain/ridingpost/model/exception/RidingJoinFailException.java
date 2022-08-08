@@ -1,4 +1,4 @@
-package com.prgrms.rg.domain.ridingpost.model;
+package com.prgrms.rg.domain.ridingpost.model.exception;
 
 public class RidingJoinFailException extends RuntimeException {
 	public RidingJoinFailException(String message) {

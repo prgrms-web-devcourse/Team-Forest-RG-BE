@@ -16,7 +16,7 @@ public class RidingMainCreateCommand {
 
 	private String title;
 
-	private int estimatedTime;
+	private String estimatedTime;
 
 	private LocalDateTime ridingDate;
 
@@ -31,7 +31,7 @@ public class RidingMainCreateCommand {
 	public RidingMainSection toSection() {
 		return RidingMainSection.builder()
 			.title(title)
-			.estimatedMinutes(estimatedTime).ridingDate(ridingDate).fee(fee).addressCode(addressCode)
+			.estimatedTime(estimatedTime).ridingDate(ridingDate).fee(fee).addressCode(addressCode)
 			.routes(routes).departurePlace(departurePlace).build();
 	}
 }

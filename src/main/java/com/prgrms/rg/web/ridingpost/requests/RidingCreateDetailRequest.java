@@ -2,6 +2,8 @@ package com.prgrms.rg.web.ridingpost.requests;
 
 import java.util.List;
 
+import javax.validation.constraints.Size;
+
 import com.prgrms.rg.domain.ridingpost.application.command.RidingSubCreateCommand;
 
 import lombok.Data;
@@ -9,14 +11,14 @@ import lombok.Data;
 @Data
 public class RidingCreateDetailRequest {
 
-	private String subTitle;
+	private String title;
 
 	private String content;
 
-	//todo validation - list 길이 제한
+	@Size(min = 0, max = 2)
 	private List<Long> images;
 
 	public RidingSubCreateCommand toCommand() {
-		return new RidingSubCreateCommand(subTitle, content, images);
+		return new RidingSubCreateCommand(title, content, images);
 	}
 }

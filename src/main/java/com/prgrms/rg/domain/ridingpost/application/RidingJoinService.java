@@ -4,11 +4,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.prgrms.rg.domain.common.event.DomainEventPublisher;
-import com.prgrms.rg.domain.ridingpost.model.RidingJoinFailException;
+import com.prgrms.rg.domain.ridingpost.model.exception.RidingJoinFailException;
 import com.prgrms.rg.domain.ridingpost.model.RidingParticipantRepository;
 import com.prgrms.rg.domain.ridingpost.model.RidingPost;
 import com.prgrms.rg.domain.ridingpost.model.RidingPostFinder;
-import com.prgrms.rg.domain.ridingpost.model.RidingPostNotFoundException;
+import com.prgrms.rg.domain.ridingpost.model.exception.RidingPostNotFoundException;
 import com.prgrms.rg.domain.ridingpost.model.event.RidingJoinEvent;
 import com.prgrms.rg.domain.user.application.UserReadService;
 import com.prgrms.rg.domain.user.model.User;

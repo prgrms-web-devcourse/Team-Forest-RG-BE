@@ -1,7 +1,6 @@
 package com.prgrms.rg.domain.ridingpost.model;
 
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -30,19 +29,12 @@ public class RidingConditionSection {
 	@OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
 	private Set<RidingConditionBicycle> bicycleList = new HashSet<>();
 
-	public RidingConditionSection(RidingPost post, RidingLevel level, List<Bicycle> bicycleList) {
-		post.assignConditionSection(this);
+	//todo post-conditionsection mapping 여기서 ?
+	public RidingConditionSection(RidingLevel level) {
 		setLevel(level);
-		setBicycleList(post, bicycleList);
 	}
 
 	public void addBicycle(RidingPost post, Bicycle bicycle) {
 		bicycleList.add(new RidingConditionBicycle(post, bicycle));
-	}
-
-	private void setBicycleList(RidingPost post, List<Bicycle> bicycleList) {
-		for (Bicycle bicycle : bicycleList) {
-			addBicycle(post, bicycle);
-		}
 	}
 }
