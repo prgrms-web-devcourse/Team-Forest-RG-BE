@@ -6,9 +6,13 @@ import javax.validation.constraints.Size;
 
 import com.prgrms.rg.domain.ridingpost.application.command.RidingSubCreateCommand;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class RidingCreateDetailRequest {
 
 	private String title;
