@@ -25,6 +25,7 @@ import com.prgrms.rg.domain.user.model.Nickname;
 import com.prgrms.rg.domain.user.model.User;
 import com.prgrms.rg.domain.user.model.UserRepository;
 
+@Transactional
 @SpringBootTest
 class RidingPostServiceImplTest {
 
