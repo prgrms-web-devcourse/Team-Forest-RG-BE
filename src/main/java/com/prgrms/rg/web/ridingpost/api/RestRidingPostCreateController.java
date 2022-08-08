@@ -1,6 +1,7 @@
 package com.prgrms.rg.web.ridingpost.api;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -20,6 +21,7 @@ public class RestRidingPostCreateController {
 
 	private final RidingPostService ridingPostService;
 
+	@Secured("ROLE_USER")
 	@PostMapping(value = "/api/v1/ridingposts")
 	public ResponseEntity<Long> createRidingPost(@AuthenticationPrincipal JwtAuthentication auth,
 		@RequestBody RidingPostCreateRequest ridingRequest) {
