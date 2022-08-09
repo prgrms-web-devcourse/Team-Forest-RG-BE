@@ -14,6 +14,6 @@ public class RidingConditionSaveCommand {
 	private final List<String> bicycleTypes;
 
 	public RidingConditionSection toSection() {
-		return new RidingConditionSection(RidingLevel.valueOf(level));
+		return new RidingConditionSection(RidingLevel.from(level));
 	}
 }

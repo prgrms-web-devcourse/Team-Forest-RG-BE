@@ -15,6 +15,13 @@ public enum RidingLevel {
 		this.description = description;
 	}
 
+	public static RidingLevel from(String levelName) {
+		for (RidingLevel level : values()) {
+			if(level.getLevelName().equals(levelName))	return level;
+		}
+		throw new IllegalArgumentException();
+	}
+
 	public String getLevelName() {
 		return levelName;
 	}
