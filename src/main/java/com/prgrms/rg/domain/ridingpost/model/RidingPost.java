@@ -70,6 +70,12 @@ public class RidingPost extends BaseTimeEntity implements ImageOwner {
 		assignLeader(leader);
 	}
 
+	public void changePost(RidingPost newPost) {
+		this.ridingMainSection = newPost.getRidingMainSection();
+		this.ridingParticipantSection = new RidingParticipantSection();
+		this.ridingConditionSection = newPost.getRidingConditionSection();
+	}
+
 	private void assignLeader(User leader) {
 		this.leader = leader;
 		addParticipant(leader);
@@ -90,6 +96,14 @@ public class RidingPost extends BaseTimeEntity implements ImageOwner {
 
 	public String getThumbnail() {
 		return (thumbnail != null) ? thumbnail.getUrl() : DEFAULT_IMAGE_URL;
+	}
+
+	public boolean compareThumbnailTo(Long thumbnailId) {
+		return thumbnail != null && thumbnail.getId().equals(thumbnailId);
+	}
+
+	public void removeCurrentSubSection() {
+		this.subSectionList.clear();
 	}
 
 	@Override

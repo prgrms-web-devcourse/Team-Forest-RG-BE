@@ -3,7 +3,7 @@ package com.prgrms.rg.domain.ridingpost.application.impl;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.prgrms.rg.domain.ridingpost.model.RidingCreateManagement;
+import com.prgrms.rg.domain.ridingpost.model.RidingSaveManagement;
 import com.prgrms.rg.domain.ridingpost.application.RidingPostService;
 import com.prgrms.rg.domain.ridingpost.application.command.RidingSaveCommand;
 import com.prgrms.rg.domain.ridingpost.model.RidingPostRepository;
@@ -18,16 +18,28 @@ public class RidingPostServiceImpl implements RidingPostService {
 
 	private final UserReadService userReadService;
 	private final RidingPostRepository ridingPostRepository;
-	private final RidingCreateManagement createManagement;
+	private final RidingSaveManagement saveManagement;
 
 	@Transactional
 	public Long createRidingPost(Long userId, RidingSaveCommand command) {
 		User user = userReadService.getUserEntityById(userId);
 
 		//post, subsection 저장
-		var savedPost = ridingPostRepository.save(createManagement.createRidingPost(user, command));
+		var savedPost = ridingPostRepository.save(saveManagement.createRidingPost(user, command));
 
 		//saved의 id return
 		return savedPost.getId();
+	}
+
+	@Override
+	@Transactional
+	public Long updateRidingPost(Long leaderId, Long postId, RidingSaveCommand command) {
+		User leader = userReadService.getUserEntityById(leaderId);
+
+		//todo postreadservice 적용
+		var post = ridingPostRepository.findByLeaderAndId(leader, postId).orElseThrow();
+		saveManagement.updateRidingPost(leader, post, command);
+
+		return post.getId();
 	}
 }

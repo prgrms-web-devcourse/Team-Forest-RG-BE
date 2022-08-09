@@ -18,6 +18,11 @@ public class SubImage extends AttachedImage {
 	@ManyToOne(fetch = FetchType.LAZY)
 	private RidingSubSection subInformation;
 
+	public SubImage(AttachedImage attachedImage, RidingSubSection subInformation) {
+		super(attachedImage.getId(), attachedImage.getOriginalFileName(), attachedImage.getUrl());
+		this.subInformation = subInformation;
+	}
+
 	public SubImage(TemporaryImage storedImage, RidingSubSection subInformation) {
 		super(storedImage.getId(), storedImage.getOriginalFileName(), storedImage.getUrl());
 		this.subInformation = subInformation;
