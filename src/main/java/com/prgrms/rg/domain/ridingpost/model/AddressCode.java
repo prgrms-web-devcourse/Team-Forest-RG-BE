@@ -30,6 +30,9 @@ public class AddressCode {
 	}
 
 	@Override
+	public String toString() {
+		return area + " " + district;
+	}
 	public boolean equals(Object o) {
 		if (this == o)
 			return true;

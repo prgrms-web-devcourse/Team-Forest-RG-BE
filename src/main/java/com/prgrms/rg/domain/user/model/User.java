@@ -77,7 +77,7 @@ public class User extends BaseTimeEntity implements ImageOwner {
 	public boolean addBicycle(Bicycle bicycle) {
 		return profile.addBicycle(this, bicycle);
 	}
-
+	
 	public String getNickname() {
 		return nickname.get();
 	}

@@ -31,6 +31,10 @@ public class RidingConditionBicycle {
 		this.bicycle = bicycle;
 	}
 
+	public String getBicycleName() {
+		return bicycle.getName();
+	}
+
 	@Override
 	public boolean equals(Object o) {
 		if (this == o)
