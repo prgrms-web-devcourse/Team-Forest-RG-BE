@@ -11,12 +11,11 @@ import lombok.Setter;
 public class OAuthLoginResult {
 	private String accessToken;
 	private Boolean isNew;
-	private String fromUrl;
-	public static OAuthLoginResult of(String accessToken, Boolean isNew, String fromUrl) {
+
+	public static OAuthLoginResult of(String accessToken, Boolean isNew) {
 		OAuthLoginResult result = new OAuthLoginResult();
 		result.setAccessToken(accessToken);
 		result.setIsNew(isNew);
-		result.setFromUrl(fromUrl);
 		return result;
 	}
 }

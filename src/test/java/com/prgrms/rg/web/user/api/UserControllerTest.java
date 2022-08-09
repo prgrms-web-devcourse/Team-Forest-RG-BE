@@ -39,12 +39,10 @@ class UserControllerTest {
 		template.update("INSERT INTO user(id,nickname,no_show,point) VALUES(3,'kms',0,0)");
 
 		var token = tokenProvider.createToken("ROLE_USER", 3L);
-
 		// Given
 		var result = mockMvc.perform(
-			MockMvcRequestBuilders.get("/user/me").header("Authorization", "Bearer " + token));
+			MockMvcRequestBuilders.get("/api/v1/user/me").header("Authorization", "Bearer " + token));
 		// When
-
 		result.andDo(print())
 			.andExpectAll(status().is2xxSuccessful(),
 				jsonPath("username", equalTo("kms")),
