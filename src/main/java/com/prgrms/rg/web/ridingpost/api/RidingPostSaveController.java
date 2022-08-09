@@ -23,7 +23,7 @@ public class RidingPostSaveController {
 
 	@Secured("ROLE_USER")
 	@PostMapping(value = "/api/v1/ridingposts")
-	public ResponseEntity<Long> createRidingPost(@AuthenticationPrincipal JwtAuthentication auth,
+	public ResponseEntity<Long> registerRidingPost(@AuthenticationPrincipal JwtAuthentication auth,
 		@RequestBody RidingPostSaveRequest ridingRequest) {
 
 		//return type : post id
