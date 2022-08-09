@@ -19,6 +19,7 @@ import com.prgrms.rg.domain.user.model.Nickname;
 import com.prgrms.rg.domain.user.model.User;
 import com.prgrms.rg.domain.user.model.UserBicycle;
 import com.prgrms.rg.domain.user.model.UserRepository;
+import com.prgrms.rg.infrastructure.repository.JpaBicycleRepository;
 
 import lombok.RequiredArgsConstructor;
 
@@ -28,7 +29,7 @@ import lombok.RequiredArgsConstructor;
 public class UserCommandServiceImpl implements UserCommandService {
 
 	private final UserRepository userRepository;
-	private final BicycleRepository bicycleRepository;
+	private final JpaBicycleRepository bicycleRepository;
 
 	@Override
 	public Long edit(UserUpdateCommand command) {

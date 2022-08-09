@@ -25,6 +25,11 @@ public class Bicycle {
 		this.name = name;
 	}
 
+	public Bicycle(Long id, String name) {
+		this.id = id;
+		this.name = name;
+	}
+
 	@Id
 	private Long id;
 	@Column(unique = true, nullable = false)
