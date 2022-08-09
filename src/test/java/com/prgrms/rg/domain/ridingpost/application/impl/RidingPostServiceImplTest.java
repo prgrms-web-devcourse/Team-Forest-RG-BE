@@ -14,10 +14,10 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.prgrms.rg.domain.ridingpost.application.command.RidingConditionCreateCommand;
-import com.prgrms.rg.domain.ridingpost.application.command.RidingCreateCommand;
-import com.prgrms.rg.domain.ridingpost.application.command.RidingMainCreateCommand;
-import com.prgrms.rg.domain.ridingpost.application.command.RidingParticipantCreateCommand;
+import com.prgrms.rg.domain.ridingpost.application.command.RidingConditionSaveCommand;
+import com.prgrms.rg.domain.ridingpost.application.command.RidingSaveCommand;
+import com.prgrms.rg.domain.ridingpost.application.command.RidingMainSaveCommand;
+import com.prgrms.rg.domain.ridingpost.application.command.RidingParticipantSaveCommand;
 import com.prgrms.rg.domain.ridingpost.model.AddressCode;
 import com.prgrms.rg.domain.ridingpost.model.RidingPostRepository;
 import com.prgrms.rg.domain.user.model.Manner;
@@ -51,15 +51,15 @@ class RidingPostServiceImplTest {
 		User savedUser = userRepository.save(user);
 
 		List<String> routes = List.of("start", "end");
-		var mainCreateCommand = RidingMainCreateCommand.builder()
+		var mainCreateCommand = RidingMainSaveCommand.builder()
 			.title("testTitle")
 			.estimatedTime("2시간").ridingDate(LocalDateTime.now().plusDays(10L))
 			.fee(0).addressCode(new AddressCode(11010)).routes(routes).build();
 
-		var createCommand = new RidingCreateCommand(null,
+		var createCommand = new RidingSaveCommand(null,
 			mainCreateCommand,
-			new RidingParticipantCreateCommand(6, 10),
-			new RidingConditionCreateCommand("BEGINNER", List.of("MTB")), null
+			new RidingParticipantSaveCommand(6, 10),
+			new RidingConditionSaveCommand("BEGINNER", List.of("MTB")), null
 		);
 
 	    //when

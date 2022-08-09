@@ -9,8 +9,8 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Order(1000)
-@RestControllerAdvice(assignableTypes = RestRidingPostCreateController.class)
-public class RidingCreateExceptionHandler {
+@RestControllerAdvice(assignableTypes = RidingPostSaveController.class)
+public class RidingSaveExceptionHandler {
 
 	@ExceptionHandler(IllegalArgumentException.class)
 	public ResponseEntity<String> handlerIllegalArgument(IllegalArgumentException e) {

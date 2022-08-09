@@ -6,8 +6,8 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 
 import com.prgrms.rg.domain.common.file.application.ImageAttachManger;
-import com.prgrms.rg.domain.ridingpost.application.command.RidingCreateCommand;
-import com.prgrms.rg.domain.ridingpost.application.command.RidingSubCreateCommand;
+import com.prgrms.rg.domain.ridingpost.application.command.RidingSaveCommand;
+import com.prgrms.rg.domain.ridingpost.application.command.RidingSubSaveCommand;
 import com.prgrms.rg.domain.user.model.User;
 
 import lombok.RequiredArgsConstructor;
@@ -20,7 +20,7 @@ public class RidingCreateManagement {
 	private final AddressCodeRepository addressCodeRepository;
 	private final BicycleRepository bicycleRepository;
 
-	public RidingPost createRidingPost(User leader, RidingCreateCommand command) {
+	public RidingPost createRidingPost(User leader, RidingSaveCommand command) {
 
 		var mainSection = command.getMainCommand().toSection();
 
@@ -59,14 +59,14 @@ public class RidingCreateManagement {
 
 		//post-subsection mapping
 		if (!CollectionUtils.isEmpty(command.getSubCommand()) && command.getSubCommand().size() <= 5) {
-			for (RidingSubCreateCommand subCommand : command.getSubCommand()) {
+			for (RidingSubSaveCommand subCommand : command.getSubCommand()) {
 				post.addSubSection(createSubSection(subCommand));
 			}
 		}
 		return post;
 	}
 
-	private RidingSubSection createSubSection(RidingSubCreateCommand command) {
+	private RidingSubSection createSubSection(RidingSubSaveCommand command) {
 		var section = new RidingSubSection(command.getTitle(), command.getContent());
 
 		//section - image mapping
