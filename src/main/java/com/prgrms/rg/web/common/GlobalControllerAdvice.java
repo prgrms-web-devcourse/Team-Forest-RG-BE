@@ -5,7 +5,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import com.prgrms.rg.web.common.message.ExceptionMessageSender;
-import com.prgrms.rg.web.common.results.InternalServerErrorResult;
+import com.prgrms.rg.web.common.results.GlobalServerErrorResult;
 
 @RestControllerAdvice
 public class GlobalControllerAdvice {
@@ -17,9 +17,9 @@ public class GlobalControllerAdvice {
 	}
 
 	@ExceptionHandler(Exception.class)
-	public ResponseEntity<InternalServerErrorResult> handleUnhandledException(Exception exception) {
+	public ResponseEntity<GlobalServerErrorResult> handleUnhandledException(Exception exception) {
 		globalMessageSender.send(exception);
-		return ResponseEntity.internalServerError().body(InternalServerErrorResult.create());
+		return ResponseEntity.internalServerError().body(GlobalServerErrorResult.INTERNAL_SERVER_ERROR);
 	}
 
 }
