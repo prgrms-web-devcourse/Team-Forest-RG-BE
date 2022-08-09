@@ -67,9 +67,11 @@ class UserCommandRestControllerV1Test {
 		var request = new UserUpdateRequest("RG라이더", 5, "하",
 			new String[] {"MTB", "로드"}, "잘 부탁드립니다. 한강 라이딩을 즐겨 합니다.");
 
+		UserUpdateCommand command = request.toCommand(1L);
+
 		var body = objectMapper.writeValueAsString(request);
 
-		when(userCommandService.edit(isA(UserUpdateCommand.class))).thenThrow(new NoSuchUserException(1L));
+		when(userCommandService.edit(command)).thenThrow(new NoSuchUserException(1L));
 
 		//When
 		mockMvc.perform(put(("/api/v1/users/1"))
