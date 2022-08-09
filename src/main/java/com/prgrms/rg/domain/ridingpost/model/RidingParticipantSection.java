@@ -19,10 +19,12 @@ import org.hibernate.validator.constraints.Range;
 import com.prgrms.rg.domain.user.model.User;
 
 import lombok.AccessLevel;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Embeddable
+@Getter
 public class RidingParticipantSection {
 
 	@Column(name = "participant_count")

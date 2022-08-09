@@ -3,7 +3,6 @@ package com.prgrms.rg.domain.ridingpost.application.impl;
 import static org.hamcrest.MatcherAssert.*;
 import static org.hamcrest.Matchers.*;
 
-
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -26,6 +25,7 @@ import com.prgrms.rg.domain.user.model.User;
 import com.prgrms.rg.domain.user.model.UserRepository;
 
 @SpringBootTest
+@Transactional
 class RidingPostServiceImplTest {
 
 	@Autowired

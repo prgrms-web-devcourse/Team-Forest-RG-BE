@@ -2,6 +2,7 @@ package com.prgrms.rg.domain.ridingpost.model;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -55,10 +56,17 @@ public class RidingSubSection implements ImageOwner {
 		this.post = post;
 	}
 
+	public List<String> getImageUrlAsList() {
+		return getImages().stream()
+			.map(SubImage::getUrl)
+			.collect(Collectors.toList());
+	}
+
 	public void addImage(AttachedImage attachedImage) {
 		var image = new SubImage(attachedImage, this);
 		images.add(image);
 	}
+
 
 	@Override
 	public AttachedImage attach(TemporaryImage storedImage) {

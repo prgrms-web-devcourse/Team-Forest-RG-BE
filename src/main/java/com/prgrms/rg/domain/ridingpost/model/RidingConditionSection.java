@@ -1,7 +1,9 @@
 package com.prgrms.rg.domain.ridingpost.model;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -35,5 +37,15 @@ public class RidingConditionSection {
 
 	public void addBicycle(RidingPost post, Bicycle bicycle) {
 		bicycleList.add(new RidingConditionBicycle(post, bicycle));
+	}
+
+	public List<String> getBicycleAsStringList() {
+		return bicycleList.stream()
+			.map(RidingConditionBicycle::getBicycleName)
+			.collect(Collectors.toList());
+	}
+
+	public String getLevel() {
+		return level.getLevelName();
 	}
 }
