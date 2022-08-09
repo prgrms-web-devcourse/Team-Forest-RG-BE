@@ -12,7 +12,7 @@ public class GlobalServerErrorResult {
 		this.message = message;
 	}
 
-	public static GlobalServerErrorResult of(String message) {
+	public static GlobalServerErrorResult from(String message) {
 		return new GlobalServerErrorResult(message);
 	}
 
