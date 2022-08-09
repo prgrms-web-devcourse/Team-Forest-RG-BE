@@ -15,7 +15,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.prgrms.rg.domain.user.application.UserAuthenticationService;
-import com.prgrms.rg.infrastructure.oauth.Communicator;
+import com.prgrms.rg.infrastructure.oauth.OAuthManager;
 import com.prgrms.rg.web.user.results.OAuthLoginResult;
 
 @SpringBootTest
@@ -23,7 +23,7 @@ import com.prgrms.rg.web.user.results.OAuthLoginResult;
 @Transactional
 class UserAuthenticationServiceImplTest {
 	@MockBean
-	Communicator communicator;
+	OAuthManager communicator;
 
 	@Autowired
 	private UserAuthenticationService userService;

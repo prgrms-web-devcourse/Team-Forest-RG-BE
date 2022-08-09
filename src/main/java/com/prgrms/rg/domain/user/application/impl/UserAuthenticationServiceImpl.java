@@ -4,7 +4,7 @@ import static com.google.common.base.Preconditions.*;
 import static org.apache.commons.lang3.ObjectUtils.*;
 
 import java.io.IOException;
-import java.util.concurrent.ConcurrentMap;
+import java.util.Map;
 
 import javax.transaction.Transactional;
 
@@ -16,7 +16,7 @@ import com.prgrms.rg.domain.user.model.Manner;
 import com.prgrms.rg.domain.user.model.Nickname;
 import com.prgrms.rg.domain.user.model.User;
 import com.prgrms.rg.domain.user.model.UserRepository;
-import com.prgrms.rg.infrastructure.oauth.Communicator;
+import com.prgrms.rg.infrastructure.oauth.OAuthManager;
 import com.prgrms.rg.web.user.results.OAuthLoginResult;
 import com.prgrms.rg.web.user.results.UserMeResult;
 
@@ -29,7 +29,7 @@ import lombok.extern.slf4j.Slf4j;
 public class UserAuthenticationServiceImpl implements UserAuthenticationService {
 	private final UserRepository userRepository;
 	private final JwtTokenProvider jwtTokenProvider;
-	private final Communicator communicator;
+	private final OAuthManager communicator;
 
 	@Override
 	@Transactional
@@ -44,8 +44,8 @@ public class UserAuthenticationServiceImpl implements UserAuthenticationService 
 	@Transactional
 	public OAuthLoginResult joinOAuth(String authorizationCode) throws IOException, InterruptedException {
 		checkArgument(authorizationCode != null, "authorizationCode must be provided");
-		checkArgument(!authorizationCode.equals("") , "authorizationCode must be provided");
-		ConcurrentMap<String, String> oauthInformation = communicator.convertAuthorizationCodeToInfo(authorizationCode);
+		checkArgument(!authorizationCode.equals(""), "authorizationCode must be provided");
+		Map<String, String> oauthInformation = communicator.convertAuthorizationCodeToInfo(authorizationCode);
 
 		String provider = "kakao";
 		String providerId = oauthInformation.get("id");
