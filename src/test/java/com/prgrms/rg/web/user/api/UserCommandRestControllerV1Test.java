@@ -42,7 +42,7 @@ class UserCommandRestControllerV1Test {
 		//Given
 		var token = tokenProvider.createToken("ROLE_USER", 1L);
 
-		var request = new UserUpdateRequest("RG라이더", 5, "BEGINNER",
+		var request = new UserUpdateRequest("RG라이더", 5, "하",
 			new String[] {"MTB", "로드"}, "잘 부탁드립니다. 한강 라이딩을 즐겨 합니다.");
 
 		var body = objectMapper.writeValueAsString(request);
@@ -66,7 +66,7 @@ class UserCommandRestControllerV1Test {
 		//Given
 		var token = tokenProvider.createToken("ROLE_USER", 1L);
 
-		var request = new UserUpdateRequest("RG라이더", 5, "BEGINNER",
+		var request = new UserUpdateRequest("RG라이더", 5, "하",
 			new String[] {"MTB", "로드"}, "잘 부탁드립니다. 한강 라이딩을 즐겨 합니다.");
 
 		var body = objectMapper.writeValueAsString(request);

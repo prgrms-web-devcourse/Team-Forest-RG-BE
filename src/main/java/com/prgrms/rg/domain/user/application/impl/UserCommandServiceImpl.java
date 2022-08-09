@@ -60,6 +60,6 @@ public class UserCommandServiceImpl implements UserCommandService {
 			bicyclesToApply.add(new UserBicycle(user, bicycle));
 		}
 
-		user.changeRiderProfile(command.getRidingYears(), RidingLevel.valueOf(command.getRidingLevel()), bicyclesToApply);
+		user.changeRiderProfile(command.getRidingYears(), RidingLevel.of(command.getRidingLevel()), bicyclesToApply);
 	}
 }

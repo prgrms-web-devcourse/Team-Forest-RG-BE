@@ -65,7 +65,7 @@ class UserCommandServiceImplTest {
 		user.addBicycle(seoulBike);
 
 		UserUpdateCommand command = new UserUpdateCommand(user.getId(), "changedName", 3
-			, BEGINNER.name(), new String[] {"따릉이", "MTB"}, "반갑습니다.");
+			, BEGINNER.getLevelName(), new String[] {"따릉이", "MTB"}, "반갑습니다.");
 
 		em.flush();
 		em.clear();
@@ -105,7 +105,7 @@ class UserCommandServiceImplTest {
 			.build());
 
 		UserUpdateCommand command = new UserUpdateCommand(user.getId(), "changedName", 5
-			, MASTER.name(), new String[] {}, "한강 라이딩을 즐겨합니다.");
+			, MASTER.getLevelName(), new String[] {}, "한강 라이딩을 즐겨합니다.");
 
 		em.flush();
 		em.clear();
