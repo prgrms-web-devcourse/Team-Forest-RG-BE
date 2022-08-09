@@ -1,4 +1,3 @@
-CREATE TABLE address_code(code int, area VARCHAR(10),city VARCHAR(10));
 INSERT INTO address_code (code,area,city) VALUES (11010,'서울특별시','종로구');
 INSERT INTO address_code (code,area,city) VALUES (11020,'서울특별시','중구');
 INSERT INTO address_code (code,area,city) VALUES (11030,'서울특별시','용산구');

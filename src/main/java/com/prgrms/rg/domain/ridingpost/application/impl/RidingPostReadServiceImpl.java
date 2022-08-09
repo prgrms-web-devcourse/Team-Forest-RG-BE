@@ -6,8 +6,8 @@ import org.springframework.transaction.annotation.Transactional;
 import com.prgrms.rg.domain.ridingpost.application.RidingPostReadService;
 import com.prgrms.rg.domain.ridingpost.model.RidingPost;
 import com.prgrms.rg.domain.ridingpost.model.RidingPostInfo;
-import com.prgrms.rg.domain.ridingpost.model.RidingPostNotFoundException;
 import com.prgrms.rg.domain.ridingpost.model.RidingPostRepository;
+import com.prgrms.rg.domain.ridingpost.model.exception.RidingPostNotFoundException;
 
 import lombok.RequiredArgsConstructor;
 

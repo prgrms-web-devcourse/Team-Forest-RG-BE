@@ -23,9 +23,12 @@ import com.prgrms.rg.domain.ridingpost.application.command.RidingCreateCommand;
 import com.prgrms.rg.domain.ridingpost.application.command.RidingMainCreateCommand;
 import com.prgrms.rg.domain.ridingpost.application.command.RidingParticipantCreateCommand;
 import com.prgrms.rg.domain.ridingpost.model.AddressCode;
+import com.prgrms.rg.domain.ridingpost.model.BicycleRepository;
 import com.prgrms.rg.domain.ridingpost.model.RidingPostInfo;
 import com.prgrms.rg.domain.user.application.UserReadService;
 import com.prgrms.rg.domain.user.model.User;
+import com.prgrms.rg.domain.user.model.UserRepository;
+import com.prgrms.rg.testutil.EntityFactory;
 
 @SpringBootTest
 @Transactional
@@ -33,11 +36,16 @@ class RidingPostReadServiceImplTest {
 	@Autowired
 	RidingPostReadService readService;
 	@Autowired
+	UserRepository userRepository;
+	@Autowired
 	ObjectMapper mapper;
 	@Autowired
 	UserReadService userReadService;
 	@Autowired
 	private RidingPostService ridingPostService;
+
+	@Autowired
+	private BicycleRepository bicycleRepository;
 
 	@BeforeEach
 	void init() {
@@ -46,21 +54,21 @@ class RidingPostReadServiceImplTest {
 
 	@DisplayName("라이딩 모집 게시글 상세 조회(필수 항목만 입력)")
 	@Test
-	@Sql(scripts = "classpath:data.sql")
+	@Sql(scripts = {"classpath:address_code.sql", "classpath:bicycle.sql"})
 	void RidingDetailInquiryTest() throws Exception {
 		//given
 		String title = "testTitle";
-		int estimatedTime = 120;
+		String estimatedTime = "120";
 		LocalDateTime ridingDate = LocalDateTime.now().plusDays(10L);
 		int fee = 0;
 		AddressCode addressCode = new AddressCode(11010);
 		int minPart = 4;
 		int maxPart = 10;
 		String level = RidingLevel.BEGINNER.name();
-		List<String> bicycle = List.of("MTV");
+		List<String> bicycle = List.of("MTB");
 		List<String> routes = List.of("start", "end");
-		User leader = userReadService.getUserEntityById(1L);
-
+		User leader = EntityFactory.createUser();
+		long userId = userRepository.save(leader).getId();
 		var mainCreateCommand = RidingMainCreateCommand.builder()
 			.title(title)
 			.estimatedTime(estimatedTime)
@@ -75,7 +83,7 @@ class RidingPostReadServiceImplTest {
 			new RidingParticipantCreateCommand(minPart, maxPart),
 			new RidingConditionCreateCommand(level, bicycle), null
 		);
-		Long savedPostId = ridingPostService.createRidingPost(1L, createCommand);
+		Long savedPostId = ridingPostService.createRidingPost(userId, createCommand);
 
 		//when
 		RidingPostInfo ridingPostInfo = readService.getRidingPostInfoById(savedPostId);

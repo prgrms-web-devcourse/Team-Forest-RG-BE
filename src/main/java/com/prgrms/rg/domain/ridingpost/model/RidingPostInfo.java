@@ -12,6 +12,8 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Data
 public class RidingPostInfo {
@@ -43,7 +45,8 @@ public class RidingPostInfo {
 	}
 
 	@Getter
-	@Builder
+	@Setter(AccessLevel.PRIVATE)
+	@NoArgsConstructor(access = AccessLevel.PRIVATE)
 	public static class RidingInfo {
 		private String title;
 		private String thumbnail;
@@ -62,32 +65,54 @@ public class RidingPostInfo {
 		private List<RidingDetail> details;
 
 		public static RidingInfo from(RidingPost ridingPost) {
+			RidingInfo instance = new RidingInfo();
 			RidingMainSection mainSection = ridingPost.getRidingMainSection();
+			mapMainSection(mainSection, instance);
 			RidingConditionSection conditionSection = ridingPost.getRidingConditionSection();
+			mapConditionSection(conditionSection, instance);
 			RidingParticipantSection participantSection = ridingPost.getRidingParticipantSection();
+			mapParticipantSection(participantSection, instance);
 			List<RidingSubSection> subSectionList = ridingPost.getSubSectionList();
-			List<RidingDetail> details = subSectionList.stream().map(RidingDetail::from).collect(Collectors.toList());
+			mapSubSection(subSectionList, instance);
+			instance.setThumbnail(ridingPost.getThumbnail());
+			instance.setCreatedAt(ridingPost.getCreatedAt());
+			return instance;
+		}
+
+		private static void mapMainSection(RidingMainSection mainSection, RidingInfo instance) {
+			if (mainSection == null)
+				return;
+			instance.setTitle(mainSection.getTitle());
+			instance.setRidingDate(mainSection.getRidingDate());
+			instance.setFee(mainSection.getFee());
+			instance.setRidingCourses(mainSection.getRoutes());
+			instance.setDeparturePosition(mainSection.getDeparturePlace());
+			instance.setZone(ZoneInfo.from(mainSection.getAddressCode()));
+			instance.setEstimatedTime(mainSection.getEstimatedTime());
+		}
+
+		private static void mapConditionSection(RidingConditionSection conditionSection, RidingInfo instance) {
+			if (conditionSection == null)
+				return;
+			instance.setRidingLevel(conditionSection.getLevel());
+			instance.setBicycleType((conditionSection.getBicycleAsStringList()));
+		}
+
+		private static void mapParticipantSection(RidingParticipantSection participantSection, RidingInfo instance) {
+			if (participantSection == null)
+				return;
 			List<ParticipantInfo> participantInfos = participantSection.getParticipants().stream()
-				.map(ridingParticipant -> {
-					return ParticipantInfo.from(ridingParticipant.getUser());
-				}).collect(Collectors.toList());
-			return RidingInfo.builder()
-				.title(mainSection.getTitle())
-				.thumbnail(ridingPost.getThumbnail())
-				.ridingLevel(conditionSection.getLevel())
-				.ridingDate(mainSection.getRidingDate())
-				.zone(ZoneInfo.from(mainSection.getAddressCode()))
-				.bicycleType(conditionSection.getBicycleAsStringList())
-				.fee(mainSection.getFee())
-				.estimatedTime(mainSection.getEstimatedTime())
-				.createdAt(ridingPost.getCreatedAt())
-				.ridingCourses(mainSection.getRoutes())
-				.maxParticipant(participantSection.getMaxParticipantCount())
-				.minParticipant(participantSection.getMinParticipantCount())
-				.participants(participantInfos)
-				.departurePosition(mainSection.getDeparturePlace())
-				.details(details)
-				.build();
+				.map(ridingParticipant -> ParticipantInfo.from(ridingParticipant.getUser()))
+				.collect(Collectors.toList());
+
+			instance.setMaxParticipant((participantSection.getMaxParticipantCount()));
+			instance.setMinParticipant(participantSection.getMinParticipantCount());
+			instance.setParticipants((participantInfos));
+		}
+
+		private static void mapSubSection(List<RidingSubSection> subSectionList, RidingInfo instance) {
+			List<RidingDetail> details = subSectionList.stream().map(RidingDetail::from).collect(Collectors.toList());
+			instance.setDetails(details);
 		}
 	}
 
