@@ -148,7 +148,7 @@ public class RidingPostInfo {
 	}
 
 	@Getter
-	@AllArgsConstructor
+	@AllArgsConstructor(access = AccessLevel.PRIVATE)
 	public static class ZoneInfo {
 		private final int code;
 		private final String name;
