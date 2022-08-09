@@ -12,7 +12,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.prgrms.rg.domain.common.file.application.FileManager;
 import com.prgrms.rg.domain.common.file.application.FileStore;
-import com.prgrms.rg.domain.common.file.application.IllegalFileExtensionException;
+import com.prgrms.rg.domain.common.file.application.exception.IllegalFileExtensionException;
 import com.prgrms.rg.domain.common.file.model.FileRepository;
 import com.prgrms.rg.domain.common.file.model.ImageAttachable;
 import com.prgrms.rg.domain.common.file.model.StoredFile;
@@ -24,12 +24,11 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class MultipartFileManager implements FileManager {
 
-	private final FileStore fileStore;
-	private final FileRepository fileRepository;
-
 	private static final String[] SUPPORTING_EXTENSIONS = {
 		"png", "jpg"
 	};
+	private final FileStore fileStore;
+	private final FileRepository fileRepository;
 
 	@Override
 	public <T extends ImageAttachable> List<StoredFile> store(List<MultipartFile> multipartFiles, T attached) {
