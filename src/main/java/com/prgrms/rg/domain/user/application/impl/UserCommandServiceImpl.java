@@ -19,7 +19,6 @@ import com.prgrms.rg.domain.user.model.Nickname;
 import com.prgrms.rg.domain.user.model.User;
 import com.prgrms.rg.domain.user.model.UserBicycle;
 import com.prgrms.rg.domain.user.model.UserRepository;
-import com.prgrms.rg.infrastructure.repository.JpaBicycleRepository;
 
 import lombok.RequiredArgsConstructor;
 
@@ -29,7 +28,7 @@ import lombok.RequiredArgsConstructor;
 public class UserCommandServiceImpl implements UserCommandService {
 
 	private final UserRepository userRepository;
-	private final JpaBicycleRepository bicycleRepository;
+	private final BicycleRepository bicycleRepository;
 
 	@Override
 	public Long edit(UserUpdateCommand command) {
@@ -45,6 +44,9 @@ public class UserCommandServiceImpl implements UserCommandService {
 
 	private void changeNickname(String nickname, User user) {
 		Nickname nicknameToChange = new Nickname(nickname);
+		if (nickname.equals(user.getNickname())) {
+			return;
+		}
 		if (userRepository.existsUserByNickname(nicknameToChange)) {
 			throw new DuplicateNicknameException(nicknameToChange);
 		}
