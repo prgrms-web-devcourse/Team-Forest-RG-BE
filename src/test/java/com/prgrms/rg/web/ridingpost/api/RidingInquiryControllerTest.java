@@ -6,7 +6,6 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +13,6 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.prgrms.rg.domain.auth.jwt.JwtTokenProvider;
@@ -23,7 +21,7 @@ import com.prgrms.rg.domain.ridingpost.model.RidingPost;
 import com.prgrms.rg.domain.ridingpost.model.RidingPostInfo;
 import com.prgrms.rg.domain.ridingpost.model.exception.RidingPostNotFoundException;
 import com.prgrms.rg.testutil.ControllerTest;
-import com.prgrms.rg.testutil.EntityFactory;
+import com.prgrms.rg.testutil.TestEntityDataFactory;
 
 @ControllerTest(controllers = RidingInquiryController.class)
 @AutoConfigureMockMvc
@@ -42,19 +40,12 @@ class RidingInquiryControllerTest {
 	@Autowired
 	private MockMvc mockMvc;
 
-	@BeforeEach
-	void init() {
-		mockMvc = MockMvcBuilders.standaloneSetup(controller)
-			.setControllerAdvice(RidingPostInquiryExceptionHandler.class)
-			.build();
-	}
-
 	@DisplayName("라이딩 게시글 상세 조회 정상 요청")
 	@Test
 	void test() throws Exception {
 		//given
 		var token = tokenProvider.createToken("ROLE_USER", 1L);
-		ridingPost = EntityFactory.createRidingPost(userId);
+		ridingPost = TestEntityDataFactory.createRidingPost(userId);
 
 		RidingPostInfo info = RidingPostInfo.from(ridingPost);
 		when(readService.getRidingPostInfoById(postId)).thenReturn(info);

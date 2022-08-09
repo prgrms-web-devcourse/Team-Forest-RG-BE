@@ -21,7 +21,7 @@ import com.prgrms.rg.domain.user.model.User;
  * 테스트용 도메인 엔티티를 생성하는 팩토리 클래스
  *
  * */
-public class EntityFactory {
+public class TestEntityDataFactory {
 	public static int ADDRESS_CODE = 11010;
 
 	public static User createUser(Long id) {

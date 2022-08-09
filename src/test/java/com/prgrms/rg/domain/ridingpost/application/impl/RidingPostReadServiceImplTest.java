@@ -28,7 +28,7 @@ import com.prgrms.rg.domain.ridingpost.model.RidingPostInfo;
 import com.prgrms.rg.domain.user.application.UserReadService;
 import com.prgrms.rg.domain.user.model.User;
 import com.prgrms.rg.domain.user.model.UserRepository;
-import com.prgrms.rg.testutil.EntityFactory;
+import com.prgrms.rg.testutil.TestEntityDataFactory;
 
 @SpringBootTest
 @Transactional
@@ -67,7 +67,7 @@ class RidingPostReadServiceImplTest {
 		String level = RidingLevel.BEGINNER.name();
 		List<String> bicycle = List.of("MTB");
 		List<String> routes = List.of("start", "end");
-		User leader = EntityFactory.createUser();
+		User leader = TestEntityDataFactory.createUser();
 		long userId = userRepository.save(leader).getId();
 		var mainCreateCommand = RidingMainCreateCommand.builder()
 			.title(title)
