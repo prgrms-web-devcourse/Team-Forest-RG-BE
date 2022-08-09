@@ -3,16 +3,15 @@ package com.prgrms.rg.domain.user.application.impl;
 import static com.google.common.base.Preconditions.*;
 import static org.apache.commons.lang3.ObjectUtils.*;
 
+import java.io.IOException;
 import java.util.concurrent.ConcurrentMap;
 
 import javax.transaction.Transactional;
 
 import org.springframework.stereotype.Service;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.prgrms.rg.domain.auth.jwt.JwtTokenProvider;
-import com.prgrms.rg.domain.user.application.UserService;
+import com.prgrms.rg.domain.user.application.UserAuthenticationService;
 import com.prgrms.rg.domain.user.model.Manner;
 import com.prgrms.rg.domain.user.model.Nickname;
 import com.prgrms.rg.domain.user.model.User;
@@ -27,11 +26,11 @@ import lombok.extern.slf4j.Slf4j;
 @Service
 @RequiredArgsConstructor
 @Slf4j
-public class UserServiceImpl implements UserService {
+public class UserAuthenticationServiceImpl implements UserAuthenticationService {
 	private final UserRepository userRepository;
 	private final JwtTokenProvider jwtTokenProvider;
 	private final Communicator communicator;
-	private final ObjectMapper objectMapper = new ObjectMapper();
+
 	@Override
 	@Transactional
 	public UserMeResult findUserById(Long id) {
@@ -43,14 +42,14 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	@Transactional
-	public OAuthLoginResult joinOAuth(String authorizationCode) throws Exception {
+	public OAuthLoginResult joinOAuth(String authorizationCode) throws IOException, InterruptedException {
 		checkArgument(authorizationCode != null, "authorizationCode must be provided");
 		checkArgument(!authorizationCode.equals("") , "authorizationCode must be provided");
 		ConcurrentMap<String, String> oauthInformation = communicator.convertAuthorizationCodeToInfo(authorizationCode);
 
 		String provider = "kakao";
 		String providerId = oauthInformation.get("id");
-		objectMapper.registerModule(new JavaTimeModule());
+
 		return userRepository.findByProviderAndProviderId(provider, providerId)
 			.map(user -> {
 				log.warn("Already exists: {} for (provider: {}, providerId: {})", user, provider, providerId);
@@ -58,7 +57,6 @@ public class UserServiceImpl implements UserService {
 				return OAuthLoginResult.of(token, false);
 			})
 			.orElseGet(() -> {
-				@SuppressWarnings("unchecked")
 				String nickname = oauthInformation.get("nickname");
 				String profileImage = oauthInformation.get("profile_image");
 				User user = userRepository.save(User.builder()

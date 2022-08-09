@@ -1,7 +1,6 @@
 package com.prgrms.rg.domain.user.application.impl;
 
 import static org.assertj.core.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.BDDMockito.*;
 
 import java.util.concurrent.ConcurrentHashMap;
@@ -13,25 +12,21 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.prgrms.rg.domain.user.application.UserService;
+import com.prgrms.rg.domain.user.application.UserAuthenticationService;
 import com.prgrms.rg.infrastructure.oauth.Communicator;
 import com.prgrms.rg.web.user.results.OAuthLoginResult;
 
 @SpringBootTest
 @AutoConfigureMockMvc
 @Transactional
-class UserServiceImplTest {
+class UserAuthenticationServiceImplTest {
 	@MockBean
 	Communicator communicator;
 
 	@Autowired
-	private UserService userService;
-
-	@Autowired
-	MockMvc mockMvc;
+	private UserAuthenticationService userService;
 
 	private static ConcurrentMap<String, String> concurrentMap;
 
