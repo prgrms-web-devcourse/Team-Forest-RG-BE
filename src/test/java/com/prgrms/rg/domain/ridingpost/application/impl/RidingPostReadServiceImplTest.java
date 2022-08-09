@@ -18,10 +18,10 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 import com.prgrms.rg.domain.common.model.metadata.RidingLevel;
 import com.prgrms.rg.domain.ridingpost.application.RidingPostReadService;
 import com.prgrms.rg.domain.ridingpost.application.RidingPostService;
-import com.prgrms.rg.domain.ridingpost.application.command.RidingConditionCreateCommand;
-import com.prgrms.rg.domain.ridingpost.application.command.RidingCreateCommand;
-import com.prgrms.rg.domain.ridingpost.application.command.RidingMainCreateCommand;
-import com.prgrms.rg.domain.ridingpost.application.command.RidingParticipantCreateCommand;
+import com.prgrms.rg.domain.ridingpost.application.command.RidingConditionSaveCommand;
+import com.prgrms.rg.domain.ridingpost.application.command.RidingMainSaveCommand;
+import com.prgrms.rg.domain.ridingpost.application.command.RidingParticipantSaveCommand;
+import com.prgrms.rg.domain.ridingpost.application.command.RidingSaveCommand;
 import com.prgrms.rg.domain.ridingpost.model.AddressCode;
 import com.prgrms.rg.domain.ridingpost.model.BicycleRepository;
 import com.prgrms.rg.domain.ridingpost.model.RidingPostInfo;
@@ -69,7 +69,7 @@ class RidingPostReadServiceImplTest {
 		List<String> routes = List.of("start", "end");
 		User leader = TestEntityDataFactory.createUser();
 		long userId = userRepository.save(leader).getId();
-		var mainCreateCommand = RidingMainCreateCommand.builder()
+		var mainCreateCommand = RidingMainSaveCommand.builder()
 			.title(title)
 			.estimatedTime(estimatedTime)
 			.ridingDate(ridingDate)
@@ -78,10 +78,10 @@ class RidingPostReadServiceImplTest {
 			.routes(routes)
 			.build();
 
-		var createCommand = new RidingCreateCommand(null,
+		var createCommand = new RidingSaveCommand(null,
 			mainCreateCommand,
-			new RidingParticipantCreateCommand(minPart, maxPart),
-			new RidingConditionCreateCommand(level, bicycle), null
+			new RidingParticipantSaveCommand(minPart, maxPart),
+			new RidingConditionSaveCommand(level, bicycle), null
 		);
 		Long savedPostId = ridingPostService.createRidingPost(userId, createCommand);
 

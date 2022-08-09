@@ -33,7 +33,7 @@ public class RidingPostSaveController {
 	}
 
 	@Secured("ROLE_USER")
-	@PutMapping(value = "/api/v1/ridingposts/{postid]")
+	@PutMapping(value = "/api/v1/ridingposts/{postid}")
 	public ResponseEntity<Long> modifyRidingPost(@AuthenticationPrincipal JwtAuthentication auth,
 		@PathVariable(name = "postid") Long postId, @RequestBody RidingPostSaveRequest ridingRequest) {
 
