@@ -1,15 +1,15 @@
-package com.prgrms.rg.domain.ridingpost.application;
+package com.prgrms.rg.domain.ridingpost.application.impl;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.prgrms.rg.domain.common.event.DomainEventPublisher;
-import com.prgrms.rg.domain.ridingpost.model.exception.RidingJoinFailException;
+import com.prgrms.rg.domain.ridingpost.application.RidingPostReadService;
 import com.prgrms.rg.domain.ridingpost.model.RidingParticipantRepository;
 import com.prgrms.rg.domain.ridingpost.model.RidingPost;
-import com.prgrms.rg.domain.ridingpost.model.RidingPostFinder;
-import com.prgrms.rg.domain.ridingpost.model.exception.RidingPostNotFoundException;
 import com.prgrms.rg.domain.ridingpost.model.event.RidingJoinEvent;
+import com.prgrms.rg.domain.ridingpost.model.exception.RidingJoinFailException;
+import com.prgrms.rg.domain.ridingpost.model.exception.RidingPostNotFoundException;
 import com.prgrms.rg.domain.user.application.UserReadService;
 import com.prgrms.rg.domain.user.model.User;
 
@@ -19,7 +19,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 public class RidingJoinService {
-	private final RidingPostFinder postFinder;
+	private final RidingPostReadService postFinder;
 	private final UserReadService userReadService;
 	private final RidingParticipantRepository ridingParticipantRepository;
 	private final DomainEventPublisher eventPublisher;
@@ -28,7 +28,7 @@ public class RidingJoinService {
 	public void joinUserToRiding(Long userId, Long ridingPostId) {
 		try {
 			User participant = userReadService.getUserEntityById(userId);
-			RidingPost post = postFinder.find(ridingPostId);
+			RidingPost post = postFinder.getRidingPostById(ridingPostId);
 			checkDuplicateJoin(participant, post);
 			post.addParticipant(participant);
 		} catch (RidingPostNotFoundException e) {

@@ -1,5 +1,6 @@
 package com.prgrms.rg.web.ridingpost.api;
 
+import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -12,6 +13,7 @@ import lombok.extern.slf4j.Slf4j;
 
 @RestControllerAdvice
 @Slf4j
+@Order(500)
 public class RidingJoinExceptionHandler {
 	private static final String LOG_MARKER = "[RidingJoinExceptionHandler]";
 

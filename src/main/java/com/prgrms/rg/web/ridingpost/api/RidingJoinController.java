@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.prgrms.rg.domain.auth.jwt.JwtAuthentication;
-import com.prgrms.rg.domain.ridingpost.application.RidingJoinService;
+import com.prgrms.rg.domain.ridingpost.application.impl.RidingJoinService;
 
 import lombok.RequiredArgsConstructor;
 
