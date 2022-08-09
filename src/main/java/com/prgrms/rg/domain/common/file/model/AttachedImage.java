@@ -18,6 +18,7 @@ import lombok.NoArgsConstructor;
 public abstract class AttachedImage extends BaseTimeEntity {
 
 	protected AttachedImage(Long id, String originalFileName, String url) {
+		this.id = id;
 		this.originalFileName = originalFileName;
 		this.url = url;
 	}
