@@ -8,7 +8,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -21,7 +20,6 @@ import com.prgrms.rg.testutil.ControllerTest;
 import com.prgrms.rg.web.user.requests.UserUpdateRequest;
 
 @ControllerTest(controllers = UserCommandRestControllerV1.class)
-@AutoConfigureMockMvc
 class UserCommandRestControllerV1Test {
 
 	@Autowired
