@@ -3,6 +3,7 @@ package com.prgrms.rg.testutil;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import com.prgrms.rg.domain.common.file.model.TemporaryImage;
 import com.prgrms.rg.domain.common.model.metadata.RidingLevel;
 import com.prgrms.rg.domain.ridingpost.model.AddressCode;
 import com.prgrms.rg.domain.ridingpost.model.Coordinate;
@@ -10,6 +11,8 @@ import com.prgrms.rg.domain.ridingpost.model.RidingConditionSection;
 import com.prgrms.rg.domain.ridingpost.model.RidingMainSection;
 import com.prgrms.rg.domain.ridingpost.model.RidingParticipantSection;
 import com.prgrms.rg.domain.ridingpost.model.RidingPost;
+import com.prgrms.rg.domain.ridingpost.model.RidingSubSection;
+import com.prgrms.rg.domain.ridingpost.model.SubImage;
 import com.prgrms.rg.domain.user.model.Manner;
 import com.prgrms.rg.domain.user.model.Nickname;
 import com.prgrms.rg.domain.user.model.User;
@@ -40,6 +43,11 @@ public class EntityFactory {
 		User leader = createUser(leaderId);
 		RidingConditionSection conditionSection = new RidingConditionSection(RidingLevel.MASTER);
 		RidingParticipantSection participantSection = new RidingParticipantSection(2, 5);
+		RidingSubSection subSection = new RidingSubSection("sub title", "sub contents");
+		TemporaryImage tempImage = new TemporaryImage("test_image_file.jpg",
+			"http://amazons3/static/image/testimage.jpg");
+		subSection.getImages().add(new SubImage(tempImage, subSection));
+
 		RidingMainSection mainSection = RidingMainSection.builder()
 			.title("자전거가 타고싶어요")
 			.ridingDate(LocalDateTime.now().plusDays(10L))
@@ -50,12 +58,15 @@ public class EntityFactory {
 			.departurePlace(new Coordinate(35.232600, 127.650250))
 			.build();
 
-		return RidingPost.builder()
+		RidingPost post = RidingPost.builder()
 			.leader(leader)
 			.ridingMainSection(mainSection)
 			.ridingConditionSection(conditionSection)
 			.ridingParticipantSection(participantSection)
 			.build();
+
+		post.addSubSection(subSection);
+		return post;
 	}
 
 }

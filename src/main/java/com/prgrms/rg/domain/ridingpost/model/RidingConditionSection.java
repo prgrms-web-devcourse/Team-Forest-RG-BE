@@ -47,7 +47,7 @@ public class RidingConditionSection {
 	}
 
 	public String getLevel() {
-		return level.name();
+		return level.getLevelName();
 	}
 
 	private void setBicycleList(RidingPost post, List<Bicycle> bicycleList) {

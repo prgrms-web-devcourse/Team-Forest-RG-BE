@@ -16,6 +16,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.prgrms.rg.domain.auth.jwt.JwtTokenProvider;
 import com.prgrms.rg.domain.ridingpost.application.RidingPostReadService;
 import com.prgrms.rg.domain.ridingpost.model.RidingPost;
@@ -33,6 +34,8 @@ class RidingInquiryControllerTest {
 	RidingPostReadService readService;
 	@Autowired
 	RidingInquiryController controller;
+	@Autowired
+	ObjectMapper mapper;
 	Long userId = 1L;
 	Long postId = 10L;
 	RidingPost ridingPost;
@@ -61,6 +64,8 @@ class RidingInquiryControllerTest {
 			.andExpect(status().isOk())
 			.andDo(print())
 			.andReturn();
+
+		System.out.println(result.getResponse().getContentAsString());
 	}
 
 	@DisplayName("잘못된 id로 라이딩 게시글 상세 조회")

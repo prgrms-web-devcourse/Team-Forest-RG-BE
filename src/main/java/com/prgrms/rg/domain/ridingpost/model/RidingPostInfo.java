@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.prgrms.rg.domain.user.model.User;
 
@@ -54,7 +55,9 @@ public class RidingPostInfo {
 		private ZoneInfo zone;
 		private int fee;
 		private String estimatedTime;
+		@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss", timezone = "Asia/Seoul")
 		private LocalDateTime createdAt;
+		@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss", timezone = "Asia/Seoul")
 		private LocalDateTime ridingDate;
 		private List<String> bicycleType;
 		private List<String> ridingCourses;
@@ -123,15 +126,31 @@ public class RidingPostInfo {
 		private Long id;
 		private String title;
 		private String contents;
-		private List<String> images;
+		private List<ImageInfo> images;
 
 		public static RidingDetail from(RidingSubSection ridingSubSection) {
+			List<SubImage> imageList = ridingSubSection.getImages();
+			List<ImageInfo> imageInfos = imageList.stream()
+				.map(ImageInfo::from)
+				.collect(Collectors.toList());
+
 			return RidingDetail.builder()
 				.id(ridingSubSection.getId())
 				.title(ridingSubSection.getTitle())
 				.contents(ridingSubSection.getContent())
-				.images(ridingSubSection.getImageUrlAsList())
+				.images(imageInfos)
 				.build();
+		}
+	}
+
+	@AllArgsConstructor(access = AccessLevel.PRIVATE)
+	@Getter
+	public static class ImageInfo {
+		private final Long id;
+		private final String imageUrl;
+
+		public static ImageInfo from(SubImage subImage) {
+			return new ImageInfo(subImage.getId(), subImage.getUrl());
 		}
 	}
 
