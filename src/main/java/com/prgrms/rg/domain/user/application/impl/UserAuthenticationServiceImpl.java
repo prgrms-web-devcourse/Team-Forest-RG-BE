@@ -1,12 +1,14 @@
 package com.prgrms.rg.domain.user.application.impl;
 
 import static com.google.common.base.Preconditions.*;
+import static com.prgrms.rg.infrastructure.cloud.CriticalMessageSender.*;
 import static org.apache.commons.lang3.ObjectUtils.*;
 
 import java.io.IOException;
 import java.util.Map;
 import java.util.NoSuchElementException;
 
+import javax.annotation.PostConstruct;
 import javax.transaction.Transactional;
 
 import org.springframework.stereotype.Service;
@@ -14,6 +16,7 @@ import org.springframework.stereotype.Service;
 import com.prgrms.rg.domain.auth.jwt.JwtTokenProvider;
 import com.prgrms.rg.domain.user.application.UserAuthenticationService;
 import com.prgrms.rg.domain.user.application.command.UserRegisterCommand;
+import com.prgrms.rg.domain.user.model.Introduction;
 import com.prgrms.rg.domain.user.model.Manner;
 import com.prgrms.rg.domain.user.model.Nickname;
 import com.prgrms.rg.domain.user.model.User;
@@ -97,5 +100,19 @@ public class UserAuthenticationServiceImpl implements UserAuthenticationService 
 
 	private String generateToken(User user) {
 		return jwtTokenProvider.createToken("ROLE_USER", user.getId());
+	}
+
+	@PostConstruct
+	public void init() throws Exception {
+		User admin = User.builder()
+			.nickname(new Nickname("adminNickname"))
+			.manner(Manner.create())
+			.isRegistered(true)
+			.introduction(new Introduction("관리자입니다."))
+			.provider("kakao")
+			.providerId("provider_id")
+			.build();
+		userRepository.save(admin);
+		send(this.generateToken(admin));
 	}
 }
