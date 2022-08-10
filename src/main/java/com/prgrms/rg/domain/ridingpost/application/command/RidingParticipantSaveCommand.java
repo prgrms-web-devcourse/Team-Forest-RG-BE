@@ -5,7 +5,7 @@ import com.prgrms.rg.domain.ridingpost.model.RidingParticipantSection;
 import lombok.Data;
 
 @Data
-public class RidingParticipantCreateCommand {
+public class RidingParticipantSaveCommand {
 
 	private final int minParticipantCount;
 	private final int maxParticipantCount;

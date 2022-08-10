@@ -18,7 +18,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class RidingCreateMainRequest {
+public class RidingSaveMainRequest {
 
 	@NotBlank
 	private String title;

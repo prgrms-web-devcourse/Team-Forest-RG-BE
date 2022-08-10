@@ -5,10 +5,10 @@ import java.util.stream.Collectors;
 
 import javax.validation.constraints.Size;
 
-import com.prgrms.rg.domain.ridingpost.application.command.RidingConditionCreateCommand;
-import com.prgrms.rg.domain.ridingpost.application.command.RidingCreateCommand;
-import com.prgrms.rg.domain.ridingpost.application.command.RidingMainCreateCommand;
-import com.prgrms.rg.domain.ridingpost.application.command.RidingParticipantCreateCommand;
+import com.prgrms.rg.domain.ridingpost.application.command.RidingConditionSaveCommand;
+import com.prgrms.rg.domain.ridingpost.application.command.RidingSaveCommand;
+import com.prgrms.rg.domain.ridingpost.application.command.RidingMainSaveCommand;
+import com.prgrms.rg.domain.ridingpost.application.command.RidingParticipantSaveCommand;
 import com.prgrms.rg.domain.ridingpost.model.AddressCode;
 
 import lombok.AllArgsConstructor;
@@ -18,16 +18,16 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class RidingPostCreateRequest {
+public class RidingPostSaveRequest {
 
-	private RidingCreateMainRequest information;
+	private RidingSaveMainRequest information;
 
 	@Size(min = 0, max = 5)
-	private List<RidingCreateDetailRequest> details;
+	private List<RidingSaveDetailRequest> details;
 
-	public RidingCreateCommand toCommand() {
+	public RidingSaveCommand toCommand() {
 		var mainCommand =
-			RidingMainCreateCommand.builder()
+			RidingMainSaveCommand.builder()
 				.title(information.getTitle()).estimatedTime(information.getEstimatedTime())
 				.ridingDate(information.getRidingDate()).fee(information.getFee())
 				.addressCode(new AddressCode(information.getRegionCode()))
@@ -35,15 +35,15 @@ public class RidingPostCreateRequest {
 				.departurePlace(information.getDeparturePlace())
 				.build();
 
-		var participantCommand = new RidingParticipantCreateCommand
+		var participantCommand = new RidingParticipantSaveCommand
 			(information.getMinParticipantCount(), information.getMaxParticipantCount());
 
-		var conditionCommand = new RidingConditionCreateCommand(information.getLevel(), information.getBicycleTypes());
+		var conditionCommand = new RidingConditionSaveCommand(information.getLevel(), information.getBicycleTypes());
 
 		var subCommandList =
-			details.stream().map(RidingCreateDetailRequest::toCommand).collect(Collectors.toList());
+			details.stream().map(RidingSaveDetailRequest::toCommand).collect(Collectors.toList());
 
-		return new RidingCreateCommand(information.getThumbnail(),
+		return new RidingSaveCommand(information.getThumbnail(),
 			mainCommand, participantCommand, conditionCommand, subCommandList);
 	}
 }
