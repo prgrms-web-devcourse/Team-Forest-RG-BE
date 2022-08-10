@@ -77,7 +77,7 @@ public class User extends BaseTimeEntity implements ImageOwner {
 
 	public void updateByRegistration(UserRegisterDTO userRegisterDTO) {
 		 this.nickname = new Nickname(userRegisterDTO.getNickName());
-		 this.profile = new RiderProfile(userRegisterDTO.getRidingStartYear(), RidingLevel.extractRidingLevel(userRegisterDTO.getLevel()));
+		 this.profile = new RiderProfile(userRegisterDTO.getRidingStartYear(), RidingLevel.of(userRegisterDTO.getLevel()));
 
 		for (String bicycle : userRegisterDTO.getBicycles()) {
 			this.profile.addBicycle(this, new Bicycle(bicycle));
