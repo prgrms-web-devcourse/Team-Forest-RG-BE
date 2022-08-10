@@ -3,6 +3,8 @@ package com.prgrms.rg.domain.user.model;
 import static javax.persistence.GenerationType.*;
 import static lombok.AccessLevel.*;
 
+import java.util.Set;
+
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -14,6 +16,7 @@ import com.prgrms.rg.domain.common.file.model.ImageOwner;
 import com.prgrms.rg.domain.common.file.model.TemporaryImage;
 import com.prgrms.rg.domain.common.model.BaseTimeEntity;
 import com.prgrms.rg.domain.common.model.metadata.Bicycle;
+import com.prgrms.rg.domain.common.model.metadata.RidingLevel;
 import com.prgrms.rg.domain.user.model.information.MannerInfo;
 import com.prgrms.rg.domain.user.model.information.RiderInfo;
 import com.prgrms.rg.domain.user.model.information.UserImageInfo;
@@ -58,6 +61,18 @@ public class User extends BaseTimeEntity implements ImageOwner {
 
 	@Embedded
 	private Manner manner;
+
+	public void changeNickname(Nickname nicknameToChange) {
+		this.nickname = nicknameToChange;
+	}
+
+	public void changeRiderProfile(int ridingYears, RidingLevel level, Set<UserBicycle> bicyclesToApply) {
+		this.profile.update(ridingYears, level, bicyclesToApply);
+	}
+
+	public void changeIntroduction(Introduction introduction) {
+		this.introduction = introduction;
+	}
 
 	public boolean addBicycle(Bicycle bicycle) {
 		return profile.addBicycle(this, bicycle);

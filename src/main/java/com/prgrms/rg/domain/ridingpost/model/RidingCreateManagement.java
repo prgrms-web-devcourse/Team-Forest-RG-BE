@@ -6,6 +6,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 
 import com.prgrms.rg.domain.common.file.application.ImageAttachManger;
+import com.prgrms.rg.domain.common.model.metadata.BicycleRepository;
 import com.prgrms.rg.domain.ridingpost.application.command.RidingCreateCommand;
 import com.prgrms.rg.domain.ridingpost.application.command.RidingSubCreateCommand;
 import com.prgrms.rg.domain.user.model.User;
