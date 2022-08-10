@@ -72,7 +72,7 @@ public class RidingPost extends BaseTimeEntity implements ImageOwner {
 
 	public void changePost(RidingPost newPost) {
 		this.ridingMainSection = newPost.getRidingMainSection();
-		this.ridingParticipantSection = new RidingParticipantSection();
+		this.ridingParticipantSection = newPost.getRidingParticipantSection();
 		this.ridingConditionSection = newPost.getRidingConditionSection();
 	}
 
