@@ -28,7 +28,7 @@ public class NotificationPushService {
 	@TransactionalEventListener(phase = AFTER_COMMIT, fallbackExecution = true)
 	@Transactional(propagation = Propagation.REQUIRES_NEW)
 	public void handleRidingJoinEvent(RidingJoinEvent event) {
-		RidingPost post = postReadService.getRidingPostById(event.getPostId());
+		RidingPost post = postReadService.loadRidingPostById(event.getPostId());
 		User host = post.getLeader();
 		Notification notification = notificationService.createRidingJoinNotification(host.getId(), post.getId());
 		notificationSender.sendNotification(host.getId(), notification, RIDING_JOIN_EVENT);

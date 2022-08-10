@@ -23,7 +23,6 @@ import com.prgrms.rg.domain.ridingpost.application.command.RidingCreateCommand;
 import com.prgrms.rg.domain.ridingpost.application.command.RidingMainCreateCommand;
 import com.prgrms.rg.domain.ridingpost.application.command.RidingParticipantCreateCommand;
 import com.prgrms.rg.domain.ridingpost.model.AddressCode;
-import com.prgrms.rg.domain.ridingpost.model.BicycleRepository;
 import com.prgrms.rg.domain.ridingpost.model.RidingPostInfo;
 import com.prgrms.rg.domain.user.application.UserReadService;
 import com.prgrms.rg.domain.user.model.User;
@@ -43,10 +42,7 @@ class RidingPostReadServiceImplTest {
 	UserReadService userReadService;
 	@Autowired
 	private RidingPostService ridingPostService;
-
-	@Autowired
-	private BicycleRepository bicycleRepository;
-
+	
 	@BeforeEach
 	void init() {
 		mapper.enable(SerializationFeature.INDENT_OUTPUT);
@@ -86,7 +82,7 @@ class RidingPostReadServiceImplTest {
 		Long savedPostId = ridingPostService.createRidingPost(userId, createCommand);
 
 		//when
-		RidingPostInfo ridingPostInfo = readService.getRidingPostInfoById(savedPostId);
+		RidingPostInfo ridingPostInfo = readService.loadRidingPostInfoById(savedPostId);
 
 		//then
 		RidingPostInfo.LeaderInfo leaderInfo = ridingPostInfo.getLeaderInfo();
