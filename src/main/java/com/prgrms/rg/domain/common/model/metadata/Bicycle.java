@@ -2,6 +2,7 @@ package com.prgrms.rg.domain.common.model.metadata;
 
 import static lombok.AccessLevel.*;
 
+import javax.persistence.Cacheable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -10,8 +11,10 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+@Cacheable
 @Entity
 @NoArgsConstructor(access = PROTECTED)
+@Getter
 @Setter(value = PRIVATE)
 public class Bicycle {
 
@@ -22,9 +25,13 @@ public class Bicycle {
 		this.name = name;
 	}
 
+	public Bicycle(Long id, String name) {
+		this.id = id;
+		this.name = name;
+	}
+
 	@Id
 	private Long id;
-	@Getter
 	@Column(unique = true, nullable = false)
 	private String name;
 

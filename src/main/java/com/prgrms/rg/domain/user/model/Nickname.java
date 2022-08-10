@@ -4,6 +4,7 @@ import static com.google.common.base.Preconditions.*;
 import static lombok.AccessLevel.*;
 
 import java.nio.charset.StandardCharsets;
+import java.util.Objects;
 import java.util.regex.Pattern;
 
 import javax.persistence.Column;
@@ -43,6 +44,23 @@ public class Nickname {
 
 	private void validateNicknameCharacter(String nickname) {
 		checkArgument(CHARSET_REGEX.matcher(nickname).matches(), CHARSET_VALIDATION_MESSAGE);
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o)
+			return true;
+		if (!(o instanceof Nickname))
+			return false;
+
+		Nickname nickname1 = (Nickname)o;
+
+		return Objects.equals(nickname, nickname1.nickname);
+	}
+
+	@Override
+	public int hashCode() {
+		return nickname != null ? nickname.hashCode() : 0;
 	}
 
 	@Override
