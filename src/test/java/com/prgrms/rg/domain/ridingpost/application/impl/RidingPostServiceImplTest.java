@@ -7,6 +7,9 @@ import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,6 +49,9 @@ class RidingPostServiceImplTest {
 
 	@Autowired
 	private AttachedImageRepository imageRepository;
+
+	@PersistenceContext
+	EntityManager em;
 
 	@Test
 	@DisplayName("사진x RidingPost 생성")
@@ -90,6 +96,9 @@ class RidingPostServiceImplTest {
 		User leader = userRepository.save(TestEntityDataFactory.createUser());
 		RidingPost post = ridingPostRepository.save(TestEntityDataFactory.createRidingPost(leader.getId()));
 
+		em.flush();
+		em.clear();
+
 		//image save
 		var image = post.getSubSectionList().get(0).getImages().get(0);
 		var subimage = imageRepository.save(image);
@@ -113,9 +122,12 @@ class RidingPostServiceImplTest {
 		var updateCommand = new RidingSaveCommand(null, mainCommand, participantCommand, conditionCommand, List.of(subCommand));
 
 		//when
-		ridingPostService.updateRidingPost(leader.getId(), post.getId(), updateCommand);
+		Long postId = ridingPostService.updateRidingPost(leader.getId(), post.getId(), updateCommand);
 
-		var updatedPost = ridingPostRepository.findById(post.getId());
+		em.flush();
+		em.clear();
+
+		var updatedPost = ridingPostRepository.findById(postId);
 
 		assertThat(updatedPost.isPresent(), is(true));
 		assertThat(updatedPost.get().getLeader().getId(), is(equalTo(leader.getId())));

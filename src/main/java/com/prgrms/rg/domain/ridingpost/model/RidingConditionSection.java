@@ -1,5 +1,6 @@
 package com.prgrms.rg.domain.ridingpost.model;
 
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -28,15 +29,25 @@ public class RidingConditionSection {
 	@Column(name = "level", nullable = false)
 	private RidingLevel level;
 
-	@OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
 	private Set<RidingConditionBicycle> bicycleList = new HashSet<>();
 
 	public RidingConditionSection(RidingLevel level) {
 		setLevel(level);
 	}
 
+	public void update(RidingConditionSection section) {
+		setLevel(level);
+		bicycleList.retainAll(section.getBicycleList());
+		bicycleList.addAll(section.getBicycleList());
+	}
+
 	public void addBicycle(RidingPost post, Bicycle bicycle) {
 		bicycleList.add(new RidingConditionBicycle(post, bicycle));
+	}
+
+	public Set<RidingConditionBicycle> getBicycleList() {
+		return Collections.unmodifiableSet(bicycleList);
 	}
 
 	public List<String> getBicycleAsStringList() {
