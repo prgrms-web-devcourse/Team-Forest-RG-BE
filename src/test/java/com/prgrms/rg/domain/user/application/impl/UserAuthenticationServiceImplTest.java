@@ -29,7 +29,6 @@ import com.prgrms.rg.web.user.results.OAuthLoginResult;
 import com.prgrms.rg.web.user.results.UserRegisterResult;
 
 @SpringBootTest
-@AutoConfigureMockMvc
 @Transactional
 class UserAuthenticationServiceImplTest {
 	@MockBean
@@ -77,12 +76,14 @@ class UserAuthenticationServiceImplTest {
 	void updateUserByRegistration_성공_테스트() {
 		//given
 		User user = TestEntityDataFactory.createUser();
-		//when
 		User savedUser = userRepository.save(user);
 		UserRegisterCommand testCommand = createTestRegisterCommand(savedUser.getId());
+		//when
 		UserRegisterResult userRegisterResult = userService.updateUserByRegistration(testCommand);
-		User updatedUser = userRepository.findById(savedUser.getId()).orElseThrow();
+
 		//then
+		assertThat(userRepository.findById(savedUser.getId()).isPresent()).isTrue();
+		User updatedUser = userRepository.findById(savedUser.getId()).get();
 		assertThat(userRegisterResult.isRegistered()).isTrue();
 		assertThat(updatedUser.getNickname()).isEqualTo(testCommand.getNickName());
 		assertThat(updatedUser.getAddressCode().getCode()).isEqualTo(23);

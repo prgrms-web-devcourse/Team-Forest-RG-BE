@@ -4,6 +4,7 @@ import java.io.IOException;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -47,6 +48,7 @@ public class UserController {
 		return ResponseEntity.status(HttpStatus.OK).body(userAuthenticationService.checkUserById(authentication.userId));
 	}
 
+	@Secured("ROLE_USER")
 	@PostMapping("api/v1/users/register")
 	public ResponseEntity<UserRegisterResult> registerUser(@AuthenticationPrincipal JwtAuthentication authentication, @RequestBody UserRegisterRequest userRegisterRequest) {
 		return ResponseEntity.status(HttpStatus.OK).body(userAuthenticationService.updateUserByRegistration(UserRegisterCommand.of(userRegisterRequest, authentication.userId)));
