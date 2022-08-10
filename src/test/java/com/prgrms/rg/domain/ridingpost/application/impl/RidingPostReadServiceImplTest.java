@@ -64,7 +64,7 @@ class RidingPostReadServiceImplTest {
 		AddressCode addressCode = new AddressCode(11010);
 		int minPart = 4;
 		int maxPart = 10;
-		String level = RidingLevel.BEGINNER.name();
+		String level = RidingLevel.BEGINNER.getLevelName();
 		List<String> bicycle = List.of("MTB");
 		List<String> routes = List.of("start", "end");
 		User leader = TestEntityDataFactory.createUser();
