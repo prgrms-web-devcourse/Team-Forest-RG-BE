@@ -50,6 +50,8 @@ public class RidingSaveManagement {
 				post.addSubSection(createSubSection(subCommand));
 			}
 		}
+
+		post.updateTime();
 		return post;
 	}
 
