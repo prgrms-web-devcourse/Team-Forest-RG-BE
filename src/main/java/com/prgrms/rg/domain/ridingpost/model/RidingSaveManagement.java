@@ -10,6 +10,7 @@ import com.prgrms.rg.domain.common.file.application.AttachedImageReadService;
 import com.prgrms.rg.domain.common.file.application.ImageAttachManger;
 import com.prgrms.rg.domain.ridingpost.application.command.RidingSaveCommand;
 import com.prgrms.rg.domain.ridingpost.application.command.RidingSubSaveCommand;
+import com.prgrms.rg.domain.common.model.metadata.BicycleRepository;
 import com.prgrms.rg.domain.user.model.User;
 
 import lombok.RequiredArgsConstructor;
