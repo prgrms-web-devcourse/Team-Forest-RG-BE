@@ -1,5 +1,7 @@
 package com.prgrms.rg.domain.ridingpost.application.impl;
 
+import static com.google.common.base.Preconditions.*;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -7,6 +9,8 @@ import com.prgrms.rg.domain.ridingpost.model.RidingSaveManagement;
 import com.prgrms.rg.domain.ridingpost.application.RidingPostService;
 import com.prgrms.rg.domain.ridingpost.application.command.RidingSaveCommand;
 import com.prgrms.rg.domain.ridingpost.model.RidingPostRepository;
+import com.prgrms.rg.domain.ridingpost.model.exception.RidingPostNotFoundException;
+import com.prgrms.rg.domain.ridingpost.model.exception.UnAuthorizedException;
 import com.prgrms.rg.domain.user.application.UserReadService;
 import com.prgrms.rg.domain.user.model.User;
 
@@ -34,10 +38,12 @@ public class RidingPostServiceImpl implements RidingPostService {
 	@Override
 	@Transactional
 	public Long updateRidingPost(Long leaderId, Long postId, RidingSaveCommand command) {
-		User leader = userReadService.getUserEntityById(leaderId);
 
 		//todo postreadservice 적용
-		var post = ridingPostRepository.findByLeaderAndId(leader, postId).orElseThrow();
+		var post = ridingPostRepository.findById(postId).orElseThrow(() -> new RidingPostNotFoundException(postId));
+		var leader = post.getLeader();
+		checkArgument(leader.getId().equals(leaderId), new UnAuthorizedException(leaderId));
+
 		saveManagement.updateRidingPost(leader, post, command);
 
 		return post.getId();
