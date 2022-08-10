@@ -15,6 +15,18 @@ public enum RidingLevel {
 		this.description = description;
 	}
 
+	public static RidingLevel extractRidingLevel(String levelName) {
+		if(levelName.equals(BEGINNER.levelName))
+			return BEGINNER;
+		else if(levelName.equals(INTERMEDIATE.levelName))
+			return INTERMEDIATE;
+		else if(levelName.equals(MASTER.levelName))
+			return MASTER;
+		else {
+			throw new IllegalArgumentException("잘못된 level Name 입니다.");
+		}
+	}
+
 	public String getLevelName() {
 		return levelName;
 	}
