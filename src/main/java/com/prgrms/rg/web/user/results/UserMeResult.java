@@ -15,11 +15,13 @@ public class UserMeResult {
 
 	private Long userId;
 	private String username;
+	private boolean isRegistered;
 
-	public static UserMeResult of(String username, Long userId) {
+	public static UserMeResult of(String username, Long userId, boolean isRegistered) {
 		UserMeResult result = new UserMeResult();
 		result.setUserId(userId);
 		result.setUsername(username);
+		result.setRegistered(isRegistered);
 		return result;
 	}
 

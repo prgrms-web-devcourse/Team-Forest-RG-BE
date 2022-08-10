@@ -55,7 +55,7 @@ public class RidingPost extends BaseTimeEntity implements ImageOwner {
 	@Embedded
 	private RidingConditionSection ridingConditionSection;
 
-	@OneToMany(fetch = LAZY, cascade = ALL, mappedBy = "post")
+	@OneToMany(fetch = LAZY, cascade = ALL, mappedBy = "post", orphanRemoval = true)
 	private List<RidingSubSection> subSectionList = new ArrayList<>();
 
 	@Builder
@@ -68,6 +68,13 @@ public class RidingPost extends BaseTimeEntity implements ImageOwner {
 		this.ridingParticipantSection = ridingParticipantSection;
 		this.ridingConditionSection = ridingConditionSection;
 		assignLeader(leader);
+	}
+
+	public void changePost(RidingPost newPost) {
+		subSectionList.clear();
+		ridingMainSection.update(newPost.getRidingMainSection());
+		ridingParticipantSection.update(newPost.getRidingParticipantSection());
+		ridingConditionSection.update(newPost.getRidingConditionSection());
 	}
 
 	private void assignLeader(User leader) {
@@ -90,6 +97,16 @@ public class RidingPost extends BaseTimeEntity implements ImageOwner {
 
 	public String getThumbnail() {
 		return (thumbnail != null) ? thumbnail.getUrl() : DEFAULT_IMAGE_URL;
+	}
+
+	public boolean equalToThumbnail(Long thumbnailId) {
+		if (thumbnail == null)
+			return thumbnailId == null;
+		return thumbnail.getId().equals(thumbnailId);
+	}
+
+	public void removeCurrentSubSection() {
+		this.subSectionList.clear();
 	}
 
 	@Override

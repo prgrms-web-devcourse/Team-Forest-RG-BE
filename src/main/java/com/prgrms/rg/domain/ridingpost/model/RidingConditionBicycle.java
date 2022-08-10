@@ -1,5 +1,6 @@
 package com.prgrms.rg.domain.ridingpost.model;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -20,7 +21,7 @@ public class RidingConditionBicycle {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	@ManyToOne(optional = false, fetch = FetchType.LAZY)
+	@ManyToOne(optional = false, fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
 	private RidingPost post;
 
 	@ManyToOne(optional = false, fetch = FetchType.LAZY)

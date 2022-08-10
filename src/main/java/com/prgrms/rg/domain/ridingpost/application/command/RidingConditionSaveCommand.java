@@ -8,12 +8,12 @@ import com.prgrms.rg.domain.ridingpost.model.RidingConditionSection;
 import lombok.Data;
 
 @Data
-public class RidingConditionCreateCommand {
+public class RidingConditionSaveCommand {
 
 	private final String level;
 	private final List<String> bicycleTypes;
 
 	public RidingConditionSection toSection() {
-		return new RidingConditionSection(RidingLevel.from(level));
+		return new RidingConditionSection(RidingLevel.of(level));
 	}
 }

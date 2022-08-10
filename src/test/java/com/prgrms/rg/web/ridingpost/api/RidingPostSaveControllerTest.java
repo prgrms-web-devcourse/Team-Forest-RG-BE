@@ -21,14 +21,14 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.prgrms.rg.domain.auth.jwt.JwtTokenProvider;
 import com.prgrms.rg.domain.ridingpost.application.RidingPostService;
-import com.prgrms.rg.domain.ridingpost.application.command.RidingCreateCommand;
+import com.prgrms.rg.domain.ridingpost.application.command.RidingSaveCommand;
 import com.prgrms.rg.domain.ridingpost.model.Coordinate;
 import com.prgrms.rg.testutil.ControllerTest;
-import com.prgrms.rg.web.ridingpost.requests.RidingCreateMainRequest;
-import com.prgrms.rg.web.ridingpost.requests.RidingPostCreateRequest;
+import com.prgrms.rg.web.ridingpost.requests.RidingSaveMainRequest;
+import com.prgrms.rg.web.ridingpost.requests.RidingPostSaveRequest;
 
-@ControllerTest(controllers = RestRidingPostCreateController.class)
-class RestRidingPostCreateControllerTest {
+@ControllerTest(controllers = RidingPostSaveController.class)
+class RidingPostSaveControllerTest {
 
 	@Autowired
 	private MockMvc mockMvc;
@@ -53,8 +53,8 @@ class RestRidingPostCreateControllerTest {
 		//given
 		var token = tokenProvider.createToken("ROLE_USER", 1L);
 
-		var body = new RidingPostCreateRequest(
-			new RidingCreateMainRequest("title", LocalDateTime.now().plusDays(10L),
+		var body = new RidingPostSaveRequest(
+			new RidingSaveMainRequest("title", LocalDateTime.now().plusDays(10L),
 				"2시간 30분", List.of("start", "end"), 10000, 5, 20,
 				10001, new Coordinate(0, 0), "상", List.of("MTB", "로드"), null), Collections.emptyList());
 
@@ -63,10 +63,10 @@ class RestRidingPostCreateControllerTest {
 		when(ridingPostService.createRidingPost(1L, body.toCommand())).thenReturn(2L);
 
 		mockMvc.perform(post("/api/v1/ridingposts")
-			.header("Authorization", "token " + token)
-			.content(bodyString)
-			.contentType("application/json")
-		).andExpect(status().isOk())
+				.header("Authorization", "token " + token)
+				.content(bodyString)
+				.contentType("application/json")
+			).andExpect(status().isOk())
 			.andDo(print());
 
 	}
@@ -75,26 +75,53 @@ class RestRidingPostCreateControllerTest {
 	@DisplayName("ridingpost 생성 실패 테스트 - 잘못된 입력")
 	void handlerIllegalExceptionTest() throws Exception {
 
-	    //given
+		//given
 		var token = tokenProvider.createToken("ROLE_USER", 1L);
 
-		var body = new RidingPostCreateRequest(
-			new RidingCreateMainRequest("error-title", LocalDateTime.now().plusDays(10L),
+		var body = new RidingPostSaveRequest(
+			new RidingSaveMainRequest("error-title", LocalDateTime.now().plusDays(10L),
 				"12321???", List.of("start", "end"), 10000, 5, 20,
 				10001, new Coordinate(0, 0), "모름", List.of("MTB", "로드"), null), Collections.emptyList());
 
 		var bodyString = objectMapper.writeValueAsString(body);
 
 		//when
-		when(ridingPostService.createRidingPost(anyLong(), any(RidingCreateCommand.class))).thenThrow(new IllegalArgumentException());
+		when(ridingPostService.createRidingPost(anyLong(), any(RidingSaveCommand.class))).thenThrow(
+			new IllegalArgumentException());
 
-	    //then
+		//then
 		mockMvc.perform(post("/api/v1/ridingposts")
 				.header("Authorization", "token " + token)
 				.content(bodyString)
 				.contentType("application/json")
 			).andExpect(status().isBadRequest())
 			.andExpect(result -> assertTrue(result.getResolvedException() instanceof IllegalArgumentException))
+			.andDo(print());
+	}
+
+	@Test
+	@DisplayName("ridingpost 수정")
+	void modifyRidingTest() throws Exception {
+
+		//given
+		Long leaderId = 1L;
+		Long postId = 10L;
+		var token = tokenProvider.createToken("ROLE_USER", leaderId);
+
+		var body = new RidingPostSaveRequest(
+			new RidingSaveMainRequest("title", LocalDateTime.now().plusDays(10L),
+				"2시간 30분", List.of("start", "end"), 10000, 5, 20,
+				10001, new Coordinate(0, 0), "상", List.of("MTB", "로드"), null), Collections.emptyList());
+
+		var bodyString = objectMapper.writeValueAsString(body);
+
+		when(ridingPostService.updateRidingPost(leaderId, postId, body.toCommand())).thenReturn(postId);
+		//when
+		mockMvc.perform(put("/api/v1/ridingposts/{postId}", postId)
+				.header("Authorization", "token " + token)
+				.contentType("application/json")
+				.content(bodyString))
+			.andExpect(status().isOk())
 			.andDo(print());
 	}
 

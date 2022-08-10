@@ -15,11 +15,17 @@ public enum RidingLevel {
 		this.description = description;
 	}
 
-	public static RidingLevel from(String levelName) {
-		for (RidingLevel level : values()) {
-			if(level.getLevelName().equals(levelName))	return level;
+	public static RidingLevel of(String levelName) {
+		switch (levelName) {
+			case "하":
+				return BEGINNER;
+			case "중":
+				return INTERMEDIATE;
+			case "상":
+				return MASTER;
+			default:
+				throw new IllegalArgumentException(levelName + "에 해당하는 라이더 레벨은 없습니다.");
 		}
-		throw new IllegalArgumentException();
 	}
 
 	public String getLevelName() {

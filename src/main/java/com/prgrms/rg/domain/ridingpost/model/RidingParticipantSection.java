@@ -48,6 +48,10 @@ public class RidingParticipantSection {
 		setMinMaxParticipantCount(minParticipantCount, maxParticipantCount);
 	}
 
+	public void update(RidingParticipantSection section) {
+		setMinMaxParticipantCount(section.getMinParticipantCount(), section.getMaxParticipantCount());
+	}
+
 	public void addParticipant(RidingPost post, User participant) {
 		//TODO 2차 시기에 동시성 처리
 		participants.add(new RidingParticipant(post, participant));

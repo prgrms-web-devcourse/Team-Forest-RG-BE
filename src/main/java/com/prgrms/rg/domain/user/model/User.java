@@ -3,10 +3,16 @@ package com.prgrms.rg.domain.user.model;
 import static javax.persistence.GenerationType.*;
 import static lombok.AccessLevel.*;
 
+import java.util.regex.Pattern;
+import java.util.Set;
+
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 
 import com.prgrms.rg.domain.common.file.model.AttachedImage;
@@ -14,6 +20,10 @@ import com.prgrms.rg.domain.common.file.model.ImageOwner;
 import com.prgrms.rg.domain.common.file.model.TemporaryImage;
 import com.prgrms.rg.domain.common.model.BaseTimeEntity;
 import com.prgrms.rg.domain.common.model.metadata.Bicycle;
+import com.prgrms.rg.domain.common.model.metadata.RidingLevel;
+import com.prgrms.rg.domain.ridingpost.model.AddressCode;
+import com.prgrms.rg.domain.user.model.dto.UserRegisterDTO;
+
 import com.prgrms.rg.domain.user.model.information.MannerInfo;
 import com.prgrms.rg.domain.user.model.information.RiderInfo;
 import com.prgrms.rg.domain.user.model.information.UserImageInfo;
@@ -54,10 +64,46 @@ public class User extends BaseTimeEntity implements ImageOwner {
 
 	private String providerId;
 
-	private Boolean isRegistered;
+	private boolean isRegistered;
+
+	private String phoneNumber;
+
+	@JoinColumn(name = "address_code")
+	@ManyToOne(fetch = FetchType.LAZY)
+	private AddressCode addressCode;
 
 	@Embedded
 	private Manner manner;
+
+	public void updateByRegistration(UserRegisterDTO userRegisterDTO) {
+		 this.nickname = new Nickname(userRegisterDTO.getNickName());
+		 this.profile = new RiderProfile(userRegisterDTO.getRidingStartYear(), RidingLevel.of(userRegisterDTO.getLevel()));
+
+		for (String bicycle : userRegisterDTO.getBicycles()) {
+			this.profile.addBicycle(this, new Bicycle(bicycle));
+		}
+		this.addressCode = new AddressCode(userRegisterDTO.getFavoriteRegionCode());
+		this.isRegistered = true;
+		setPhoneNumber(userRegisterDTO.getPhoneNumber());
+	}
+
+	private void setPhoneNumber(String phoneNumber) {
+		if(!Pattern.matches("^01(?:0|1|[6-9])-(?:\\d{3}|\\d{4})-\\d{4}$", phoneNumber))
+			throw new IllegalArgumentException("잘못된 번호입니다.");
+		this.phoneNumber = phoneNumber;
+	}
+
+	public void changeNickname(Nickname nicknameToChange) {
+		this.nickname = nicknameToChange;
+	}
+
+	public void changeRiderProfile(int ridingYears, RidingLevel level, Set<UserBicycle> bicyclesToApply) {
+		this.profile.update(ridingYears, level, bicyclesToApply);
+	}
+
+	public void changeIntroduction(Introduction introduction) {
+		this.introduction = introduction;
+	}
 
 	public boolean addBicycle(Bicycle bicycle) {
 		return profile.addBicycle(this, bicycle);
