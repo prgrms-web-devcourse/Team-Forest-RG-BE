@@ -31,8 +31,7 @@ public class RidingSaveManagement {
 		post.changePost(newPost);
 
 		//thumbnail -> 비교
-		if (Objects.isNull(command.getThumbnailId()) ||
-			!post.compareThumbnailTo(command.getThumbnailId())) {
+		if (!post.equalToThumbnail(command.getThumbnailId())) {
 			post.removeCurrentImage();
 			//null이 아닌 썸네일 삽입
 			if (!Objects.isNull(command.getThumbnailId())) {
@@ -118,11 +117,11 @@ public class RidingSaveManagement {
 
 	private void addImagesToSubSection(List<Long> imageIdList, RidingSubSection subSection) {
 		if (!CollectionUtils.isEmpty(imageIdList) && imageIdList.size() <= 2) {
-			for(Long id : imageIdList){
+			for (Long id : imageIdList) {
 				var findImage = imageReadService.getAttachedImageById(id);
 				if (findImage.isPresent()) { //기존 저정되어 있던 image
 					subSection.addImage(findImage.get());
-				} else {					//새로운 image
+				} else {                    //새로운 image
 					imageManager.store(id, subSection);
 				}
 			}
