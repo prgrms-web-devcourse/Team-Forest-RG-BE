@@ -5,13 +5,13 @@ import static org.apache.commons.lang3.ObjectUtils.*;
 
 import java.io.IOException;
 import java.util.Map;
+import java.util.NoSuchElementException;
 
 import javax.transaction.Transactional;
 
 import org.springframework.stereotype.Service;
 
 import com.prgrms.rg.domain.auth.jwt.JwtTokenProvider;
-import com.prgrms.rg.domain.user.application.NoSuchUserException;
 import com.prgrms.rg.domain.user.application.UserAuthenticationService;
 import com.prgrms.rg.domain.user.application.command.UserRegisterCommand;
 import com.prgrms.rg.domain.user.model.Manner;
@@ -78,9 +78,9 @@ public class UserAuthenticationServiceImpl implements UserAuthenticationService 
 
 	@Override
 	public UserRegisterResult updateUserByRegistration(UserRegisterCommand userRegisterCommand) {
-		User user = userRepository.findById(userRegisterCommand.getUserId()).orElseThrow(() -> new NoSuchUserException(
-			userRegisterCommand.getUserId()));
-		if(user.isRegistered()) {
+		User user = userRepository.findById(userRegisterCommand.getUserId())
+			.orElseThrow(() -> new NoSuchElementException("유저를 찾을 수 없습니다."));
+		if (user.isRegistered()) {
 			log.info("Already exists: {} user", userRegisterCommand.getUserId());
 			return UserRegisterResult.of(false);
 		}
@@ -88,7 +88,8 @@ public class UserAuthenticationServiceImpl implements UserAuthenticationService 
 			.bicycles(userRegisterCommand.getBicycles())
 			.favoriteRegionCode(userRegisterCommand.getFavoriteRegionCode())
 			.nickNameAndLevel(userRegisterCommand.getNickName(), userRegisterCommand.getLevel())
-			.ridingStartYearAndPhoneNumber(userRegisterCommand.getRidingStartYear(), userRegisterCommand.getPhoneNumber())
+			.ridingStartYearAndPhoneNumber(userRegisterCommand.getRidingStartYear(),
+				userRegisterCommand.getPhoneNumber())
 			.build();
 		user.updateByRegistration(userRegisterDTO);
 		return UserRegisterResult.of(true);
