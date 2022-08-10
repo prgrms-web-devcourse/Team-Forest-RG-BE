@@ -6,8 +6,8 @@ import java.util.Objects;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 
-import com.prgrms.rg.domain.common.file.application.AttachedImageReadService;
 import com.prgrms.rg.domain.common.file.application.ImageAttachManger;
+import com.prgrms.rg.domain.common.file.model.AttachedImageRepository;
 import com.prgrms.rg.domain.ridingpost.application.command.RidingSaveCommand;
 import com.prgrms.rg.domain.ridingpost.application.command.RidingSubSaveCommand;
 import com.prgrms.rg.domain.common.model.metadata.BicycleRepository;
@@ -22,7 +22,7 @@ public class RidingSaveManagement {
 	private final ImageAttachManger imageManager;
 	private final AddressCodeRepository addressCodeRepository;
 	private final BicycleRepository bicycleRepository;
-	private final AttachedImageReadService imageReadService;
+	private final AttachedImageRepository imageRepository;
 
 	public RidingPost updateRidingPost(User leader, RidingPost post, RidingSaveCommand command) {
 
@@ -45,9 +45,8 @@ public class RidingSaveManagement {
 			for (RidingSubSaveCommand subCommand : command.getSubCommand()) {
 				var subSection = new RidingSubSection(subCommand.getTitle(), subCommand.getContent());
 
-				//image check
 				addImagesToSubSection(subCommand.getImageIdList(), subSection);
-				post.addSubSection(createSubSection(subCommand));
+				post.addSubSection(subSection);
 			}
 		}
 
@@ -117,8 +116,9 @@ public class RidingSaveManagement {
 
 	private void addImagesToSubSection(List<Long> imageIdList, RidingSubSection subSection) {
 		if (!CollectionUtils.isEmpty(imageIdList) && imageIdList.size() <= 2) {
+			//image check
 			for (Long id : imageIdList) {
-				var findImage = imageReadService.getAttachedImageById(id);
+				var findImage = imageRepository.findById(id);
 				if (findImage.isPresent()) { //기존 저정되어 있던 image
 					subSection.addImage(findImage.get());
 				} else {                    //새로운 image

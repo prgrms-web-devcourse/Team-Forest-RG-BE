@@ -14,6 +14,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.prgrms.rg.domain.common.file.model.AttachedImageRepository;
 import com.prgrms.rg.domain.common.model.metadata.RidingLevel;
 import com.prgrms.rg.domain.ridingpost.application.command.RidingConditionSaveCommand;
 import com.prgrms.rg.domain.ridingpost.application.command.RidingSaveCommand;
@@ -42,6 +43,9 @@ class RidingPostServiceImplTest {
 
 	@Autowired
 	private UserRepository userRepository;
+
+	@Autowired
+	private AttachedImageRepository imageRepository;
 
 	@Test
 	@DisplayName("사진x RidingPost 생성")
@@ -82,15 +86,20 @@ class RidingPostServiceImplTest {
 	@DisplayName("ridingpost 수정 테스트")
 	@Sql(scripts = {"classpath:address_code.sql", "classpath:bicycle.sql"})
 	void updateRidingTest(){
-		//user-post
+		//user-post save
 		User leader = userRepository.save(TestEntityDataFactory.createUser());
 		RidingPost post = ridingPostRepository.save(TestEntityDataFactory.createRidingPost(leader.getId()));
+
+		//image save
+		var image = post.getSubSectionList().get(0).getImages().get(0);
+		var subimage = imageRepository.save(image);
+
 
 		var conditionCommand = new RidingConditionSaveCommand("상", List.of("MTB"));
 		var participantCommand = new RidingParticipantSaveCommand(post.getRidingParticipantSection().getMinParticipantCount(),
 			post.getRidingParticipantSection().getMaxParticipantCount());
 		var subCommand = new RidingSubSaveCommand("new-sub title", "new-sub content",
-			Collections.emptyList());
+			List.of(subimage.getId()));
 
 		var mainCommand = RidingMainSaveCommand.builder()
 			.title("자전거가 타고싶어요")

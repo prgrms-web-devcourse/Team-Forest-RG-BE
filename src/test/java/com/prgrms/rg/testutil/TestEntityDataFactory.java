@@ -46,7 +46,7 @@ public class TestEntityDataFactory {
 		RidingSubSection subSection = new RidingSubSection("sub title", "sub contents");
 		TemporaryImage tempImage = new TemporaryImage("test_image_file.jpg",
 			"http://amazons3/static/image/testimage.jpg");
-		subSection.getImages().add(new SubImage(tempImage, subSection));
+		subSection.getImages().add(new SubImage(1L, tempImage, subSection));
 
 		RidingMainSection mainSection = RidingMainSection.builder()
 			.title("자전거가 타고싶어요")

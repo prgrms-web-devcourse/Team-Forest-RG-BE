@@ -63,14 +63,14 @@ public class RidingSubSection implements ImageOwner {
 	}
 
 	public void addImage(AttachedImage attachedImage) {
-		var image = new SubImage(attachedImage, this);
+		var image = new SubImage(attachedImage.getId(),attachedImage, this);
 		images.add(image);
 	}
 
 
 	@Override
 	public AttachedImage attach(TemporaryImage storedImage) {
-		var image = new SubImage(storedImage, this);
+		var image = new SubImage(storedImage.getId(), storedImage, this);
 		images.add(image);
 		return image;
 	}
