@@ -13,6 +13,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class RidingPostCommentCreateRequest {
 	@NotNull
-	@Length(min = 5, max = 20000)
+	@Length(min = 1, max = 500)
 	private String content;
 }
