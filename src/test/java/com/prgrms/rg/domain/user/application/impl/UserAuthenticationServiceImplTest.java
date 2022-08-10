@@ -76,12 +76,12 @@ class UserAuthenticationServiceImplTest {
 	@Test
 	void updateUserByRegistration_성공_테스트() {
 		//given
-		UserRegisterCommand testCommand = createTestRegisterCommand();
 		User user = TestEntityDataFactory.createUser();
 		//when
-		userRepository.save(user);
+		User savedUser = userRepository.save(user);
+		UserRegisterCommand testCommand = createTestRegisterCommand(savedUser.getId());
 		UserRegisterResult userRegisterResult = userService.updateUserByRegistration(testCommand);
-		User updatedUser = userRepository.findById(user.getId()).orElseThrow();
+		User updatedUser = userRepository.findById(savedUser.getId()).orElseThrow();
 		//then
 		assertThat(userRegisterResult.isRegistered()).isTrue();
 		assertThat(updatedUser.getNickname()).isEqualTo(testCommand.getNickName());
@@ -94,10 +94,10 @@ class UserAuthenticationServiceImplTest {
 
 	}
 
-	private UserRegisterCommand createTestRegisterCommand() {
+	private UserRegisterCommand createTestRegisterCommand(Long userId) {
 		List<String> bicycles = new ArrayList<>();
 		bicycles.add("MTB");
 		bicycles.add("Road");
-		return UserRegisterCommand.of(new UserRegisterRequest(1996,23,bicycles,"하", "010-1234-5678","김훈기"),1L);
+		return UserRegisterCommand.of(new UserRegisterRequest(1996,23,bicycles,"하", "010-1234-5678","김훈기"),userId);
 	}
 }
