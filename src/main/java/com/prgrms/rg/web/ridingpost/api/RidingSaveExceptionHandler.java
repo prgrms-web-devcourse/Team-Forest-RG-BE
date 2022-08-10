@@ -13,7 +13,7 @@ import lombok.extern.slf4j.Slf4j;
 public class RidingSaveExceptionHandler {
 
 	@ExceptionHandler(IllegalArgumentException.class)
-	public ResponseEntity<String> handlerIllegalArgument(IllegalArgumentException e) {
+	public ResponseEntity<String> handleIllegalArgument(IllegalArgumentException e) {
 
 		log.warn("ILLEGAL ARGUMENT", e);
 		return ResponseEntity.badRequest().body(e.getMessage());
