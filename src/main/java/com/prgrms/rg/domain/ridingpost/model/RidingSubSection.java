@@ -28,8 +28,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class RidingSubSection implements ImageOwner {
 
-	private static final int MAX_IMAGE_LIST_SIZE = 5;
-
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
@@ -45,7 +43,7 @@ public class RidingSubSection implements ImageOwner {
 	@Column(name = "content")
 	private String content;
 
-	//0-5개의 사진. 사진 용량 체크 -> service 단에서 해야할듯 ..
+	//0-2개의 사진
 	@OneToMany(mappedBy = "subInformation", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
 	private List<SubImage> images = new ArrayList<>();
 
@@ -64,9 +62,15 @@ public class RidingSubSection implements ImageOwner {
 			.collect(Collectors.toList());
 	}
 
+	public void addImage(AttachedImage attachedImage) {
+		var image = new SubImage(attachedImage.getId(),attachedImage, this);
+		images.add(image);
+	}
+
+
 	@Override
 	public AttachedImage attach(TemporaryImage storedImage) {
-		var image = new SubImage(storedImage, this);
+		var image = new SubImage(storedImage.getId(), storedImage, this);
 		images.add(image);
 		return image;
 	}

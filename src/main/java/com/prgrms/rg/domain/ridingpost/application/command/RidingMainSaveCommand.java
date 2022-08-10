@@ -12,7 +12,7 @@ import lombok.Data;
 
 @Builder
 @Data
-public class RidingMainCreateCommand {
+public class RidingMainSaveCommand {
 
 	private String title;
 
