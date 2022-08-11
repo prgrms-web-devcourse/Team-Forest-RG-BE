@@ -9,12 +9,12 @@ import lombok.Getter;
 @Getter
 public final class MannerInfo {
 
-	private MannerLevel level;
+	private int mannerPoint;
 	private short noShow;
 	private LocalDate bannedUntil;
 
-	public MannerInfo(MannerLevel level, short noShow, LocalDate bannedUntil) {
-		this.level = level;
+	public MannerInfo(int mannerPoint, short noShow, LocalDate bannedUntil) {
+		this.mannerPoint = mannerPoint;
 		this.noShow = noShow;
 		this.bannedUntil = bannedUntil;
 	}
@@ -22,7 +22,7 @@ public final class MannerInfo {
 	@Override
 	public String toString() {
 		return "MannerInfo{" +
-			"level=" + level +
+			"mannerPoint=" + mannerPoint +
 			", noShow=" + noShow +
 			", bannedUntil=" + bannedUntil +
 			'}';
