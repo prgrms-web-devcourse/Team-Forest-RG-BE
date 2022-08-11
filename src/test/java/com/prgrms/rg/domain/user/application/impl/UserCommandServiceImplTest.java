@@ -74,9 +74,6 @@ class UserCommandServiceImplTest {
 		//When
 		Long editedUserId = sut.edit(command);
 
-		em.flush();
-		em.clear();
-
 		User afterEdited = userRepository.findById(editedUserId).get();
 
 		//Then
