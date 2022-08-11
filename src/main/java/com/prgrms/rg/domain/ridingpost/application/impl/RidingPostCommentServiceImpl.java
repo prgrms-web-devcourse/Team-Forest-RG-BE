@@ -71,7 +71,6 @@ public class RidingPostCommentServiceImpl implements RidingPostCommentService {
 	}
 
 	@Override
-	@Transactional
 	public List<RidingPostCommentInfo> getCommentsByPostId(long ridingPostId) {
 		RidingPost post;
 		try {

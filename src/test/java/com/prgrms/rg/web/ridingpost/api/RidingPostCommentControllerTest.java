@@ -1,9 +1,12 @@
 package com.prgrms.rg.web.ridingpost.api;
 
+import static com.prgrms.rg.testutil.TestEntityDataFactory.*;
 import static org.mockito.BDDMockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
+import java.lang.reflect.Field;
+import java.util.List;
 import java.util.Map;
 
 import org.junit.jupiter.api.DisplayName;
@@ -19,6 +22,8 @@ import com.prgrms.rg.domain.auth.jwt.JwtTokenProvider;
 import com.prgrms.rg.domain.common.RelatedEntityNotFoundException;
 import com.prgrms.rg.domain.ridingpost.application.RidingPostCommentService;
 import com.prgrms.rg.domain.ridingpost.application.command.RidingPostCommentCreateCommand;
+import com.prgrms.rg.domain.ridingpost.application.information.RidingPostCommentInfo;
+import com.prgrms.rg.domain.ridingpost.model.RidingPostComment;
 import com.prgrms.rg.testutil.ControllerTest;
 
 @ControllerTest(controllers = RidingPostCommentController.class)
@@ -94,6 +99,41 @@ class RidingPostCommentControllerTest {
 			jsonPath("message").value("필요한 사용자 정보, 라이딩 정보를 불러오는 데 실패했습니다.")
 		);
 		then(ridingPostCommentService).should(times(1)).createComment(command);
+	}
+
+	@Test
+	@DisplayName("특정 RidingPost에 있는 댓글들을 대댓글과 함께 담아서 응답한다.")
+	void test() throws Exception {
+
+		// Given
+		var author = createUser(1L);
+		var commentAuthor = createUser(2L);
+		var post = createRidingPost(author.getId());
+
+		var rootComment = RidingPostComment.createRootComment(commentAuthor, post, "root");
+		assignId(rootComment, 1L);
+		var childComment = RidingPostComment.createChildComment(commentAuthor, rootComment, "child");
+		assignId(childComment, 2L);
+		
+		var expectedReturn = List.of(RidingPostCommentInfo.from(rootComment));
+		given(ridingPostCommentService.getCommentsByPostId(1L)).willReturn(expectedReturn);
+
+		// When
+		var result = mockMvc.perform(
+			get("/api/v1/ridingposts/" + 1L + "/comments")
+		);
+		// Then
+		result.andExpectAll(
+			status().isOk(),
+			content().json(objectMapper.writeValueAsString(Map.of("comments", expectedReturn)))
+		);
+
+	}
+
+	private <T> void assignId(T target, long id) throws NoSuchFieldException, IllegalAccessException {
+		Field idField = target.getClass().getDeclaredField("id");
+		idField.setAccessible(true);
+		idField.set(target, id);
 	}
 
 }

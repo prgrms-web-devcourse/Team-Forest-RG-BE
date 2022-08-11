@@ -4,6 +4,7 @@ import javax.validation.Valid;
 
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -14,6 +15,7 @@ import com.prgrms.rg.domain.ridingpost.application.RidingPostCommentService;
 import com.prgrms.rg.domain.ridingpost.application.command.RidingPostCommentCreateCommand;
 import com.prgrms.rg.web.common.results.CommandSuccessResult;
 import com.prgrms.rg.web.ridingpost.requests.RidingPostCommentCreateRequest;
+import com.prgrms.rg.web.ridingpost.results.RidingPostCommentListResult;
 
 @RestController
 public class RidingPostCommentController {
@@ -38,4 +40,9 @@ public class RidingPostCommentController {
 		return CommandSuccessResult.from(commentId);
 	}
 
+	@GetMapping("/api/v1/ridingposts/{postid}/comments")
+	public RidingPostCommentListResult createRidingComment(@PathVariable("postid") long postId) {
+
+		return RidingPostCommentListResult.from(commentService.getCommentsByPostId(postId));
+	}
 }
