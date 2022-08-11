@@ -9,4 +9,6 @@ public interface RidingPostCommentService {
 	long createComment(RidingPostCommentCreateCommand command);
 
 	List<RidingPostCommentInfo> getCommentsByPostId(long ridingPostId);
+
+	void updateContents(Long userId, long commentId, String contents);
 }

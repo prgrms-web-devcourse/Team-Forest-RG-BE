@@ -17,6 +17,7 @@ import com.prgrms.rg.domain.ridingpost.application.information.RidingPostComment
 import com.prgrms.rg.domain.ridingpost.model.RidingPost;
 import com.prgrms.rg.domain.ridingpost.model.RidingPostComment;
 import com.prgrms.rg.domain.ridingpost.model.RidingPostCommentRepository;
+import com.prgrms.rg.domain.ridingpost.model.exception.UnAuthorizedException;
 import com.prgrms.rg.domain.user.application.UserReadService;
 import com.prgrms.rg.domain.user.model.User;
 
@@ -85,6 +86,25 @@ public class RidingPostCommentServiceImpl implements RidingPostCommentService {
 			.map(RidingPostCommentInfo::from)
 			.sorted(Comparator.comparing(RidingPostCommentInfo::getCreatedAt))
 			.collect(Collectors.toUnmodifiableList());
+
+	}
+
+	@Override
+	@Transactional
+	public void updateContents(Long userId, long commentId, String contents) {
+		User requestingUser;
+		RidingPostComment comment;
+		try {
+			requestingUser = userReadService.getUserEntityById(userId);
+			comment = ridingPostCommentRepository.findById(commentId);
+			if (!Objects.equals(requestingUser, comment.getAuthor())) {
+				throw new UnAuthorizedException(userId);
+			}
+		} catch (NoSuchElementException exception) {
+			throw new RelatedEntityNotFoundException(exception);
+		}
+
+		comment.changeContents(contents);
 
 	}
 
