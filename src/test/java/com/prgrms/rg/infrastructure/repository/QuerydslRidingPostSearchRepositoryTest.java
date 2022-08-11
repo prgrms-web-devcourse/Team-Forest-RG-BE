@@ -92,7 +92,7 @@ class QuerydslRidingPostSearchRepositoryTest {
 		//given
 		Pageable pageable = PageRequest.of(0, 50, Sort.Direction.DESC, "createdAt");
 		RidingSearchCondition condition = new RidingSearchCondition();
-		condition.setZone(zone);
+		condition.setAddressCode(zone);
 
 		//when
 		Slice<RidingPostInfo> ridingPostInfos = searchRepository.searchRidingPostSlice(condition, pageable);
@@ -164,7 +164,7 @@ class QuerydslRidingPostSearchRepositoryTest {
 		//given
 		Pageable pageable = PageRequest.of(0, 50, Sort.Direction.DESC, "createdAt");
 		RidingSearchCondition condition = new RidingSearchCondition();
-		condition.setBicycleType(Bicycle.BicycleCode.MTB);
+		condition.setBicycleCode(Bicycle.BicycleCode.MTB);
 
 		//when
 		Slice<RidingPostInfo> ridingPostInfos = searchRepository.searchRidingPostSlice(condition, pageable);
@@ -187,7 +187,7 @@ class QuerydslRidingPostSearchRepositoryTest {
 		//given
 		Pageable pageable = PageRequest.of(0, 50, Sort.Direction.DESC, "createdAt");
 		RidingSearchCondition condition = new RidingSearchCondition();
-		condition.setBicycleType(code);
+		condition.setBicycleCode(code);
 		condition.setRidingLevel(level);
 
 		//when

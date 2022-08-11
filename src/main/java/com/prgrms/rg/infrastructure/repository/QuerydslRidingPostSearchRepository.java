@@ -45,8 +45,8 @@ public class QuerydslRidingPostSearchRepository extends QuerydslRepositorySuppor
 			.leftJoin(bicycle).on(bicycle.id.eq(ridingConditionBicycle.id)).fetchJoin()
 			.where(ridingLevelEq(condition.getRidingLevel()),
 				postStatusEq(condition.getRidingStatusFromCode()),
-				zoneEq(condition.getZone()),
-				bicycleEq(condition.getBicycleType())
+				zoneEq(condition.getAddressCode()),
+				bicycleEq(condition.getBicycleCode())
 			)
 			.offset(pageable.getOffset())
 			.limit(pageable.getPageSize() + 1L)

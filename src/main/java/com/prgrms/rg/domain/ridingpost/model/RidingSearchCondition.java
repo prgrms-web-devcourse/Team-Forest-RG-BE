@@ -6,8 +6,8 @@ import lombok.NoArgsConstructor;
 
 @Data
 public class RidingSearchCondition {
-	private Long bicycleType;
-	private Integer zone;
+	private Long bicycleCode;
+	private Integer addressCode;
 	private String ridingLevel;
 	private Long ridingStatus = RidingStatusCode.PROGRESS;
 
@@ -20,7 +20,7 @@ public class RidingSearchCondition {
 			case 2:
 				return RidingStatus.CLOSED;
 			default:
-				throw new IllegalArgumentException("Riding Status Code is invalid");
+				throw new IllegalArgumentException("Riding Status Code '" + ridingStatus.intValue() + "' is invalid");
 		}
 	}
 
