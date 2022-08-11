@@ -4,7 +4,6 @@ import static org.hamcrest.MatcherAssert.*;
 import static org.hamcrest.Matchers.*;
 
 import java.time.LocalDateTime;
-import java.util.Collections;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -36,6 +35,7 @@ import com.prgrms.rg.testutil.TestEntityDataFactory;
 
 @SpringBootTest
 @Transactional
+@Sql(scripts = {"classpath:address_code.sql", "classpath:bicycle.sql"})
 class RidingPostServiceImplTest {
 
 	@Autowired
@@ -56,7 +56,6 @@ class RidingPostServiceImplTest {
 	@Test
 	@DisplayName("사진x RidingPost 생성")
 	@Transactional
-	@Sql(scripts = "classpath:data.sql")
 	void createRidingTest(){
 
 	    //given
@@ -90,7 +89,6 @@ class RidingPostServiceImplTest {
 	@Test
 	@Transactional
 	@DisplayName("ridingpost 수정 테스트")
-	@Sql(scripts = {"classpath:address_code.sql", "classpath:bicycle.sql"})
 	void updateRidingTest(){
 		//user-post save
 		User leader = userRepository.save(TestEntityDataFactory.createUser());
@@ -135,6 +133,21 @@ class RidingPostServiceImplTest {
 			mainCommand.getEstimatedTime())));
 		assertThat(updatedPost.get().getSubSectionList(), is(hasSize(1)));
 		assertThat(updatedPost.get().getSubSectionList().get(0).getTitle(), is(equalTo(subCommand.getTitle())));
+
+	}
+
+	@Test
+	@DisplayName("RidingPost 삭제 테스트")
+	void deleteRidingTest(){
+
+		var leader = userRepository.save(TestEntityDataFactory.createUser(10L));
+		var post = ridingPostRepository.save(TestEntityDataFactory.createRidingPost(leader.getId()));
+
+		//when
+		ridingPostService.deleteRidingPost(leader.getId(), post.getId());
+
+		var findPost = ridingPostRepository.findById(post.getId());
+		assertThat(findPost.isEmpty(), is(true));
 
 	}
 }
