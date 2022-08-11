@@ -55,7 +55,6 @@ class RidingPostServiceImplTest {
 
 	@Test
 	@DisplayName("사진x RidingPost 생성")
-	@Transactional
 	void createRidingTest(){
 
 	    //given
@@ -87,7 +86,6 @@ class RidingPostServiceImplTest {
 	}
 
 	@Test
-	@Transactional
 	@DisplayName("ridingpost 수정 테스트")
 	void updateRidingTest(){
 		//user-post save
