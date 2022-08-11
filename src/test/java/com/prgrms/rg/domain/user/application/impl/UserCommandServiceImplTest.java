@@ -81,7 +81,7 @@ class UserCommandServiceImplTest {
 
 		//Then
 		assertThat(afterEdited.getNickname()).isEqualTo("changedName");
-		assertThat(afterEdited.getRiderInformation().getRidingYears()).isEqualTo(Year.of(2017));
+		assertThat(afterEdited.getRiderInformation().getRidingYears()).isEqualTo(2017);
 		assertThat(afterEdited.getRiderInformation().getLevel()).isEqualTo(BEGINNER);
 		List<String> changedBicycles = afterEdited.getRiderInformation().getBicycles();
 		assertThat(changedBicycles).containsAll(List.of("따릉이", "MTB")).doesNotContain("로드");

@@ -68,7 +68,7 @@ public class RiderProfile {
 	}
 
 	Year getRidingYears() {
-		return Year.now().minusYears(ridingStartYear.getValue());
+		return ridingStartYear;
 	}
 
 	RiderInfo information() {
