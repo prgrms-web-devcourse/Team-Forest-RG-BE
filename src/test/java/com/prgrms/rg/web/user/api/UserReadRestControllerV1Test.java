@@ -40,7 +40,7 @@ class UserReadRestControllerV1Test {
 	ObjectMapper objectMapper;
 
 	@Test
-	@DisplayName("User 정보 수정 테스트")
+	@DisplayName("User 프로필 읽기 테스트")
 	void updateUserTest() throws Exception {
 		//Given
 		var token = tokenProvider.createToken("ROLE_USER", 1L);
@@ -57,8 +57,8 @@ class UserReadRestControllerV1Test {
 			.build();
 		user.addBicycle(new Bicycle(1L, "로드"));
 		user.addBicycle(new Bicycle(2L, "따릉이"));
-		UserProfilePageInfo result = new UserProfilePageInfo(user.getNickname(), user.getRiderInformation(),
-			user.getImage(), user.getIntroduction(), user.getMannerInfo(), user.getContactInfo());
+		//TODO 라이딩 정보 추가
+		UserProfilePageInfo result = UserProfilePageInfo.from(user, null);
 
 		when(userReadService.getUserProfilePageInfo(1L)).thenReturn(result);
 

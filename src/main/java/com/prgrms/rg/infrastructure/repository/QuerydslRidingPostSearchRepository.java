@@ -16,11 +16,17 @@ import org.springframework.stereotype.Repository;
 
 import com.prgrms.rg.domain.common.model.metadata.Bicycle;
 import com.prgrms.rg.domain.common.model.metadata.RidingLevel;
+import com.prgrms.rg.domain.ridingpost.model.RidingConditionBicycle;
 import com.prgrms.rg.domain.ridingpost.model.RidingPost;
 import com.prgrms.rg.domain.ridingpost.model.RidingPostInfo;
 import com.prgrms.rg.domain.ridingpost.model.RidingPostSearchRepository;
 import com.prgrms.rg.domain.ridingpost.model.RidingSearchCondition;
 import com.prgrms.rg.domain.ridingpost.model.RidingStatus;
+import com.prgrms.rg.domain.user.model.User;
+import com.prgrms.rg.infrastructure.repository.projections.querydsl.RidingPostBriefInfoQueryDslProjection;
+import com.prgrms.rg.infrastructure.repository.projections.querydsl.QPostInfoQueryDslProjection;
+import com.prgrms.rg.infrastructure.repository.querydslconditions.RidingPostUserSearchType;
+import com.querydsl.core.types.Expression;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.JPQLQuery;
 
@@ -30,6 +36,8 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class QuerydslRidingPostSearchRepository extends QuerydslRepositorySupport
 	implements RidingPostSearchRepository {
+
+	private static final int MAXIMUM_USER_SEARCH_RESULT = 20;
 
 	public QuerydslRidingPostSearchRepository() {
 		super(RidingPost.class);
@@ -88,6 +96,25 @@ public class QuerydslRidingPostSearchRepository extends QuerydslRepositorySuppor
 	private BooleanExpression bicycleEq(Long bicycleCode) {
 		return bicycleCode != null ? ridingConditionBicycle.bicycle.id.eq(bicycleCode)
 			.or(ridingConditionBicycle.bicycle.id.eq(Bicycle.BicycleCode.ALL)) : null;
+	}
+
+	@Override
+	public List<RidingPostBriefInfoQueryDslProjection> searchRidingPostByUser(User user, RidingPostUserSearchType searchType) {
+		JPQLQuery<RidingPostBriefInfoQueryDslProjection> query = from(ridingPost)
+			.leftJoin(ridingPost.thumbnail).fetchJoin() // 1:1
+			.leftJoin(ridingConditionBicycle).on(ridingConditionBicycle.id.eq(ridingPost.id)).fetchJoin()// 1:m
+			.leftJoin(bicycle).on(bicycle.id.eq(ridingConditionBicycle.id)).fetchJoin()
+			.where(ridingPost.userConditionOf(user, searchType))
+			.orderBy(ridingPost.ridingMainSection.ridingDate.desc(), ridingPost.id.desc())
+			.limit(MAXIMUM_USER_SEARCH_RESULT)
+			.select(new QPostInfoQueryDslProjection(ridingPost.id, ridingPost.ridingMainSection.title,
+				ridingPost.thumbnail.url,
+				ridingPost.ridingConditionSection.level.stringValue(), ridingPost.ridingMainSection.ridingDate,
+				ridingPost.ridingMainSection.routes,
+				(Expression<? extends List<RidingConditionBicycle>>)ridingPost.ridingConditionSection.bicycleList,
+				ridingPost.ridingMainSection.departurePlace));
+
+		return query.fetch();
 	}
 }
 
