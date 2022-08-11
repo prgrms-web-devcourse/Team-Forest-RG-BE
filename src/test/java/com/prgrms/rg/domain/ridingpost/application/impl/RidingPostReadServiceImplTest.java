@@ -43,10 +43,7 @@ class RidingPostReadServiceImplTest {
 	UserReadService userReadService;
 	@Autowired
 	private RidingPostService ridingPostService;
-
-	@Autowired
-	private BicycleRepository bicycleRepository;
-
+	
 	@BeforeEach
 	void init() {
 		mapper.enable(SerializationFeature.INDENT_OUTPUT);
@@ -86,7 +83,7 @@ class RidingPostReadServiceImplTest {
 		Long savedPostId = ridingPostService.createRidingPost(userId, createCommand);
 
 		//when
-		RidingPostInfo ridingPostInfo = readService.getRidingPostInfoById(savedPostId);
+		RidingPostInfo ridingPostInfo = readService.loadRidingPostInfoById(savedPostId);
 
 		//then
 		RidingPostInfo.LeaderInfo leaderInfo = ridingPostInfo.getLeaderInfo();

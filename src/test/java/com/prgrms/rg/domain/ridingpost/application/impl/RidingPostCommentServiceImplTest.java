@@ -57,7 +57,7 @@ class RidingPostCommentServiceImplTest {
 		// Then
 		var savedComment = ridingPostCommentRepository.findById(commentId);
 		assertThat(savedComment).isNotNull();
-		assertThat(savedComment.getContent()).isEqualTo("comment");
+		assertThat(savedComment.getContents()).isEqualTo("comment");
 		assertThat(savedComment.getAuthor()).isEqualTo(commentAuthor);
 		assertThat(savedComment.getRidingPost()).isEqualTo(post);
 		assertThat(savedComment.getParentComment()).isNull();
@@ -84,7 +84,7 @@ class RidingPostCommentServiceImplTest {
 		// Then
 		var savedComment = ridingPostCommentRepository.findById(commentId);
 		assertThat(savedComment).isNotNull();
-		assertThat(savedComment.getContent()).isEqualTo("comment");
+		assertThat(savedComment.getContents()).isEqualTo("comment");
 		assertThat(savedComment.getAuthor()).isEqualTo(commentAuthor);
 		assertThat(savedComment.getRidingPost()).isNull();
 
@@ -145,6 +145,25 @@ class RidingPostCommentServiceImplTest {
 		var secondChildCommentInfo = rootCommentInfo.getChildComments().get(1);
 		assertThat(secondChildCommentInfo.getCommentId()).isEqualTo(secondChildCommentId);
 		assertThat(secondChildCommentInfo.getContents()).isEqualTo("child2");
+
+	}
+
+	@Test
+	@DisplayName("권한을 가진 사용자의 댓글 내용 수정 요청을 수행한다.")
+	void handle_update_command_with_proper_user() {
+
+		// Given
+		var commentAuthor = createUser();
+		var leader = User.builder().nickname(new Nickname("leader")).manner(Manner.create()).build();
+		userRepository.save(commentAuthor);
+		userRepository.save(leader);
+
+		var post = createRidingPost(leader.getId());
+		post = ridingPostRepository.save(post);
+
+		// When
+
+		// Then
 
 	}
 

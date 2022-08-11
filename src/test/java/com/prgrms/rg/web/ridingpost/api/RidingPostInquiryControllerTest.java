@@ -23,15 +23,15 @@ import com.prgrms.rg.domain.ridingpost.model.exception.RidingPostNotFoundExcepti
 import com.prgrms.rg.testutil.ControllerTest;
 import com.prgrms.rg.testutil.TestEntityDataFactory;
 
-@ControllerTest(controllers = RidingInquiryController.class)
+@ControllerTest(controllers = RidingPostInquiryController.class)
 @AutoConfigureMockMvc
-class RidingInquiryControllerTest {
+class RidingPostInquiryControllerTest {
 	@Autowired
 	JwtTokenProvider tokenProvider;
 	@MockBean
 	RidingPostReadService readService;
 	@Autowired
-	RidingInquiryController controller;
+	RidingPostInquiryController controller;
 	@Autowired
 	ObjectMapper mapper;
 	Long userId = 1L;
@@ -48,7 +48,7 @@ class RidingInquiryControllerTest {
 		ridingPost = TestEntityDataFactory.createRidingPost(userId);
 
 		RidingPostInfo info = RidingPostInfo.from(ridingPost);
-		when(readService.getRidingPostInfoById(postId)).thenReturn(info);
+		when(readService.loadRidingPostInfoById(postId)).thenReturn(info);
 		//when
 		MvcResult result = mockMvc.perform(get("/api/v1/ridingposts/" + postId)
 				.header("Authorization", "token " + token))
@@ -65,7 +65,7 @@ class RidingInquiryControllerTest {
 		//given
 		var token = tokenProvider.createToken("ROLE_USER", 1L);
 		Long invalidId = 99999L;
-		when(readService.getRidingPostInfoById(invalidId)).thenThrow(new RidingPostNotFoundException(invalidId));
+		when(readService.loadRidingPostInfoById(invalidId)).thenThrow(new RidingPostNotFoundException(invalidId));
 
 		//when
 		mockMvc.perform(get("/api/v1/ridingposts/" + invalidId)
