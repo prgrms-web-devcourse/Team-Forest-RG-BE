@@ -1,7 +1,7 @@
 package com.prgrms.rg.domain.user.application.impl;
 
 import static com.google.common.base.Preconditions.*;
-import static com.prgrms.rg.infrastructure.cloud.CriticalMessageSender.*;
+import static com.prgrms.rg.web.common.message.CriticalMessageSender.*;
 import static org.apache.commons.lang3.ObjectUtils.*;
 
 import java.io.IOException;
