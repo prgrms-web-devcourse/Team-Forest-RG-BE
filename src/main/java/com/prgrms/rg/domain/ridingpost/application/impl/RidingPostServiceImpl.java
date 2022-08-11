@@ -5,6 +5,7 @@ import static com.google.common.base.Preconditions.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.prgrms.rg.domain.ridingpost.model.RidingPost;
 import com.prgrms.rg.domain.ridingpost.model.RidingSaveManagement;
 import com.prgrms.rg.domain.ridingpost.application.RidingPostService;
 import com.prgrms.rg.domain.ridingpost.application.command.RidingSaveCommand;
@@ -39,13 +40,25 @@ public class RidingPostServiceImpl implements RidingPostService {
 	@Transactional
 	public Long updateRidingPost(Long leaderId, Long postId, RidingSaveCommand command) {
 
-		//todo postreadservice 적용
-		var post = ridingPostRepository.findById(postId).orElseThrow(() -> new RidingPostNotFoundException(postId));
-		var leader = post.getLeader();
-		checkArgument(leader.getId().equals(leaderId), new UnAuthorizedException(leaderId));
-
-		saveManagement.updateRidingPost(leader, post, command);
+		var post = checkPostOperationCommand(leaderId, postId);
+		saveManagement.updateRidingPost(post.getLeader(), post, command);
 
 		return post.getId();
 	}
+
+	@Override
+	@Transactional(readOnly = true)
+	public void deleteRidingPost(Long leaderId, Long postId) {
+		checkPostOperationCommand(leaderId, postId);
+
+		ridingPostRepository.deleteById(postId);
+	}
+
+	private RidingPost checkPostOperationCommand(Long leaderId, Long postId) {
+		var post = ridingPostRepository.findById(postId).orElseThrow(() -> new RidingPostNotFoundException(postId));
+		var leader = post.getLeader();
+		checkArgument(leader.getId().equals(leaderId), new UnAuthorizedException(leaderId));
+		return post;
+	}
+
 }
