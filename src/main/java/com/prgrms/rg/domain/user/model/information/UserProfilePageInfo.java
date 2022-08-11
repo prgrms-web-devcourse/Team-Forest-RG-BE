@@ -1,5 +1,6 @@
 package com.prgrms.rg.domain.user.model.information;
 
+import com.prgrms.rg.domain.ridingpost.application.information.RidingPostBriefInfo;
 import com.prgrms.rg.domain.user.model.User;
 
 import lombok.Getter;
@@ -12,10 +13,10 @@ public class UserProfilePageInfo {
 	private UserImageInfo image;
 	private String introduction;
 	private MannerInfo manner;
-
 	private ContactInfo contact;
+	private ParticipatedRidingInfo ridings;
 
-	public UserProfilePageInfo(String nickname, RiderInfo profile,
+	private UserProfilePageInfo(String nickname, RiderInfo profile,
 		UserImageInfo image, String introduction, MannerInfo manner, ContactInfo contact) {
 		this.nickname = nickname;
 		this.profile = profile;
@@ -25,7 +26,7 @@ public class UserProfilePageInfo {
 		this.contact = contact;
 	}
 
-	public static UserProfilePageInfo of(User user) {
+	public static UserProfilePageInfo from(User user, ParticipatedRidingInfo ridings) {
 		return new UserProfilePageInfo(user.getNickname(), user.getRiderInformation(),
 			user.getImage(), user.getIntroduction(), user.getMannerInfo(), user.getContactInfo());
 	}
