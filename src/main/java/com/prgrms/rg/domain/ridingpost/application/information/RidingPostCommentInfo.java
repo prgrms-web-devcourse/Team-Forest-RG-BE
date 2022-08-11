@@ -18,6 +18,7 @@ public class RidingPostCommentInfo {
 	private final long parentCommentId;
 	private final long authorId;
 	private final String authorName;
+	private final String authorImageUrl;
 	private final String contents;
 	private final LocalDateTime createdAt;
 	private final List<RidingPostCommentInfo> childComments;
@@ -35,6 +36,7 @@ public class RidingPostCommentInfo {
 			.authorName(comment.getAuthor().getNickname())
 			.contents(comment.getContents())
 			.createdAt(comment.getCreatedAt())
+			.authorImageUrl(comment.getAuthor().getProfileImage().getUrl())
 			.build();
 	}
 }
