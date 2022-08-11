@@ -10,5 +10,7 @@ public interface RidingPostCommentService {
 
 	List<RidingPostCommentInfo> getCommentsByPostId(long ridingPostId);
 
-	void updateContents(Long userId, long commentId, String contents);
+	void updateComment(long userId, long commentId, String contents);
+
+	void removeComment(long userId, long commentId);
 }
