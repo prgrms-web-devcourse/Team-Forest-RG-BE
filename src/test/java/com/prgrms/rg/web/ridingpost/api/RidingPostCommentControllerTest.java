@@ -46,7 +46,7 @@ class RidingPostCommentControllerTest {
 		var authorId = 1L;
 		var postId = 2L;
 		var token = tokenProvider.createToken("ROLE_USER", authorId);
-		var command = RidingPostCommentCreateCommand.of(authorId, postId, content);
+		var command = RidingPostCommentCreateCommand.of(authorId, postId, null, content);
 		given(ridingPostCommentService.createComment(command)).willReturn(1L);
 
 		// When
@@ -76,7 +76,7 @@ class RidingPostCommentControllerTest {
 		var authorId = 1L;
 		var postId = 2L;
 		var token = tokenProvider.createToken("ROLE_USER", authorId);
-		var command = RidingPostCommentCreateCommand.of(authorId, postId, content);
+		var command = RidingPostCommentCreateCommand.of(authorId, postId, null, content);
 		given(ridingPostCommentService.createComment(command)).willThrow(RelatedEntityNotFoundException.class);
 
 		// When

@@ -31,7 +31,7 @@ public class RidingPostCommentController {
 		@PathVariable("postid") long postId,
 		@AuthenticationPrincipal JwtAuthentication auth) {
 		var userId = auth.userId;
-		var command = RidingPostCommentCreateCommand.of(userId, postId, request.getContent());
+		var command = RidingPostCommentCreateCommand.of(userId, postId, request.getParentCommentId(), request.getContent());
 
 		var commentId = commentService.createComment(command);
 

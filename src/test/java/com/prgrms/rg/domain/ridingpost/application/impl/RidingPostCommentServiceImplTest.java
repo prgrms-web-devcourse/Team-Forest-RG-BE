@@ -2,8 +2,8 @@ package com.prgrms.rg.domain.ridingpost.application.impl;
 
 import static com.prgrms.rg.testutil.TestEntityDataFactory.*;
 import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.ThrowableAssert.*;
 
-import org.assertj.core.api.ThrowableAssert;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.prgrms.rg.domain.common.RelatedEntityNotFoundException;
 import com.prgrms.rg.domain.ridingpost.application.RidingPostCommentService;
 import com.prgrms.rg.domain.ridingpost.application.command.RidingPostCommentCreateCommand;
+import com.prgrms.rg.domain.ridingpost.model.RidingPostComment;
 import com.prgrms.rg.domain.ridingpost.model.RidingPostCommentRepository;
 import com.prgrms.rg.domain.ridingpost.model.RidingPostRepository;
 import com.prgrms.rg.domain.user.model.Manner;
@@ -39,7 +40,7 @@ class RidingPostCommentServiceImplTest {
 	RidingPostCommentRepository ridingPostCommentRepository;
 
 	@Test
-	@DisplayName("요청을 받아 사용자와 라이딩 게시물 정보와 연결된 댓글을 저장한다.")
+	@DisplayName("요청을 받아 사용자와 라이딩 게시물 정보와 연결된 댓글을 저장한다. - 부모 댓글")
 	void create_comment_successful() {
 		// Given
 		var commentAuthor = createUser();
@@ -48,7 +49,7 @@ class RidingPostCommentServiceImplTest {
 		userRepository.save(leader);
 		var post = createRidingPost(leader.getId());
 		post = ridingPostRepository.save(post);
-		var command = RidingPostCommentCreateCommand.of(commentAuthor.getId(), post.getId(), "comment");
+		var command = RidingPostCommentCreateCommand.of(commentAuthor.getId(), post.getId(), null, "comment");
 
 		// When
 		var commentId = ridingPostCommentService.createComment(command);
@@ -57,8 +58,37 @@ class RidingPostCommentServiceImplTest {
 		var savedComment = ridingPostCommentRepository.findById(commentId);
 		assertThat(savedComment).isNotNull();
 		assertThat(savedComment.getContent()).isEqualTo("comment");
-		assertThat(savedComment.getAuthor().getId()).isEqualTo(commentAuthor.getId());
-		assertThat(savedComment.getRidingPost().getId()).isEqualTo(post.getId());
+		assertThat(savedComment.getAuthor()).isEqualTo(commentAuthor);
+		assertThat(savedComment.getRidingPost()).isEqualTo(post);
+		assertThat(savedComment.getParentComment()).isNull();
+
+	}
+
+	@Test
+	@DisplayName("요청을 받아 사용자와 라이딩 게시물 정보와 연결된 댓글을 저장한다. - 자식 댓글")
+	void create_child_comment_successful() {
+		// Given
+		var commentAuthor = createUser();
+		var leader = User.builder().nickname(new Nickname("leader")).manner(Manner.create()).build();
+		userRepository.save(commentAuthor);
+		userRepository.save(leader);
+		var post = createRidingPost(leader.getId());
+		post = ridingPostRepository.save(post);
+		var parentComment = RidingPostComment.of(leader, post, "parent");
+		parentComment = ridingPostCommentRepository.save(parentComment);
+		var command = RidingPostCommentCreateCommand.of(commentAuthor.getId(), post.getId(), parentComment.getId(), "comment");
+
+		// When
+		var commentId = ridingPostCommentService.createComment(command);
+
+		// Then
+		var savedComment = ridingPostCommentRepository.findById(commentId);
+		assertThat(savedComment).isNotNull();
+		assertThat(savedComment.getContent()).isEqualTo("comment");
+		assertThat(savedComment.getAuthor()).isEqualTo(commentAuthor);
+		assertThat(savedComment.getRidingPost()).isNull();
+		assertThat(savedComment.getParentComment()).isEqualTo(parentComment);
+		assertThat(savedComment.getParentComment().getChildComments()).contains(savedComment);
 
 	}
 
@@ -70,8 +100,8 @@ class RidingPostCommentServiceImplTest {
 		var invalidUserId = 2L;
 
 		// When
-		ThrowableAssert.ThrowingCallable when =
-			() -> ridingPostCommentService.createComment(RidingPostCommentCreateCommand.of(invalidUserId, 1L, "wrong"));
+		ThrowingCallable when =
+			() -> ridingPostCommentService.createComment(RidingPostCommentCreateCommand.of(invalidUserId, 1L, null, "wrong"));
 
 		// Then
 		assertThatThrownBy(when)
