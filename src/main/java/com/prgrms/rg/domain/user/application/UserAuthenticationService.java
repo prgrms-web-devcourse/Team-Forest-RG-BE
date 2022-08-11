@@ -8,7 +8,7 @@ import com.prgrms.rg.web.user.results.UserMeResult;
 import com.prgrms.rg.web.user.results.UserRegisterResult;
 
 public interface UserAuthenticationService {
-	UserMeResult checkUserById(Long id);
+	UserMeResult checkUserById(Long id, String token);
 
 	OAuthLoginResult joinOAuth(String authorizationCode) throws IOException, InterruptedException;
 

@@ -76,19 +76,16 @@ public class User extends BaseTimeEntity implements ImageOwner {
 	private Manner manner;
 
 	public void updateByRegistration(UserRegisterDTO userRegisterDTO) {
-		 this.nickname = new Nickname(userRegisterDTO.getNickName());
-		 this.profile = new RiderProfile(userRegisterDTO.getRidingStartYear(), RidingLevel.of(userRegisterDTO.getLevel()));
-
-		for (String bicycle : userRegisterDTO.getBicycles()) {
-			this.profile.addBicycle(this, new Bicycle(bicycle));
-		}
-		this.addressCode = new AddressCode(userRegisterDTO.getFavoriteRegionCode());
+		this.nickname = new Nickname(userRegisterDTO.getNickName());
+		this.profile = new RiderProfile(userRegisterDTO.getRidingStartYear(),
+			RidingLevel.of(userRegisterDTO.getLevel()));
+		this.addressCode = userRegisterDTO.getFavoriteRegionCode();
 		this.isRegistered = true;
 		setPhoneNumber(userRegisterDTO.getPhoneNumber());
 	}
 
 	private void setPhoneNumber(String phoneNumber) {
-		if(!Pattern.matches("^01(?:0|1|[6-9])-(?:\\d{3}|\\d{4})-\\d{4}$", phoneNumber))
+		if (!Pattern.matches("^01(?:0|1|[6-9])-(?:\\d{3}|\\d{4})-\\d{4}$", phoneNumber))
 			throw new IllegalArgumentException("잘못된 번호입니다.");
 		this.phoneNumber = phoneNumber;
 	}
@@ -108,7 +105,7 @@ public class User extends BaseTimeEntity implements ImageOwner {
 	public boolean addBicycle(Bicycle bicycle) {
 		return profile.addBicycle(this, bicycle);
 	}
-	
+
 	public String getNickname() {
 		return nickname.get();
 	}

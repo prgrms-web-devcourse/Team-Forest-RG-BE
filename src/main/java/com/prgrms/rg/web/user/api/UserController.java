@@ -1,7 +1,6 @@
 package com.prgrms.rg.web.user.api;
 
 import java.io.IOException;
-
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
@@ -12,6 +11,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.prgrms.rg.domain.auth.jwt.JwtAuthentication;
 import com.prgrms.rg.domain.user.application.UserAuthenticationService;
 import com.prgrms.rg.domain.user.application.command.UserRegisterCommand;
@@ -31,6 +31,12 @@ public class UserController {
 	private final UserAuthenticationService userAuthenticationService;
 
 	@ExceptionHandler
+	private ResponseEntity<String> forbiddenException(JWTVerificationException exception) {
+		log.info("Not Allowed User , error = {}", exception.getMessage());
+		return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("User is not Allowed");
+	}
+
+	@ExceptionHandler
 	private ResponseEntity<String> forbiddenException(NullPointerException exception) {
 		log.info("Not Allowed User , error = {}", exception.getMessage());
 		return ResponseEntity.status(HttpStatus.FORBIDDEN).body("User is not Allowed");
@@ -45,7 +51,9 @@ public class UserController {
 
 	@GetMapping("api/v1/user/me")
 	public ResponseEntity<UserMeResult> me(@AuthenticationPrincipal JwtAuthentication authentication) {
-		return ResponseEntity.status(HttpStatus.OK).body(userAuthenticationService.checkUserById(authentication.userId));
+		UserMeResult result = userAuthenticationService.checkUserById(authentication.userId,
+			authentication.token);
+		return ResponseEntity.status(HttpStatus.OK).header("Authorization", result.getToken()).body(result);
 	}
 
 	@Secured("ROLE_USER")
