@@ -15,7 +15,6 @@ public enum RidingLevel {
 		this.description = description;
 	}
 
-
 	public static RidingLevel of(String levelName) {
 		switch (levelName) {
 			case "하":

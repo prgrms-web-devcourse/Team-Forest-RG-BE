@@ -7,6 +7,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -15,6 +16,7 @@ import com.prgrms.rg.domain.ridingpost.application.RidingPostCommentService;
 import com.prgrms.rg.domain.ridingpost.application.command.RidingPostCommentCreateCommand;
 import com.prgrms.rg.web.common.results.CommandSuccessResult;
 import com.prgrms.rg.web.ridingpost.requests.RidingPostCommentCreateRequest;
+import com.prgrms.rg.web.ridingpost.requests.RidingPostCommentUpdateRequest;
 import com.prgrms.rg.web.ridingpost.results.RidingPostCommentListResult;
 
 @RestController
@@ -33,7 +35,7 @@ public class RidingPostCommentController {
 		@PathVariable("postid") long postId,
 		@AuthenticationPrincipal JwtAuthentication auth) {
 		var userId = auth.userId;
-		var command = RidingPostCommentCreateCommand.of(userId, postId, request.getParentCommentId(), request.getContent());
+		var command = RidingPostCommentCreateCommand.of(userId, postId, request.getParentCommentId(), request.getContents());
 
 		var commentId = commentService.createComment(command);
 
@@ -44,5 +46,19 @@ public class RidingPostCommentController {
 	public RidingPostCommentListResult createRidingComment(@PathVariable("postid") long postId) {
 
 		return RidingPostCommentListResult.from(commentService.getCommentsByPostId(postId));
+	}
+
+	@Secured("ROLE_USER")
+	@PutMapping("/api/v1/ridingposts/{postid}/comments/{commentid}")
+	public CommandSuccessResult updateRidingComment(
+		@Valid @RequestBody RidingPostCommentUpdateRequest command,
+		@PathVariable("postid") long postId,
+		@PathVariable("commentid") long commentId,
+		@AuthenticationPrincipal JwtAuthentication auth) {
+
+		var userId = auth.userId;
+		commentService.updateContents(userId, commentId, command.getContents());
+
+		return CommandSuccessResult.from(commentId);
 	}
 }

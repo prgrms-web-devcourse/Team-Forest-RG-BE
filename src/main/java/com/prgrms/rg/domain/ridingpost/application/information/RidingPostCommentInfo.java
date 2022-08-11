@@ -33,7 +33,7 @@ public class RidingPostCommentInfo {
 				.collect(Collectors.toUnmodifiableList()))
 			.commentId(comment.getId())
 			.authorName(comment.getAuthor().getNickname())
-			.contents(comment.getContent())
+			.contents(comment.getContents())
 			.createdAt(comment.getCreatedAt())
 			.build();
 	}
