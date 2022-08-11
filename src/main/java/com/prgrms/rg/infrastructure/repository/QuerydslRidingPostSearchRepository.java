@@ -3,8 +3,6 @@ package com.prgrms.rg.infrastructure.repository;
 import static com.prgrms.rg.domain.common.model.metadata.QBicycle.*;
 import static com.prgrms.rg.domain.ridingpost.model.QRidingConditionBicycle.*;
 import static com.prgrms.rg.domain.ridingpost.model.QRidingPost.*;
-import static com.prgrms.rg.domain.ridingpost.model.QRidingThumbnailImage.*;
-import static com.prgrms.rg.domain.user.model.QUser.*;
 
 import java.util.List;
 import java.util.Objects;
@@ -14,6 +12,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.SliceImpl;
 import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
+import org.springframework.stereotype.Repository;
 
 import com.prgrms.rg.domain.common.model.metadata.RidingLevel;
 import com.prgrms.rg.domain.ridingpost.model.RidingPost;
@@ -24,6 +23,7 @@ import com.prgrms.rg.domain.ridingpost.model.RidingStatus;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.JPQLQuery;
 
+@Repository
 public class QuerydslRidingPostSearchRepository extends QuerydslRepositorySupport
 	implements RidingPostSearchRepository {
 
@@ -35,19 +35,21 @@ public class QuerydslRidingPostSearchRepository extends QuerydslRepositorySuppor
 	@Override
 	public Slice<RidingPostInfo> searchRidingPostSlice(RidingSearchCondition condition, Pageable pageable) {
 		JPQLQuery<RidingPost> query = from(ridingPost)
-			.leftJoin(user).fetchJoin() //m:1
-			.leftJoin(ridingThumbnailImage).fetchJoin() // 1:1
-			.leftJoin(ridingConditionBicycle).fetchJoin()// 1:m
-			.leftJoin(bicycle).fetchJoin()
+			.leftJoin(ridingPost.leader).fetchJoin() //m:1
+			.leftJoin(ridingPost.thumbnail).fetchJoin() // 1:1
+			.leftJoin(ridingConditionBicycle).on(ridingConditionBicycle.id.eq(ridingPost.id)).fetchJoin()// 1:m
+			.leftJoin(bicycle).on(bicycle.id.eq(ridingConditionBicycle.id)).fetchJoin()
 			.where(ridingLevelEq(condition.getRidingLevel()),
 				postStatusEq(condition.getPostStatus()),
 				zoneEq(condition.getZone()),
-				bicycleEq(condition.getBicycleType()))
+				bicycleEq(condition.getBicycleType())
+			)
 			.offset(pageable.getOffset())
 			.limit(pageable.getPageSize() + 1)
 			.select(ridingPost);
 
 		Objects.requireNonNull(getQuerydsl()).applySorting(pageable.getSort(), query);
+
 		List<RidingPost> result = query.fetch();
 		return convertResultAsSlice(result, pageable);
 	}
@@ -67,7 +69,7 @@ public class QuerydslRidingPostSearchRepository extends QuerydslRepositorySuppor
 	}
 
 	private BooleanExpression ridingLevelEq(String ridingLevel) {
-		return ridingLevel != null ? ridingPost.ridingConditionSection.level.eq(RidingLevel.from(ridingLevel)) : null;
+		return ridingLevel != null ? ridingPost.ridingConditionSection.level.eq(RidingLevel.of(ridingLevel)) : null;
 	}
 
 	private BooleanExpression postStatusEq(String postStatus) {
@@ -80,7 +82,6 @@ public class QuerydslRidingPostSearchRepository extends QuerydslRepositorySuppor
 	}
 
 	private BooleanExpression bicycleEq(Long bicycleCode) {
-		return bicycleCode != null ? ridingPost.ridingConditionSection.bicycleList.any().bicycle.id.eq(bicycleCode) :
-			null;
+		return bicycleCode != null ? bicycle.id.eq(bicycleCode) : null;
 	}
 }
