@@ -36,7 +36,7 @@ public class RidingPostCommentInfo {
 			.authorName(comment.getAuthor().getNickname())
 			.contents(comment.getContents())
 			.createdAt(comment.getCreatedAt())
-			.authorImageUrl(comment.getAuthor().getProfileImage().getUrl())
+			.authorImageUrl(comment.getAuthor().getImage().getFileUrl())
 			.build();
 	}
 }
