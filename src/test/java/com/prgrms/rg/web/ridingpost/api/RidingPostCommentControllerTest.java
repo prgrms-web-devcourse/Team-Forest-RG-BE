@@ -45,13 +45,13 @@ class RidingPostCommentControllerTest {
 	void handle_post_comment_request_successfully() throws Exception {
 
 		// Given
-		String content = "content";
-		Map<String, Object> bodyMap = Map.of("content", content);
+		String contents = "content";
+		Map<String, Object> bodyMap = Map.of("contents", contents);
 		var body = objectMapper.writeValueAsString(bodyMap);
 		var authorId = 1L;
 		var postId = 2L;
 		var token = tokenProvider.createToken("ROLE_USER", authorId);
-		var command = RidingPostCommentCreateCommand.of(authorId, postId, null, content);
+		var command = RidingPostCommentCreateCommand.of(authorId, postId, null, contents);
 		given(ridingPostCommentService.createComment(command)).willReturn(1L);
 
 		// When
@@ -76,7 +76,7 @@ class RidingPostCommentControllerTest {
 	void send_error_message_when_requested_with_invalid_related_entity_id() throws Exception {
 		// Given
 		String content = "content";
-		Map<String, Object> bodyMap = Map.of("content", content);
+		Map<String, Object> bodyMap = Map.of("contents", content);
 		var body = objectMapper.writeValueAsString(bodyMap);
 		var authorId = 1L;
 		var postId = 2L;
@@ -103,7 +103,7 @@ class RidingPostCommentControllerTest {
 
 	@Test
 	@DisplayName("특정 RidingPost에 있는 댓글들을 대댓글과 함께 담아서 응답한다.")
-	void test() throws Exception {
+	void response_comments_query_by_riding_post_id() throws Exception {
 
 		// Given
 		var author = createUser(1L);
@@ -114,7 +114,7 @@ class RidingPostCommentControllerTest {
 		assignId(rootComment, 1L);
 		var childComment = RidingPostComment.createChildComment(commentAuthor, rootComment, "child");
 		assignId(childComment, 2L);
-		
+
 		var expectedReturn = List.of(RidingPostCommentInfo.from(rootComment));
 		given(ridingPostCommentService.getCommentsByPostId(1L)).willReturn(expectedReturn);
 
@@ -130,10 +130,41 @@ class RidingPostCommentControllerTest {
 
 	}
 
+	@Test
+	@DisplayName("댓글을 수정 요청을 성공적으로 수행하고, 수정한 댓글의 id를 반환한다.")
+	void modify_comments_successfully() throws Exception {
+
+		// Given
+		var commentId = 1L;
+		var userId = 2L;
+		var postId = 3L;
+		var requestMap = Map.of("contents", "updatedContents");
+		var token = tokenProvider.createToken("ROLE_USER", userId);
+
+		var body = objectMapper.writeValueAsString(requestMap);
+
+		// When
+		var result = mockMvc.perform(
+			put("/api/v1/ridingposts/" + postId + "/comments/" + commentId)
+				.contentType(MediaType.APPLICATION_JSON)
+				.content(body)
+				.header(HttpHeaders.AUTHORIZATION, "token " + token)
+		);
+
+		// Then
+		then(ridingPostCommentService).should(times(1)).updateContents(userId, commentId, "updatedContents");
+		result.andExpectAll(
+			status().isOk(),
+			jsonPath("id").value(commentId)
+		);
+
+	}
+
 	private <T> void assignId(T target, long id) throws NoSuchFieldException, IllegalAccessException {
 		Field idField = target.getClass().getDeclaredField("id");
 		idField.setAccessible(true);
 		idField.set(target, id);
+		idField.setAccessible(false);
 	}
 
 }

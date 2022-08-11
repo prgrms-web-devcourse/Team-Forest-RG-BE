@@ -86,3 +86,4 @@ public class QuerydslRidingPostSearchRepository extends QuerydslRepositorySuppor
 		return bicycleCode != null ? bicycle.id.eq(bicycleCode).or(bicycle.id.eq(Bicycle.BicycleCode.ALL)) : null;
 	}
 }
+

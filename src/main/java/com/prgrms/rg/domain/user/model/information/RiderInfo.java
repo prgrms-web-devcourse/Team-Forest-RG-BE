@@ -25,6 +25,14 @@ public final class RiderInfo {
 		return Collections.unmodifiableList(bicycles);
 	}
 
+	public String[] getBicyclesAsArray() {
+		String[] result = new String[bicycles.size()];
+		for (int i = 0; i < result.length; i++) {
+			result[i] = bicycles.get(i);
+		}
+		return result;
+	}
+
 	@Override
 	public String toString() {
 		return "RiderInfo{" +

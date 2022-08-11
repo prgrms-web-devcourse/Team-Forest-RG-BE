@@ -37,7 +37,7 @@ public class Manner {
 	}
 
 	MannerInfo information() {
-		return new MannerInfo(mannerLevel(), noShow, bannedUntil);
+		return new MannerInfo(point, noShow, bannedUntil);
 	}
 
 	MannerLevel mannerLevel() {
