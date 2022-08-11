@@ -6,3 +6,11 @@ spring:
     active:
       - common
       - aws
+  jpa:
+    defer-datasource-initialization: true
+  sql:
+    init:
+      mode: always
+      data-locations:
+        - classpath:static/db/bicycle.sql
+        - classpath:static/db/address_code.sql
