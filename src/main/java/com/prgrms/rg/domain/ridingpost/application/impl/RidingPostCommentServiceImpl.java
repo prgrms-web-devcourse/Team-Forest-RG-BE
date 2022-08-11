@@ -1,8 +1,8 @@
 package com.prgrms.rg.domain.ridingpost.application.impl;
 
+import java.util.NoSuchElementException;
 import java.util.Comparator;
 import java.util.List;
-import java.util.NoSuchElementException;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
@@ -52,7 +52,7 @@ public class RidingPostCommentServiceImpl implements RidingPostCommentService {
 
 		try {
 			author = userReadService.getUserEntityById(command.getAuthorId());
-			post = ridingPostReadService.getRidingPostById(command.getPostId());
+			post = ridingPostReadService.loadRidingPostById(command.getPostId());
 		} catch (NoSuchElementException exception) {
 			throw new RelatedEntityNotFoundException(exception);
 		}
@@ -74,7 +74,7 @@ public class RidingPostCommentServiceImpl implements RidingPostCommentService {
 	public List<RidingPostCommentInfo> getCommentsByPostId(long ridingPostId) {
 		RidingPost post;
 		try {
-			post = ridingPostReadService.getRidingPostById(ridingPostId);
+			post = ridingPostReadService.loadRidingPostById(ridingPostId);
 		} catch (NoSuchElementException exception) {
 			throw new RelatedEntityNotFoundException(exception);
 		}
