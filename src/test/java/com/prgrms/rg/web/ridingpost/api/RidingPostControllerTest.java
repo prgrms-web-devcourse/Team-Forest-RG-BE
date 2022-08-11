@@ -47,7 +47,7 @@ class RidingPostControllerTest {
 	}
 
 	@Test
-	@DisplayName("RidingPost 생성 테스트")
+	@DisplayName("RidingPost 생성 controller")
 	void createRidingTest() throws Exception {
 
 		//given
@@ -72,7 +72,7 @@ class RidingPostControllerTest {
 	}
 
 	@Test
-	@DisplayName("ridingpost 생성 실패 테스트 - 잘못된 입력")
+	@DisplayName("ridingpost controller 생성 실패 테스트 - 잘못된 입력")
 	void handlerIllegalExceptionTest() throws Exception {
 
 		//given
@@ -100,7 +100,7 @@ class RidingPostControllerTest {
 	}
 
 	@Test
-	@DisplayName("ridingpost 수정")
+	@DisplayName("ridingpost 수정 controller")
 	void modifyRidingTest() throws Exception {
 
 		//given
@@ -123,6 +123,25 @@ class RidingPostControllerTest {
 				.content(bodyString))
 			.andExpect(status().isOk())
 			.andDo(print());
+	}
+
+	@Test
+	@DisplayName("ridingpost 삭제 controller")
+	void deleteRidingTest() throws Exception {
+
+		//given
+		Long leaderId = 1L;
+		Long postId = 10L;
+		var token = tokenProvider.createToken("ROLE_USER", leaderId);
+
+		doNothing().when(ridingPostService).deleteRidingPost(leaderId, postId);
+
+		mockMvc.perform(delete("/api/v1/ridingposts/{postId}", postId)
+				.header("Authorization", "token " + token)
+				.contentType("application/json"))
+			.andExpect(status().isOk())
+			.andDo(print());
+
 	}
 
 }
