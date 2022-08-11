@@ -50,6 +50,7 @@ public class RidingMainSection {
 	@ManyToOne(fetch = FetchType.LAZY)
 	private AddressCode addressCode;
 
+	//0-5개 길이 제한
 	@ElementCollection
 	@CollectionTable(name = "riding_routes", joinColumns =
 	@JoinColumn(name = "post_id"))
