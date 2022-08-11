@@ -10,6 +10,7 @@ import com.prgrms.rg.domain.ridingpost.model.Coordinate;
 import com.prgrms.rg.domain.ridingpost.model.RidingConditionBicycle;
 import com.querydsl.core.annotations.QueryProjection;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -23,22 +24,16 @@ public class RidingPostBriefInfoQueryDslProjection implements RidingPostBriefInf
 	private String ridingLevel;
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss", timezone = "Asia/Seoul")
 	private LocalDateTime ridingDate;
-	private List<String> ridingCourses;
-	private List<String> bicycleType;
 	private Coordinate departurePosition;
 
 	@QueryProjection
 	public RidingPostBriefInfoQueryDslProjection(Long id, String title, String thumbnail, String ridingLevel,
-		LocalDateTime ridingDate,
-		List<String> ridingCourses, List<RidingConditionBicycle> bicycleTypes, Coordinate departurePosition) {
+		LocalDateTime ridingDate, Coordinate departurePosition) {
 		this.id = id;
 		this.title = title;
 		this.thumbnail = thumbnail;
 		this.ridingLevel = ridingLevel;
 		this.ridingDate = ridingDate;
-		this.ridingCourses = ridingCourses;
-		this.bicycleType = new ArrayList<>();
-		bicycleTypes.forEach((b) -> bicycleType.add(b.getBicycleName()));
 		this.departurePosition = departurePosition;
 	}
 }

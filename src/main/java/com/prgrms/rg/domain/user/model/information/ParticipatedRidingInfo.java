@@ -4,6 +4,11 @@ import java.util.List;
 
 import com.prgrms.rg.domain.ridingpost.application.information.RidingPostBriefInfo;
 
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Data
+@NoArgsConstructor
 public final class ParticipatedRidingInfo {
 	List<? extends RidingPostBriefInfo> leading;
 	List<? extends RidingPostBriefInfo> finished;
