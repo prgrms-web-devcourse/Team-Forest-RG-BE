@@ -41,7 +41,7 @@ class RidingPostCommentServiceImplTest {
 
 	@Test
 	@DisplayName("요청을 받아 사용자와 라이딩 게시물 정보와 연결된 댓글을 저장한다. - 부모 댓글")
-	void create_comment_successful() {
+	void create_parent_comment() {
 		// Given
 		var commentAuthor = createUser();
 		var leader = User.builder().nickname(new Nickname("leader")).manner(Manner.create()).build();
@@ -66,7 +66,7 @@ class RidingPostCommentServiceImplTest {
 
 	@Test
 	@DisplayName("요청을 받아 사용자와 라이딩 게시물 정보와 연결된 댓글을 저장한다. - 자식 댓글")
-	void create_child_comment_successful() {
+	void create_child_comment() {
 		// Given
 		var commentAuthor = createUser();
 		var leader = User.builder().nickname(new Nickname("leader")).manner(Manner.create()).build();
@@ -74,7 +74,7 @@ class RidingPostCommentServiceImplTest {
 		userRepository.save(leader);
 		var post = createRidingPost(leader.getId());
 		post = ridingPostRepository.save(post);
-		var parentComment = RidingPostComment.of(leader, post, "parent");
+		var parentComment = RidingPostComment.createRootComment(leader, post, "parent");
 		parentComment = ridingPostCommentRepository.save(parentComment);
 		var command = RidingPostCommentCreateCommand.of(commentAuthor.getId(), post.getId(), parentComment.getId(), "comment");
 
@@ -87,8 +87,10 @@ class RidingPostCommentServiceImplTest {
 		assertThat(savedComment.getContent()).isEqualTo("comment");
 		assertThat(savedComment.getAuthor()).isEqualTo(commentAuthor);
 		assertThat(savedComment.getRidingPost()).isNull();
-		assertThat(savedComment.getParentComment()).isEqualTo(parentComment);
-		assertThat(savedComment.getParentComment().getChildComments()).contains(savedComment);
+
+		RidingPostComment savedParentComment = savedComment.getParentComment();
+		assertThat(savedParentComment).isEqualTo(parentComment);
+		assertThat(savedParentComment.getChildComments()).contains(savedComment);
 
 	}
 
@@ -106,6 +108,43 @@ class RidingPostCommentServiceImplTest {
 		// Then
 		assertThatThrownBy(when)
 			.isInstanceOf(RelatedEntityNotFoundException.class);
+
+	}
+
+	@Test
+	@DisplayName("특정 RidingPost의 댓글들을 조회해서 생성 시간 기준 오름차순으로 반환한다.")
+	void query_comments_related_with_specific_riding_post() {
+
+		// Given
+		var commentAuthor = createUser();
+		var leader = User.builder().nickname(new Nickname("leader")).manner(Manner.create()).build();
+		userRepository.save(commentAuthor);
+		userRepository.save(leader);
+		var post = createRidingPost(leader.getId());
+		post = ridingPostRepository.save(post);
+
+		var rootComment = RidingPostComment.createRootComment(commentAuthor, post, "parent");
+		rootComment = ridingPostCommentRepository.save(rootComment);
+		var childCommentId = ridingPostCommentService.createComment(
+			RidingPostCommentCreateCommand.of(leader.getId(), post.getId(), rootComment.getId(), "child"));
+		var secondChildCommentId = ridingPostCommentService.createComment(
+			RidingPostCommentCreateCommand.of(leader.getId(), post.getId(), rootComment.getId(), "child2"));
+
+		// When
+		var commentsInfo = ridingPostCommentService.getCommentsByPostId(post.getId());
+
+		// Then
+		assertThat(commentsInfo).hasSize(1);
+		var rootCommentInfo = commentsInfo.get(0);
+		assertThat(rootCommentInfo.getAuthorName()).isEqualTo(commentAuthor.getNickname());
+		assertThat(rootCommentInfo.getChildComments()).hasSize(2);
+		assertThat(rootCommentInfo.getParentCommentId()).isZero();
+		var childCommentInfo = rootCommentInfo.getChildComments().get(0);
+		assertThat(childCommentInfo.getCommentId()).isEqualTo(childCommentId);
+		assertThat(childCommentInfo.getContents()).isEqualTo("child");
+		var secondChildCommentInfo = rootCommentInfo.getChildComments().get(1);
+		assertThat(secondChildCommentInfo.getCommentId()).isEqualTo(secondChildCommentId);
+		assertThat(secondChildCommentInfo.getContents()).isEqualTo("child2");
 
 	}
 

@@ -56,11 +56,11 @@ public class RidingPostComment extends BaseTimeEntity {
 		this.childComments = new ArrayList<>();
 	}
 
-	public static RidingPostComment of(User author, RidingPost post, String content) {
+	public static RidingPostComment createRootComment(User author, RidingPost post, String content) {
 		return new RidingPostComment(author, post, content);
 	}
 
-	public static RidingPostComment createChildPost(User author, RidingPostComment parentComment, String content) {
+	public static RidingPostComment createChildComment(User author, RidingPostComment parentComment, String content) {
 		var newPost = new RidingPostComment(author, null, content);
 		newPost.assignToParent(parentComment);
 		return newPost;
