@@ -5,6 +5,7 @@ import java.util.List;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
 
 import org.hibernate.validator.constraints.Range;
 
@@ -29,6 +30,9 @@ public class RidingSaveMainRequest {
 	//string
 	@Pattern(regexp = "^[1-9]시간( 30분)?$|^((30)|(60))분|6시간 이상$")
 	private String estimatedTime;
+
+	//todo routes 길이 설정
+	@Size(max = 10)
 	private List<String> routes;
 	private int fee;
 

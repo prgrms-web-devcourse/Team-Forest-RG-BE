@@ -1,9 +1,9 @@
 package com.prgrms.rg.web.common.message;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
-
-import com.prgrms.rg.infrastructure.cloud.CriticalMessageSender;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -15,10 +15,12 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class OuterSystemExceptionMessageSender implements ExceptionMessageSender {
 	@Override
-	public void send(Exception exception) {
+	public void send(Exception exception, HttpServletRequest request) {
 		log.warn(exception.getMessage(), exception);
 		try {
-			CriticalMessageSender.send(exception);
+			String prefixMessage = MessageFactory.createHttpMessage(request);
+			String bodyMessage = MessageFactory.createStackTraceMessage(exception);
+			CriticalMessageSender.send(prefixMessage + "\n" + bodyMessage);
 		} catch (Exception messageException) {
 			log.error(messageException.getMessage(), messageException);
 		}

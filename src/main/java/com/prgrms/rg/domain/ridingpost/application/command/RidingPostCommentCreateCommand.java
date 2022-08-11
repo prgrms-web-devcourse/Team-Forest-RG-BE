@@ -9,9 +9,10 @@ import lombok.RequiredArgsConstructor;
 public class RidingPostCommentCreateCommand {
 	private final long authorId;
 	private final long postId;
+	private final Long parentCommentId;
 	private final String content;
 
-	public static RidingPostCommentCreateCommand of(long authorId, long postId, String content) {
-		return new RidingPostCommentCreateCommand(authorId, postId, content);
+	public static RidingPostCommentCreateCommand of(long authorId, long postId, Long parentCommentId, String content) {
+		return new RidingPostCommentCreateCommand(authorId, postId, parentCommentId, content);
 	}
 }
