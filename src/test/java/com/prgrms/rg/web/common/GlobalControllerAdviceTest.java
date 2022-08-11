@@ -3,6 +3,8 @@ package com.prgrms.rg.web.common;
 import static org.mockito.BDDMockito.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -38,7 +40,7 @@ class GlobalControllerAdviceTest {
 			MockMvcResultMatchers.jsonPath("message").value(Matchers.equalTo("Internal Server Error"))
 		);
 
-		then(exceptionMessageSender).should(times(1)).send(any(Exception.class));
+		then(exceptionMessageSender).should(times(1)).send(any(Exception.class), any(HttpServletRequest.class));
 
 	}
 

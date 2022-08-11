@@ -1,5 +1,7 @@
 package com.prgrms.rg.web.common;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -22,8 +24,9 @@ public class GlobalControllerAdvice {
 	}
 
 	@ExceptionHandler(Exception.class)
-	public ResponseEntity<GlobalServerErrorResult> handleUnhandledException(Exception exception) {
-		globalMessageSender.send(exception);
+	public ResponseEntity<GlobalServerErrorResult> handleUnhandledException(Exception exception, HttpServletRequest request) {
+
+		globalMessageSender.send(exception, request);
 		return ResponseEntity.internalServerError().body(GlobalServerErrorResult.INTERNAL_SERVER_ERROR);
 	}
 
