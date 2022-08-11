@@ -1,8 +1,8 @@
 package com.prgrms.rg.domain.ridingpost.application.impl;
 
-import java.util.NoSuchElementException;
 import java.util.Comparator;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
@@ -22,7 +22,7 @@ import com.prgrms.rg.domain.user.application.UserReadService;
 import com.prgrms.rg.domain.user.model.User;
 
 @Service
-@Transactional(readOnly = true)
+@Transactional
 public class RidingPostCommentServiceImpl implements RidingPostCommentService {
 
 	private final UserReadService userReadService;
@@ -72,6 +72,7 @@ public class RidingPostCommentServiceImpl implements RidingPostCommentService {
 	}
 
 	@Override
+	@Transactional(readOnly = true)
 	public List<RidingPostCommentInfo> getCommentsByPostId(long ridingPostId) {
 		RidingPost post;
 		try {
@@ -91,7 +92,19 @@ public class RidingPostCommentServiceImpl implements RidingPostCommentService {
 
 	@Override
 	@Transactional
-	public void updateContents(Long userId, long commentId, String contents) {
+	public void updateComment(long userId, long commentId, String contents) {
+		var comment = fetchAuthorizedComment(userId, commentId);
+		comment.changeContents(contents);
+
+	}
+
+	@Override
+	public void removeComment(long userId, long commentId) {
+		var comment = fetchAuthorizedComment(userId, commentId);
+		ridingPostCommentRepository.delete(comment);
+	}
+
+	private RidingPostComment fetchAuthorizedComment(long userId, long commentId) {
 		User requestingUser;
 		RidingPostComment comment;
 		try {
@@ -103,9 +116,7 @@ public class RidingPostCommentServiceImpl implements RidingPostCommentService {
 		} catch (NoSuchElementException exception) {
 			throw new RelatedEntityNotFoundException(exception);
 		}
-
-		comment.changeContents(contents);
-
+		return comment;
 	}
 
 }

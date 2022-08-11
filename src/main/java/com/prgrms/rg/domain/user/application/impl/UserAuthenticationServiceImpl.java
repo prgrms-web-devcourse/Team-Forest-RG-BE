@@ -1,7 +1,7 @@
 package com.prgrms.rg.domain.user.application.impl;
 
 import static com.google.common.base.Preconditions.*;
-import static com.prgrms.rg.infrastructure.cloud.CriticalMessageSender.*;
+import static com.prgrms.rg.web.common.message.CriticalMessageSender.*;
 import static org.apache.commons.lang3.ObjectUtils.*;
 
 import java.io.IOException;
@@ -14,11 +14,13 @@ import javax.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
 import com.prgrms.rg.domain.auth.jwt.JwtTokenProvider;
+import com.prgrms.rg.domain.common.model.metadata.RidingLevel;
 import com.prgrms.rg.domain.user.application.UserAuthenticationService;
 import com.prgrms.rg.domain.user.application.command.UserRegisterCommand;
 import com.prgrms.rg.domain.user.model.Introduction;
 import com.prgrms.rg.domain.user.model.Manner;
 import com.prgrms.rg.domain.user.model.Nickname;
+import com.prgrms.rg.domain.user.model.RiderProfile;
 import com.prgrms.rg.domain.user.model.User;
 import com.prgrms.rg.domain.user.model.UserRepository;
 import com.prgrms.rg.domain.user.model.dto.UserRegisterDTO;
@@ -111,6 +113,7 @@ public class UserAuthenticationServiceImpl implements UserAuthenticationService 
 			.introduction(new Introduction("관리자입니다."))
 			.provider("kakao")
 			.providerId("provider_id")
+			.profile(new RiderProfile(2017, RidingLevel.INTERMEDIATE))
 			.build();
 		userRepository.save(admin);
 		send(this.generateToken(admin));

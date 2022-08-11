@@ -10,4 +10,5 @@ import com.prgrms.rg.domain.ridingpost.model.RidingPostCommentRepository;
 
 public interface JpaRidingPostCommentRepository extends JpaRepository<RidingPostComment, Long>, RidingPostCommentRepository {
 	List<RidingPostComment> findAllByRidingPost(RidingPost ridingPost);
+
 }

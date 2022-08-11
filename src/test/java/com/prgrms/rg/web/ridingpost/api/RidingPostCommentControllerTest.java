@@ -152,7 +152,32 @@ class RidingPostCommentControllerTest {
 		);
 
 		// Then
-		then(ridingPostCommentService).should(times(1)).updateContents(userId, commentId, "updatedContents");
+		then(ridingPostCommentService).should(times(1)).updateComment(userId, commentId, "updatedContents");
+		result.andExpectAll(
+			status().isOk(),
+			jsonPath("id").value(commentId)
+		);
+
+	}
+
+	@Test
+	@DisplayName("댓글을 삭제 요청을 성공적으로 수행하고, 수정한 댓글의 id를 반환한다.")
+	void remove_comments_successfully() throws Exception {
+
+		// Given
+		var commentId = 1L;
+		var userId = 2L;
+		var postId = 3L;
+		var token = tokenProvider.createToken("ROLE_USER", userId);
+
+		// When
+		var result = mockMvc.perform(
+			delete("/api/v1/ridingposts/" + postId + "/comments/" + commentId)
+				.header(HttpHeaders.AUTHORIZATION, "token " + token)
+		);
+
+		// Then
+		then(ridingPostCommentService).should(times(1)).removeComment(userId, commentId);
 		result.andExpectAll(
 			status().isOk(),
 			jsonPath("id").value(commentId)
