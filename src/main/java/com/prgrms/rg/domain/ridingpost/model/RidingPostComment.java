@@ -45,18 +45,19 @@ public class RidingPostComment extends BaseTimeEntity {
 	private List<RidingPostComment> childComments;
 
 	@Column(length = 500, nullable = false)
-	private String content;
+	private String contents;
 
-	private RidingPostComment(User author, RidingPost ridingPost, String content) {
+	private RidingPostComment(User author, RidingPost ridingPost, String contents) {
 		checkNotNull(author);
-		checkArgument(Strings.isNotBlank(content));
+		checkArgument(Strings.isNotBlank(contents));
 		this.author = author;
 		this.ridingPost = ridingPost;
-		this.content = content;
+		this.contents = contents;
 		this.childComments = new ArrayList<>();
 	}
 
 	public static RidingPostComment createRootComment(User author, RidingPost post, String content) {
+		checkNotNull(post);
 		return new RidingPostComment(author, post, content);
 	}
 
@@ -64,6 +65,11 @@ public class RidingPostComment extends BaseTimeEntity {
 		var newPost = new RidingPostComment(author, null, content);
 		newPost.assignToParent(parentComment);
 		return newPost;
+	}
+
+	public void changeContents(String contents) {
+		checkArgument(Strings.isNotBlank(contents));
+		this.contents = contents;
 	}
 
 	// TODO : 엔티티 분리
