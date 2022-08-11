@@ -1,8 +1,11 @@
 package com.prgrms.rg.domain.ridingpost.application;
 
-import com.prgrms.rg.domain.ridingpost.application.command.RidingCreateCommand;
+import com.prgrms.rg.domain.ridingpost.application.command.RidingSaveCommand;
 
 public interface RidingPostService {
 
-	Long createRidingPost(Long userId, RidingCreateCommand command);
+	Long createRidingPost(Long userId, RidingSaveCommand command);
+
+	Long updateRidingPost(Long leaderId, Long postId, RidingSaveCommand command);
+
 }

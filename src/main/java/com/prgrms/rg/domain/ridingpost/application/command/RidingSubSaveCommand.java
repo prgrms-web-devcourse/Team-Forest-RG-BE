@@ -5,7 +5,7 @@ import java.util.List;
 import lombok.Data;
 
 @Data
-public class RidingSubCreateCommand {
+public class RidingSubSaveCommand {
 
 	private final String title;
 	private final String content;

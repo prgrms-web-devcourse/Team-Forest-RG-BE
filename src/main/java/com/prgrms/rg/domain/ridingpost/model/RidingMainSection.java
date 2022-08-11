@@ -72,6 +72,17 @@ public class RidingMainSection {
 		setDeparturePlace(departurePlace);
 	}
 
+	public void update(RidingMainSection section) {
+		setTitle(section.getTitle());
+		setEstimatedTime(section.getEstimatedTime());
+		setFee(section.getFee());
+		assignAddressCode(section.getAddressCode());
+		setRidingDate(section.getRidingDate());
+		setDeparturePlace(section.getDeparturePlace());
+		routes.clear();
+		routes.addAll(section.getRoutes());
+	}
+
 	public List<String> getRoutes() {
 		return Collections.unmodifiableList(routes);
 	}

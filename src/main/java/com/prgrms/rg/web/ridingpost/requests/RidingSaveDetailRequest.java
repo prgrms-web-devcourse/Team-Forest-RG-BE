@@ -4,7 +4,7 @@ import java.util.List;
 
 import javax.validation.constraints.Size;
 
-import com.prgrms.rg.domain.ridingpost.application.command.RidingSubCreateCommand;
+import com.prgrms.rg.domain.ridingpost.application.command.RidingSubSaveCommand;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class RidingCreateDetailRequest {
+public class RidingSaveDetailRequest {
 
 	private String title;
 
@@ -22,7 +22,7 @@ public class RidingCreateDetailRequest {
 	@Size(min = 0, max = 2)
 	private List<Long> images;
 
-	public RidingSubCreateCommand toCommand() {
-		return new RidingSubCreateCommand(title, content, images);
+	public RidingSubSaveCommand toCommand() {
+		return new RidingSubSaveCommand(title, content, images);
 	}
 }
