@@ -1,5 +1,7 @@
 package com.prgrms.rg.domain.ridingpost.application.impl;
 
+import java.util.NoSuchElementException;
+
 import org.springframework.stereotype.Service;
 
 import com.prgrms.rg.domain.common.RelatedEntityNotFoundException;
@@ -35,10 +37,9 @@ public class RidingPostCommentServiceImpl implements RidingPostCommentService {
 		try {
 			author = userReadService.getUserEntityById(command.getAuthorId());
 			post = ridingPostReadService.loadRidingPostById(command.getPostId());
-		} catch (RuntimeException exception) {
+		} catch (NoSuchElementException exception) {
 			throw new RelatedEntityNotFoundException(exception);
 		}
-
 		var comment = RidingPostComment.of(author, post, command.getContent());
 		return ridingPostCommentRepository.save(comment).getId();
 	}
