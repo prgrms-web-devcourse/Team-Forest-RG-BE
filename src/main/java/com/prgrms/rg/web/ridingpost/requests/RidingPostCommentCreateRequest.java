@@ -1,8 +1,7 @@
 package com.prgrms.rg.web.ridingpost.requests;
 
-import javax.validation.constraints.NotNull;
-
-import org.hibernate.validator.constraints.Length;
+import javax.annotation.Nullable;
+import javax.validation.constraints.NotEmpty;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -12,7 +11,9 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 public class RidingPostCommentCreateRequest {
-	@NotNull
-	@Length(min = 1, max = 500)
+	@NotEmpty
 	private String content;
+
+	@Nullable
+	private Long parentCommentId;
 }
