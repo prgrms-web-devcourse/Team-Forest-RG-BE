@@ -27,8 +27,8 @@ import com.prgrms.rg.testutil.ControllerTest;
 import com.prgrms.rg.web.ridingpost.requests.RidingSaveMainRequest;
 import com.prgrms.rg.web.ridingpost.requests.RidingPostSaveRequest;
 
-@ControllerTest(controllers = RidingPostSaveController.class)
-class RidingPostSaveControllerTest {
+@ControllerTest(controllers = RidingPostController.class)
+class RidingPostControllerTest {
 
 	@Autowired
 	private MockMvc mockMvc;
