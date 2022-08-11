@@ -40,6 +40,7 @@ public class RidingPostReadServiceImpl implements RidingPostReadService {
 	@Override
 	public Slice<RidingPostInfo> loadFilteredRidingPostByCondition(RidingSearchCondition condition, Pageable pageable) {
 		try {
+			condition.convertRidingStatusFromCode();
 			searchConditionValidator.validate(condition);
 			return searchRepository.searchRidingPostSlice(condition, pageable);
 		} catch (IllegalArgumentException e) {

@@ -131,7 +131,7 @@ class QuerydslRidingPostSearchRepositoryTest {
 		//given
 		Pageable pageable = PageRequest.of(0, 50, Sort.Direction.DESC, "createdAt");
 		RidingSearchCondition condition = new RidingSearchCondition();
-		condition.setRidingStatus(RidingSearchCondition.RidingStatusCode.CLOSED);
+		condition.setRidingStatusCode(RidingSearchCondition.RidingStatusCode.CLOSED);
 
 		//when
 		Slice<RidingPostInfo> ridingPostInfos = searchRepository.searchRidingPostSlice(condition, pageable);
@@ -148,7 +148,7 @@ class QuerydslRidingPostSearchRepositoryTest {
 		//given
 		Pageable pageable = PageRequest.of(0, 50, Sort.Direction.DESC, "createdAt");
 		RidingSearchCondition condition = new RidingSearchCondition();
-		condition.setRidingStatus(RidingSearchCondition.RidingStatusCode.PROGRESS);
+		condition.setRidingStatusCode(RidingSearchCondition.RidingStatusCode.PROGRESS);
 
 		//when
 		Slice<RidingPostInfo> ridingPostInfos = searchRepository.searchRidingPostSlice(condition, pageable);

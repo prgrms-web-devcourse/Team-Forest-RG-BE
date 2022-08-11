@@ -9,18 +9,23 @@ public class RidingSearchCondition {
 	private Long bicycleCode;
 	private Integer addressCode;
 	private String ridingLevel;
-	private Long ridingStatus = RidingStatusCode.PROGRESS;
+	private Long ridingStatusCode = RidingStatusCode.PROGRESS;
+	private RidingStatus ridingStatus;
 
-	public RidingStatus getRidingStatusFromCode() {
-		switch (ridingStatus.intValue()) {
+	public void convertRidingStatusFromCode() {
+		switch (ridingStatusCode.intValue()) {
 			case 0:
-				return null;
+				ridingStatus = null;
+				break;
 			case 1:
-				return RidingStatus.IN_PROGRESS;
+				ridingStatus = RidingStatus.IN_PROGRESS;
+				break;
 			case 2:
-				return RidingStatus.CLOSED;
+				ridingStatus = RidingStatus.CLOSED;
+				break;
 			default:
-				throw new IllegalArgumentException("Riding Status Code '" + ridingStatus.intValue() + "' is invalid");
+				throw new IllegalArgumentException(
+					"Riding Status Code '" + ridingStatusCode.intValue() + "' is invalid");
 		}
 	}
 

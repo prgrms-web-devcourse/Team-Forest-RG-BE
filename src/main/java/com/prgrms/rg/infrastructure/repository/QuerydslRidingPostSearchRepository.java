@@ -44,7 +44,7 @@ public class QuerydslRidingPostSearchRepository extends QuerydslRepositorySuppor
 			.leftJoin(ridingConditionBicycle).on(ridingConditionBicycle.post.id.eq(ridingPost.id)).fetchJoin()
 			.leftJoin(bicycle).on(bicycle.id.eq(ridingConditionBicycle.id)).fetchJoin()
 			.where(ridingLevelEq(condition.getRidingLevel()),
-				postStatusEq(condition.getRidingStatusFromCode()),
+				postStatusEq(condition.getRidingStatus()),
 				zoneEq(condition.getAddressCode()),
 				bicycleEq(condition.getBicycleCode())
 			)

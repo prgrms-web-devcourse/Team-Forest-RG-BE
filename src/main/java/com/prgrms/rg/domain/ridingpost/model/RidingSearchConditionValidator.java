@@ -1,9 +1,12 @@
 package com.prgrms.rg.domain.ridingpost.model;
 
+import java.util.Arrays;
+
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.prgrms.rg.domain.common.model.metadata.BicycleRepository;
+import com.prgrms.rg.domain.common.model.metadata.RidingLevel;
 
 import lombok.RequiredArgsConstructor;
 
@@ -17,6 +20,7 @@ public class RidingSearchConditionValidator {
 	public void validate(RidingSearchCondition condition) {
 		validateAddressCode(condition);
 		validateBicycleCode(condition);
+		validateRidingLevel(condition);
 	}
 
 	private void validateAddressCode(RidingSearchCondition condition) {
@@ -31,8 +35,19 @@ public class RidingSearchConditionValidator {
 		Long bicycleCode = condition.getBicycleCode();
 		if (bicycleCode == null)
 			return;
-		if (bicycleRepository.existsById(bicycleCode))
+		if (!bicycleRepository.existsById(bicycleCode))
 			throw new IllegalArgumentException("bicycle code '" + bicycleCode + "' is invalid");
+	}
+
+	private void validateRidingLevel(RidingSearchCondition condition) {
+		String stringLevel = condition.getRidingLevel();
+		if (stringLevel == null)
+			return;
+		boolean isValid = Arrays.stream(RidingLevel.values())
+			.anyMatch(ridingLevel -> stringLevel.equals(ridingLevel.getLevelName()));
+
+		if (!isValid)
+			throw new IllegalArgumentException("Riding level '" + stringLevel + "' is invalid");
 	}
 
 }
