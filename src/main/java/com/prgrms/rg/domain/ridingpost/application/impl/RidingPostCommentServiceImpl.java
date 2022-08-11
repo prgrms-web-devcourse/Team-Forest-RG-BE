@@ -34,7 +34,7 @@ public class RidingPostCommentServiceImpl implements RidingPostCommentService {
 		RidingPost post;
 		try {
 			author = userReadService.getUserEntityById(command.getAuthorId());
-			post = ridingPostReadService.getRidingPostById(command.getPostId());
+			post = ridingPostReadService.loadRidingPostById(command.getPostId());
 		} catch (RuntimeException exception) {
 			throw new RelatedEntityNotFoundException(exception);
 		}
