@@ -1,19 +1,16 @@
 package com.prgrms.rg.web.ridingpost.requests;
 
-import javax.annotation.Nullable;
 import javax.validation.constraints.NotEmpty;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@NoArgsConstructor
 @Data
+@NoArgsConstructor
 @AllArgsConstructor
-public class RidingPostCommentCreateRequest {
+public class RidingPostCommentUpdateRequest {
 	@NotEmpty
 	private String contents;
 
-	@Nullable
-	private Long parentCommentId;
 }

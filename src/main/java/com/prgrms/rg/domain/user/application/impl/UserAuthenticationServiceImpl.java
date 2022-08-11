@@ -1,7 +1,7 @@
 package com.prgrms.rg.domain.user.application.impl;
 
 import static com.google.common.base.Preconditions.*;
-import static com.prgrms.rg.infrastructure.cloud.CriticalMessageSender.*;
+import static com.prgrms.rg.web.common.message.CriticalMessageSender.*;
 import static org.apache.commons.lang3.ObjectUtils.*;
 
 import java.io.IOException;
@@ -26,11 +26,13 @@ import com.prgrms.rg.domain.auth.jwt.JwtTokenProvider;
 import com.prgrms.rg.domain.common.model.metadata.BicycleRepository;
 import com.prgrms.rg.domain.ridingpost.model.AddressCode;
 import com.prgrms.rg.domain.ridingpost.model.AddressCodeRepository;
+import com.prgrms.rg.domain.common.model.metadata.RidingLevel;
 import com.prgrms.rg.domain.user.application.UserAuthenticationService;
 import com.prgrms.rg.domain.user.application.command.UserRegisterCommand;
 import com.prgrms.rg.domain.user.model.Introduction;
 import com.prgrms.rg.domain.user.model.Manner;
 import com.prgrms.rg.domain.user.model.Nickname;
+import com.prgrms.rg.domain.user.model.RiderProfile;
 import com.prgrms.rg.domain.user.model.User;
 import com.prgrms.rg.domain.user.model.UserRepository;
 import com.prgrms.rg.domain.user.model.dto.UserRegisterDTO;
@@ -160,6 +162,7 @@ public class UserAuthenticationServiceImpl implements UserAuthenticationService 
 			.introduction(new Introduction("관리자입니다."))
 			.provider("kakao")
 			.providerId("provider_id")
+			.profile(new RiderProfile(2017, RidingLevel.INTERMEDIATE))
 			.build();
 		AddressCode save = addressCodeRepository.save(new AddressCode(99999));
 		UserRegisterCommand userRegisterCommand = createTestRegisterCommand(admin.getId());

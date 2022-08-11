@@ -3,7 +3,7 @@ package com.prgrms.rg;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-import com.prgrms.rg.infrastructure.cloud.CriticalMessageSender;
+import com.prgrms.rg.web.common.message.CriticalMessageSender;
 
 @SpringBootApplication
 public class RgApplication {

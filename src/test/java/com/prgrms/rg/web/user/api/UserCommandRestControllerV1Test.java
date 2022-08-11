@@ -54,7 +54,6 @@ class UserCommandRestControllerV1Test {
 				.contentType("application/json")
 			).andExpect(status().isOk())
 			.andDo(print());
-
 	}
 
 	@Test

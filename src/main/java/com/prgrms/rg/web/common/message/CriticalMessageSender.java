@@ -1,8 +1,8 @@
-package com.prgrms.rg.infrastructure.cloud;
+package com.prgrms.rg.web.common.message;
 
-import java.io.ByteArrayOutputStream;
+import static com.prgrms.rg.web.common.message.MessageFactory.*;
+
 import java.io.OutputStream;
-import java.io.PrintStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
@@ -69,12 +69,6 @@ public class CriticalMessageSender {
 		emojiBuffer.append("\n").append(message).append("\n");
 		emojiBuffer.append(emoji.repeat(20));
 		return json.writeValueAsString(Map.of("channel", SLACK_CHANNEL_ID, "text", emojiBuffer));
-	}
-
-	private static String createStackTraceMessage(Exception exception) {
-		var stackStream = new ByteArrayOutputStream();
-		exception.printStackTrace(new PrintStream(stackStream));
-		return stackStream.toString(StandardCharsets.UTF_8);
 	}
 
 }
