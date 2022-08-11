@@ -144,6 +144,9 @@ class RidingPostServiceImplTest {
 		//when
 		ridingPostService.deleteRidingPost(leader.getId(), post.getId());
 
+		em.flush();
+		em.clear();
+
 		var findPost = ridingPostRepository.findById(post.getId());
 		assertThat(findPost.isEmpty(), is(true));
 
