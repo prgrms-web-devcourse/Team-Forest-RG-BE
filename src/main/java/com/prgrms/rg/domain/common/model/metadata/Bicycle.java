@@ -10,6 +10,7 @@ import javax.persistence.Id;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.experimental.UtilityClass;
 
 @Cacheable
 @Entity
@@ -58,5 +59,25 @@ public class Bicycle {
 			"id=" + id +
 			", name='" + name + '\'' +
 			'}';
+	}
+
+	@UtilityClass
+	public static class BicycleName {
+		public static final String ALL = "상관없음";
+		public static final String MTB = "MTB";
+		public static final String ROAD = "로드";
+		public static final String DDARUNGE = "따릉이";
+		public static final String FIXIE = "픽시";
+		public static final String HYBRID = "하이브리드";
+	}
+
+	@UtilityClass
+	public static class BicycleCode {
+		public static final Long ALL = 0L;
+		public static final Long MTB = 1L;
+		public static final Long ROAD = 2L;
+		public static final Long DDARUNGE = 3L;
+		public static final Long FIXIE = 4L;
+		public static final Long HYBRID = 5L;
 	}
 }

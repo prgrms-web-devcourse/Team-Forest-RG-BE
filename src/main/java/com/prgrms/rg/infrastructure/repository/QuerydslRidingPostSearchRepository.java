@@ -14,6 +14,7 @@ import org.springframework.data.domain.SliceImpl;
 import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
 import org.springframework.stereotype.Repository;
 
+import com.prgrms.rg.domain.common.model.metadata.Bicycle;
 import com.prgrms.rg.domain.common.model.metadata.RidingLevel;
 import com.prgrms.rg.domain.ridingpost.model.RidingPost;
 import com.prgrms.rg.domain.ridingpost.model.RidingPostInfo;
@@ -45,7 +46,7 @@ public class QuerydslRidingPostSearchRepository extends QuerydslRepositorySuppor
 				bicycleEq(condition.getBicycleType())
 			)
 			.offset(pageable.getOffset())
-			.limit(pageable.getPageSize() + 1)
+			.limit(pageable.getPageSize() + 1L)
 			.select(ridingPost);
 
 		Objects.requireNonNull(getQuerydsl()).applySorting(pageable.getSort(), query);
@@ -82,6 +83,6 @@ public class QuerydslRidingPostSearchRepository extends QuerydslRepositorySuppor
 	}
 
 	private BooleanExpression bicycleEq(Long bicycleCode) {
-		return bicycleCode != null ? bicycle.id.eq(bicycleCode) : null;
+		return bicycleCode != null ? bicycle.id.eq(bicycleCode).or(bicycle.id.eq(Bicycle.BicycleCode.ALL)) : null;
 	}
 }
