@@ -20,6 +20,8 @@ import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.Sort;
 import org.springframework.test.context.jdbc.Sql;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import com.prgrms.rg.domain.common.model.metadata.Bicycle;
 import com.prgrms.rg.domain.ridingpost.application.RidingPostService;
 import com.prgrms.rg.domain.ridingpost.application.command.RidingConditionSaveCommand;
@@ -27,9 +29,11 @@ import com.prgrms.rg.domain.ridingpost.application.command.RidingMainSaveCommand
 import com.prgrms.rg.domain.ridingpost.application.command.RidingParticipantSaveCommand;
 import com.prgrms.rg.domain.ridingpost.application.command.RidingSaveCommand;
 import com.prgrms.rg.domain.ridingpost.model.AddressCode;
+import com.prgrms.rg.domain.ridingpost.model.Coordinate;
 import com.prgrms.rg.domain.ridingpost.model.RidingPostInfo;
 import com.prgrms.rg.domain.ridingpost.model.RidingPostRepository;
 import com.prgrms.rg.domain.ridingpost.model.RidingSearchCondition;
+import com.prgrms.rg.domain.ridingpost.model.RidingStatus;
 import com.prgrms.rg.domain.user.model.User;
 import com.prgrms.rg.domain.user.model.UserRepository;
 import com.prgrms.rg.testutil.TestEntityDataFactory;
@@ -44,6 +48,8 @@ class QuerydslRidingPostSearchRepositoryTest {
 	private UserRepository userRepository;
 	@Autowired
 	private RidingPostService ridingPostService;
+	@Autowired
+	private ObjectMapper mapper;
 	private final static Integer BUNDANG = 31023;
 	private final static Integer GANGNAM = 11230;
 	private final static Integer JUNGU = 11010;
@@ -51,12 +57,13 @@ class QuerydslRidingPostSearchRepositoryTest {
 	RidingPostRepository ridingPostRepository;
 
 	@BeforeEach
-	void initData() {
+	void init() {
+		mapper.enable(SerializationFeature.INDENT_OUTPUT);
 		/*
 		 * TYPE = MTB, ZONE = 경기도 성남시 분당구, LEVEL = "상" 10개
 		 * TYPE = 로드,MTB ZONE = 경기도 성남시 분당구, LEVEL = "중" 20개
 		 * TYPE = 픽시 ZONE = 서울특별시 강남구 LEVEL = "하" 5개
-		 * TYPE = 픽시 ZONE = 서울특별시 강남구 LEVEL = "하" 라이딩 모집  = 마감 8개
+		 * TYPE = 픽시 ZONE = 서울특별시 강남구 LEVEL = "" 라이딩 모집  = 마감 8개
 		 * */
 		User leader = TestEntityDataFactory.createUser();
 		long userId = userRepository.save(leader).getId();
@@ -103,11 +110,11 @@ class QuerydslRidingPostSearchRepositoryTest {
 		assertThat(results).hasSize(expect);
 	}
 
-	@DisplayName("숙련도 별라이딩 게시글 조회")
+	@DisplayName("숙련도별 라이딩 게시글 조회")
 	@ParameterizedTest
 	@CsvSource({
 		"상,   10",
-		"중,   20",
+		"중,   28",
 		"하,   5"
 	})
 	void test2(String level, int expect) {
@@ -121,25 +128,25 @@ class QuerydslRidingPostSearchRepositoryTest {
 
 		//then
 		List<RidingPostInfo> results = ridingPostInfos.getContent();
-		System.out.println(results.get(0).getRidingInfo().getBicycleType().get(0));
 		assertThat(results).hasSize(expect);
 	}
 
 	@DisplayName("마감된 모든 라이딩 조회")
 	@Test
-	void test3() {
+	void test3() throws Exception {
 		//given
 		Pageable pageable = PageRequest.of(0, 50, Sort.Direction.DESC, "createdAt");
 		RidingSearchCondition condition = new RidingSearchCondition();
-		condition.setRidingStatusCode(RidingSearchCondition.RidingStatusCode.CLOSED);
+		condition.setRidingStatus(RidingStatus.CLOSED);
 
 		//when
 		Slice<RidingPostInfo> ridingPostInfos = searchRepository.searchRidingPostSlice(condition, pageable);
 
 		//then
 		List<RidingPostInfo> results = ridingPostInfos.getContent();
-		System.out.println(results.get(0).getRidingInfo().getBicycleType().get(0));
 		assertThat(results).hasSize(8);
+
+		System.out.println(mapper.writeValueAsString(ridingPostInfos));
 	}
 
 	@DisplayName("현재 모집 진행중인 모든 라이딩 조회")
@@ -148,7 +155,7 @@ class QuerydslRidingPostSearchRepositoryTest {
 		//given
 		Pageable pageable = PageRequest.of(0, 50, Sort.Direction.DESC, "createdAt");
 		RidingSearchCondition condition = new RidingSearchCondition();
-		condition.setRidingStatusCode(RidingSearchCondition.RidingStatusCode.PROGRESS);
+		condition.setRidingStatus(RidingStatus.IN_PROGRESS);
 
 		//when
 		Slice<RidingPostInfo> ridingPostInfos = searchRepository.searchRidingPostSlice(condition, pageable);
@@ -201,13 +208,6 @@ class QuerydslRidingPostSearchRepositoryTest {
 		assertThat(results).hasSize(expect);
 	}
 
-	//
-	//
-	// @DisplayName("경기도 성남시 분당에서 진행되는 라이딩 게시글만 조회 -30개 나와야함")
-	// @Test
-	// void test2(){
-	//
-	// }
 	private Long createPostWithCondition(List<String> bicycle, String level, int zoneCode, Long leaderId) {
 		String title = "testTitle";
 		String estimatedTime = "120";
@@ -224,6 +224,7 @@ class QuerydslRidingPostSearchRepositoryTest {
 			.fee(fee)
 			.addressCode(addressCode)
 			.routes(routes)
+			.departurePlace(new Coordinate(37.660666, 126.229333))
 			.build();
 
 		var createCommand = new RidingSaveCommand(null,
@@ -251,6 +252,7 @@ class QuerydslRidingPostSearchRepositoryTest {
 			.fee(fee)
 			.addressCode(addressCode)
 			.routes(routes)
+			.departurePlace(new Coordinate(37.660666, 126.229333))
 			.build();
 
 		var createCommand = new RidingSaveCommand(null,
@@ -260,6 +262,6 @@ class QuerydslRidingPostSearchRepositoryTest {
 		);
 
 		return ridingPostService.createRidingPost(leaderId, createCommand);
-
 	}
+
 }

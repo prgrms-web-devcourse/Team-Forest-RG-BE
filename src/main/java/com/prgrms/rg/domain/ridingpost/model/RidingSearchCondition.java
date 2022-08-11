@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 
 @Data
 public class RidingSearchCondition {
+
 	private Long bicycleCode;
 	private Integer addressCode;
 	private String ridingLevel;

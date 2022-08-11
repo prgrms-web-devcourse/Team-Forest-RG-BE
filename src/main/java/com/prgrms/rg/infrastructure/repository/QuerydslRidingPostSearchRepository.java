@@ -44,7 +44,7 @@ public class QuerydslRidingPostSearchRepository extends QuerydslRepositorySuppor
 			.leftJoin(ridingConditionBicycle).on(ridingConditionBicycle.post.id.eq(ridingPost.id)).fetchJoin()
 			.leftJoin(bicycle).on(bicycle.id.eq(ridingConditionBicycle.id)).fetchJoin()
 			.where(ridingLevelEq(condition.getRidingLevel()),
-				postStatusEq(condition.getRidingStatus()),
+				ridingStatusEq(condition.getRidingStatus()),
 				zoneEq(condition.getAddressCode()),
 				bicycleEq(condition.getBicycleCode())
 			)
@@ -55,8 +55,6 @@ public class QuerydslRidingPostSearchRepository extends QuerydslRepositorySuppor
 		Objects.requireNonNull(getQuerydsl()).applySorting(pageable.getSort(), query);
 
 		List<RidingPost> result = query.fetch();
-		log.error("query result size : " + result.size());
-
 		return convertResultAsSlice(result, pageable);
 	}
 
@@ -78,7 +76,7 @@ public class QuerydslRidingPostSearchRepository extends QuerydslRepositorySuppor
 		return ridingLevel != null ? ridingPost.ridingConditionSection.level.eq(RidingLevel.of(ridingLevel)) : null;
 	}
 
-	private BooleanExpression postStatusEq(RidingStatus ridingStatus) {
+	private BooleanExpression ridingStatusEq(RidingStatus ridingStatus) {
 		return ridingStatus != null ? ridingPost.ridingParticipantSection.status.eq(ridingStatus) :
 			null;
 	}
