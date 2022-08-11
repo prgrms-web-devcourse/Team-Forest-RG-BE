@@ -96,11 +96,8 @@ class UserAuthenticationServiceImplTest {
 		UserRegisterCommand testCommand = createTestRegisterCommand(savedUser.getId());
 		em.flush();
 		em.clear();
-
 		//when
 		UserRegisterResult userRegisterResult = userService.updateUserByRegistration(testCommand);
-		em.flush();
-		em.clear();
 		//then
 		assertThat(userRepository.findById(savedUser.getId()).isPresent()).isTrue();
 		User updatedUser = userRepository.findById(savedUser.getId()).get();
@@ -111,8 +108,6 @@ class UserAuthenticationServiceImplTest {
 		assertThat(updatedUser.getRiderInformation().getRidingYears()).isEqualTo(1996);
 		assertThat(updatedUser.getPhoneNumber()).isEqualTo("010-1234-5678");
 		assertThat(updatedUser.getRiderInformation().getLevel()).isEqualTo(RidingLevel.BEGINNER);
-
-
 	}
 
 	private UserRegisterCommand createTestRegisterCommand(Long userId) {
