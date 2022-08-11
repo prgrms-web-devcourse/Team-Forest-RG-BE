@@ -1,18 +1,16 @@
 package com.prgrms.rg.web.ridingpost.api;
 
-import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import com.prgrms.rg.domain.ridingpost.model.exception.UnAuthorizedException;
+import com.prgrms.rg.web.common.RgControllerAdvice;
 
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-@Order(1000)
-@RestControllerAdvice(assignableTypes = RidingPostController.class)
+@RgControllerAdvice(assignableTypes = RidingPostController.class)
 public class RidingPostExceptionHandler {
 
 	@ExceptionHandler(IllegalArgumentException.class)
