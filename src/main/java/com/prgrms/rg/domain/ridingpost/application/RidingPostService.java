@@ -8,4 +8,6 @@ public interface RidingPostService {
 
 	Long updateRidingPost(Long leaderId, Long postId, RidingSaveCommand command);
 
+	void deleteRidingPost(Long leaderId, Long postId);
+
 }

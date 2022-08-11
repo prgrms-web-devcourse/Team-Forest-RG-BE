@@ -23,12 +23,13 @@ import com.prgrms.rg.domain.auth.jwt.JwtTokenProvider;
 import com.prgrms.rg.domain.ridingpost.application.RidingPostService;
 import com.prgrms.rg.domain.ridingpost.application.command.RidingSaveCommand;
 import com.prgrms.rg.domain.ridingpost.model.Coordinate;
+import com.prgrms.rg.domain.ridingpost.model.exception.UnAuthorizedException;
 import com.prgrms.rg.testutil.ControllerTest;
 import com.prgrms.rg.web.ridingpost.requests.RidingSaveMainRequest;
 import com.prgrms.rg.web.ridingpost.requests.RidingPostSaveRequest;
 
-@ControllerTest(controllers = RidingPostSaveController.class)
-class RidingPostSaveControllerTest {
+@ControllerTest(controllers = RidingPostController.class)
+class RidingPostControllerTest {
 
 	@Autowired
 	private MockMvc mockMvc;
@@ -47,7 +48,7 @@ class RidingPostSaveControllerTest {
 	}
 
 	@Test
-	@DisplayName("RidingPost 생성 테스트")
+	@DisplayName("RidingPost 생성 controller")
 	void createRidingTest() throws Exception {
 
 		//given
@@ -72,8 +73,8 @@ class RidingPostSaveControllerTest {
 	}
 
 	@Test
-	@DisplayName("ridingpost 생성 실패 테스트 - 잘못된 입력")
-	void handlerIllegalExceptionTest() throws Exception {
+	@DisplayName("ridingpost controller 생성 실패 테스트 - 잘못된 입력")
+	void handleIllegalExceptionTest() throws Exception {
 
 		//given
 		var token = tokenProvider.createToken("ROLE_USER", 1L);
@@ -100,7 +101,7 @@ class RidingPostSaveControllerTest {
 	}
 
 	@Test
-	@DisplayName("ridingpost 수정")
+	@DisplayName("ridingpost 수정 controller")
 	void modifyRidingTest() throws Exception {
 
 		//given
@@ -123,6 +124,43 @@ class RidingPostSaveControllerTest {
 				.content(bodyString))
 			.andExpect(status().isOk())
 			.andDo(print());
+	}
+
+	@Test
+	@DisplayName("ridingpost 삭제 controller")
+	void deleteRidingTest() throws Exception {
+
+		//given
+		Long leaderId = 1L;
+		Long postId = 10L;
+		var token = tokenProvider.createToken("ROLE_USER", leaderId);
+
+		doNothing().when(ridingPostService).deleteRidingPost(leaderId, postId);
+
+		mockMvc.perform(delete("/api/v1/ridingposts/{postId}", postId)
+				.header("Authorization", "token " + token)
+				.contentType("application/json"))
+			.andExpect(status().isOk())
+			.andDo(print());
+
+	}
+
+	@Test
+	@DisplayName("허가되지 않은 유저 요청 - UnAuthorizedException")
+	void handleUnAuthorizedExceptionTest() throws Exception{
+
+		Long leaderId = 1L;
+		Long postId = 10L;
+		var token = tokenProvider.createToken("ROLE_USER", leaderId);
+
+		doThrow(new UnAuthorizedException(leaderId)).when(ridingPostService).deleteRidingPost(leaderId, postId);
+
+		mockMvc.perform(delete("/api/v1/ridingposts/{postId}", postId)
+				.header("Authorization", "token " + token)
+				.contentType("application/json"))
+			.andExpect(status().isUnauthorized())
+			.andDo(print());
+
 	}
 
 }

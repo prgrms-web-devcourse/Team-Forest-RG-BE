@@ -4,6 +4,7 @@ import javax.validation.Valid;
 
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -57,7 +58,20 @@ public class RidingPostCommentController {
 		@AuthenticationPrincipal JwtAuthentication auth) {
 
 		var userId = auth.userId;
-		commentService.updateContents(userId, commentId, command.getContents());
+		commentService.updateComment(userId, commentId, command.getContents());
+
+		return CommandSuccessResult.from(commentId);
+	}
+
+	@Secured("ROLE_USER")
+	@DeleteMapping("/api/v1/ridingposts/{postid}/comments/{commentid}")
+	public CommandSuccessResult removeRidingComment(
+		@PathVariable("postid") long postId,
+		@PathVariable("commentid") long commentId,
+		@AuthenticationPrincipal JwtAuthentication auth) {
+
+		var userId = auth.userId;
+		commentService.removeComment(userId, commentId);
 
 		return CommandSuccessResult.from(commentId);
 	}

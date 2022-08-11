@@ -161,9 +161,38 @@ class RidingPostCommentServiceImplTest {
 		var post = createRidingPost(leader.getId());
 		post = ridingPostRepository.save(post);
 
+		var comment = RidingPostComment.createRootComment(commentAuthor, post, "parent");
+		comment = ridingPostCommentRepository.save(comment);
+
 		// When
+		ridingPostCommentService.updateComment(commentAuthor.getId(), comment.getId(), "changed");
+		// Then
+		assertThat(comment.getContents()).isEqualTo("changed");
+
+	}
+
+	@Test
+	@DisplayName("권한을 가진 사용자의 댓글 내용 삭제 요청을 수행한다.")
+	void handle_delete_command_with_authorized_user() {
+
+		// Given
+		var commentAuthor = createUser();
+		var leader = User.builder().nickname(new Nickname("leader")).manner(Manner.create()).build();
+		userRepository.save(commentAuthor);
+		userRepository.save(leader);
+
+		var post = createRidingPost(leader.getId());
+		post = ridingPostRepository.save(post);
+
+		var comment = RidingPostComment.createRootComment(commentAuthor, post, "parent");
+		comment = ridingPostCommentRepository.save(comment);
+		var commentId = comment.getId();
+
+		// When
+		ridingPostCommentService.removeComment(commentAuthor.getId(), commentId);
 
 		// Then
+		assertThat(ridingPostCommentRepository.findById(commentId)).isNull();
 
 	}
 
