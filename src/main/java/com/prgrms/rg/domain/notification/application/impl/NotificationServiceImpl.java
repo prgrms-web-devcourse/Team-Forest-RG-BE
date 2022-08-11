@@ -25,7 +25,7 @@ public class NotificationServiceImpl implements NotificationService {
 	@Transactional
 	public Notification createRidingJoinNotification(Long userId, Long ridingPostId) {
 		User user = userReadService.getUserEntityById(userId);
-		RidingPost post = postReadService.getRidingPostById(ridingPostId);
+		RidingPost post = postReadService.loadRidingPostById(ridingPostId);
 		Notification notification = Notification.createRidingJoinNotification(user, post);
 		return notificationRepository.save(notification);
 	}
