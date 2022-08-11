@@ -15,12 +15,20 @@ spring:
     open-in-view: false
     hibernate:
       ddl-auto: create-drop
+    defer-datasource-initialization: true
   servlet:
     multipart:
       max-file-size: 10MB
       max-request-size: 10MB
+  sql:
+    init:
+      mode: always
+      data-locations:
+        - classpath:static/db/bicycle.sql
+        - classpath:static/db/address_code.sql
 server:
   port: 8080
 logging:
   file:
     path: ${LOG_PATH}
+
