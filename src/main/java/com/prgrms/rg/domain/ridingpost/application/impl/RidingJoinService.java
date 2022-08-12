@@ -26,16 +26,16 @@ public class RidingJoinService {
 	private final RidingParticipantRepository ridingParticipantRepository;
 	private final DomainEventPublisher eventPublisher;
 
-	public void joinUserToRiding(Long userId, Long ridingPostId) {
+	public void joinUserToRiding(Long participantId, Long ridingPostId) {
 		try {
-			User participant = userReadService.getUserEntityById(userId);
+			User participant = userReadService.getUserEntityById(participantId);
 			RidingPost post = postFinder.loadRidingPostById(ridingPostId);
 			checkDuplicateJoin(participant, post);
 			post.addParticipant(participant);
 		} catch (RidingPostNotFoundException e) {
 			throw new RidingJoinFailException(e);
 		}
-		RidingJoinEvent event = new RidingJoinEvent(userId, ridingPostId);
+		RidingJoinEvent event = new RidingJoinEvent(participantId, ridingPostId);
 		eventPublisher.publish(event);
 	}
 
