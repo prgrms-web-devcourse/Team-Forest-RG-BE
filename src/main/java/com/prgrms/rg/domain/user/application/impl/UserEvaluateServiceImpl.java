@@ -42,7 +42,8 @@ public class UserEvaluateServiceImpl implements UserEvaluateService {
 
 		checkEnabledEvaluation(ridingpost, evaluator);
 		for (EvaluatedFromLeaderCommand command : commandList) {
-			userEvaluateManagement.evaluate(members, evaluator, command.getMemberId(), command.isRecommended(), command.isNoshow());
+			userEvaluateManagement.evaluate(members, evaluator, command.getMemberId(), command.isRecommended(),
+				command.isNoshow());
 		}
 		evaluator.setEvaluated();
 	}
@@ -61,10 +62,12 @@ public class UserEvaluateServiceImpl implements UserEvaluateService {
 	}
 
 	/**
-	 * 평가 진행 여부, 진행 가능 여부(riding 시작 시점 이후인지) 확인
+	 * 평가 진행 여부, 진행 가능 여부(riding 시작 시점 이후인지, 이후 7일 이상 경과하였는지) 확인
 	 */
 	private void checkEnabledEvaluation(RidingPost riding, RidingParticipant participant) {
-		checkArgument(riding.getRidingMainSection().getRidingDate().isBefore(LocalDateTime.now()),
+		var ridingDate = riding.getRidingMainSection().getRidingDate();
+		checkArgument(LocalDateTime.now().isAfter(ridingDate) &&
+				LocalDateTime.now().isBefore(ridingDate.plusDays(7L)),
 			new EvaluationFailException());
 		checkArgument(!participant.isEvaluated(), new EvaluationFailException());
 
