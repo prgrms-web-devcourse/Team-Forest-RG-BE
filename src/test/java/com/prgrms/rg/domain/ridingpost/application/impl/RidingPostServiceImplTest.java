@@ -149,8 +149,10 @@ class RidingPostServiceImplTest {
 		assertThat(updatedPost.get().getRidingMainSection().getEstimatedTime(), is(equalTo(
 			mainCommand.getEstimatedTime())));
 		assertThat(updatedPost.get().getSubSectionList(), is(hasSize(1)));
-		assertThat(updatedPost.get().getSubSectionList().get(0).getTitle(), is(equalTo(subCommand.getTitle())));
 
+		var subsection = updatedPost.get().getSubSectionList().get(0);
+		assertThat(subsection.getTitle(), is(equalTo(subCommand.getTitle())));
+		assertThat(subsection.getImages(), is(hasSize(1)));
 	}
 
 	@Test

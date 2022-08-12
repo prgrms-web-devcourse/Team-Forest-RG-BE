@@ -34,7 +34,7 @@ public class RidingPostServiceImpl implements RidingPostService {
 		//post, subsection 저장
 		RidingPost savedPost = ridingPostRepository.save(saveManagement.createRidingPost(user, command));
 
-		//image
+		//image save
 		imageSaveManagement.saveThumbnailImage(savedPost, command.getThumbnailId());
 		for (int i = 0; i < savedPost.getSubSectionList().size(); i++) {
 			var subSection = savedPost.getSubSectionList().get(i);
@@ -51,10 +51,9 @@ public class RidingPostServiceImpl implements RidingPostService {
 
 		var post = checkAndFindPost(leaderId, postId);
 		var updatedPost = saveManagement.updateRidingPost(post.getLeader(), post, command);
-		//save ?
 
 		// image
-		imageSaveManagement.saveThumbnailImage(post, command.getThumbnailId());
+		imageSaveManagement.saveThumbnailImage(updatedPost, command.getThumbnailId());
 		for (int i = 0; i < updatedPost.getSubSectionList().size(); i++) {
 			var subSection = updatedPost.getSubSectionList().get(i);
 			imageSaveManagement.updateSubImages(command.getSubCommand().get(i).getImageIdList(), subSection);

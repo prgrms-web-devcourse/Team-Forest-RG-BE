@@ -6,7 +6,7 @@ import java.util.Objects;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 
-import com.prgrms.rg.domain.common.file.application.ImageAttachManger;
+import com.prgrms.rg.domain.common.file.application.ImageAttachManager;
 import com.prgrms.rg.domain.common.file.model.AttachedImageRepository;
 
 import lombok.RequiredArgsConstructor;
@@ -16,11 +16,11 @@ import lombok.RequiredArgsConstructor;
 public class RidingImageSaveManagement {
 
 	private final AttachedImageRepository imageRepository;
-	private final ImageAttachManger imageManager;
+	private final ImageAttachManager imageManager;
 
 	//thumbnail save
 	public void saveThumbnailImage(RidingPost post, Long thumbnailId) {
-		//thumbn ail -> 비교
+		//thumbnail -> 비교
 		if (!post.equalToThumbnail(thumbnailId)) {
 			post.removeCurrentImage();
 			//null이 아닌 썸네일 삽입
