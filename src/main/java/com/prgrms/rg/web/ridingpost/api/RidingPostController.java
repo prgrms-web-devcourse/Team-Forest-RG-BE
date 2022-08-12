@@ -5,7 +5,6 @@ import javax.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -29,26 +28,16 @@ public class RidingPostController {
 
 	@Secured("ROLE_USER")
 	@PostMapping(value = "/api/v1/ridingposts")
-	public ResponseEntity<Long> registerRidingPost(@AuthenticationPrincipal JwtAuthentication auth,
-		@RequestBody @Valid RidingPostSaveRequest ridingRequest, BindingResult result) {
-		if (result.hasErrors()) {
-			//todo 에러 메시지 포함
-			throw new IllegalArgumentException();
-		}
-
+	public ResponseEntity<Long> registerRidingPost(@Valid @RequestBody RidingPostSaveRequest ridingRequest,
+		@AuthenticationPrincipal JwtAuthentication auth) {
 		//return type : post id
 		return ResponseEntity.ok(ridingPostService.createRidingPost(auth.userId, ridingRequest.toCommand()));
 	}
 
 	@Secured("ROLE_USER")
 	@PutMapping(value = "/api/v1/ridingposts/{postid}")
-	public ResponseEntity<Long> modifyRidingPost(@AuthenticationPrincipal JwtAuthentication auth,
-		@PathVariable(name = "postid") Long postId, @RequestBody @Valid RidingPostSaveRequest ridingRequest
-		, BindingResult result) {
-		if (result.hasErrors()) {
-			//todo 에러 메시지 포함
-			throw new IllegalArgumentException();
-		}
+	public ResponseEntity<Long> modifyRidingPost(@Valid @RequestBody RidingPostSaveRequest ridingRequest,
+		@AuthenticationPrincipal JwtAuthentication auth, @PathVariable(name = "postid") Long postId) {
 		return ResponseEntity.ok(ridingPostService.updateRidingPost(auth.userId, postId, ridingRequest.toCommand()));
 	}
 

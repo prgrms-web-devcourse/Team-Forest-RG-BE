@@ -44,7 +44,7 @@ public class RidingPostCommentController {
 	}
 
 	@GetMapping("/api/v1/ridingposts/{postid}/comments")
-	public RidingPostCommentListResult createRidingComment(@PathVariable("postid") long postId) {
+	public RidingPostCommentListResult getRidingComment(@PathVariable("postid") long postId) {
 
 		return RidingPostCommentListResult.from(commentService.getCommentsByPostId(postId));
 	}

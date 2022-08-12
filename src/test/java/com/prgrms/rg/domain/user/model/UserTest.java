@@ -18,7 +18,7 @@ class UserTest {
 		int ridingStartYear = 1996;
 		Integer favoriteRegionCode = 23;
 		String level = "하";
-		String phoneNumber = "010-5687-1234";
+		String phoneNumber = "01056871234";
 		String nickName = "hunkiKim";
 		UserRegisterDTO dto = UserRegisterDTO.builder()
 			.favoriteRegionCode(new AddressCode(favoriteRegionCode))
@@ -51,7 +51,7 @@ class UserTest {
 		int ridingStartYear = 1996;
 		Integer favoriteRegionCode = 23;
 		String level = "하";
-		String noSnakePhoneNumber = "01056789492";
+		String noSnakePhoneNumber = "010-5678-9492";
 		String wrongPhoneNumber = "123-5687-5643";
 		String nickName = "hunkiKim";
 		UserRegisterDTO dto = UserRegisterDTO.builder()

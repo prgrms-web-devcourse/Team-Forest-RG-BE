@@ -13,4 +13,6 @@ public interface BicycleRepository {
 	String findNameById(Long id);
 
 	Bicycle save(Bicycle bicycle);
+
+	boolean existsById(Long id);
 }

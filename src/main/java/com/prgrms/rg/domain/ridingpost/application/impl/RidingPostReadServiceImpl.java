@@ -11,7 +11,9 @@ import com.prgrms.rg.domain.ridingpost.model.RidingPostInfo;
 import com.prgrms.rg.domain.ridingpost.model.RidingPostRepository;
 import com.prgrms.rg.domain.ridingpost.model.RidingPostSearchRepository;
 import com.prgrms.rg.domain.ridingpost.model.RidingSearchCondition;
+import com.prgrms.rg.domain.ridingpost.model.RidingSearchConditionValidator;
 import com.prgrms.rg.domain.ridingpost.model.exception.RidingPostNotFoundException;
+import com.prgrms.rg.domain.ridingpost.model.exception.RidingSearchFailException;
 
 import lombok.RequiredArgsConstructor;
 
@@ -21,6 +23,7 @@ import lombok.RequiredArgsConstructor;
 public class RidingPostReadServiceImpl implements RidingPostReadService {
 	private final RidingPostRepository ridingPostRepository;
 	private final RidingPostSearchRepository searchRepository;
+	private final RidingSearchConditionValidator searchConditionValidator;
 
 	@Override
 	public RidingPost loadRidingPostById(Long postId) {
@@ -36,7 +39,12 @@ public class RidingPostReadServiceImpl implements RidingPostReadService {
 
 	@Override
 	public Slice<RidingPostInfo> loadFilteredRidingPostByCondition(RidingSearchCondition condition, Pageable pageable) {
-		//TODO 검색조건 검증 코드 추가
-		return searchRepository.searchRidingPostSlice(condition, pageable);
+		try {
+			condition.convertRidingStatusFromCode();
+			searchConditionValidator.validate(condition);
+			return searchRepository.searchRidingPostSlice(condition, pageable);
+		} catch (IllegalArgumentException e) {
+			throw new RidingSearchFailException(e);
+		}
 	}
 }

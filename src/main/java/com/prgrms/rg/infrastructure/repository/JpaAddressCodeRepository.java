@@ -6,4 +6,6 @@ import com.prgrms.rg.domain.ridingpost.model.AddressCode;
 import com.prgrms.rg.domain.ridingpost.model.AddressCodeRepository;
 
 public interface JpaAddressCodeRepository extends JpaRepository<AddressCode, Integer>, AddressCodeRepository {
+	@Override
+	boolean existsByCode(int code);
 }

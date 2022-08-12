@@ -1,5 +1,7 @@
 package com.prgrms.rg.web.user.api;
 
+import javax.validation.Valid;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -22,9 +24,9 @@ public class UserCommandRestControllerV1 implements UserRestController {
 
 	@Secured("ROLE_USER")
 	@PutMapping("/api/v1/users/{userId}")
-	public ResponseEntity<Long> editUser(@AuthenticationPrincipal JwtAuthentication auth,
-		@PathVariable(name = "userId") Long userId,
-		@RequestBody UserUpdateRequest request) {
+	public ResponseEntity<Long> editUser(@Valid @RequestBody UserUpdateRequest request,
+		@AuthenticationPrincipal JwtAuthentication auth,
+		@PathVariable(name = "userId") Long userId) {
 		return ResponseEntity.ok().body(userService.edit(request.toCommand(userId)));
 	}
 }

@@ -14,16 +14,14 @@ import lombok.Setter;
 public class UserMeResult {
 
 	private Long userId;
-	private String username;
 	private boolean isRegistered;
-	private String token;
+	private String accessToken;
 
-	public static UserMeResult of(String username, Long userId, boolean isRegistered, String token) {
+	public static UserMeResult of(Long userId, boolean isRegistered, String token) {
 		UserMeResult result = new UserMeResult();
 		result.setUserId(userId);
-		result.setUsername(username);
 		result.setRegistered(isRegistered);
-		result.setToken(token);
+		result.setAccessToken(token);
 		return result;
 	}
 
@@ -35,7 +33,6 @@ public class UserMeResult {
 	public String toString() {
 		return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
 			.append("userId", userId)
-			.append("username", username)
 			.toString();
 	}
 }

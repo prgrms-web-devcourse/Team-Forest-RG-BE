@@ -53,7 +53,7 @@ public class UserController {
 	public ResponseEntity<UserMeResult> me(@AuthenticationPrincipal JwtAuthentication authentication) {
 		UserMeResult result = userAuthenticationService.checkUserById(authentication.userId,
 			authentication.token);
-		return ResponseEntity.status(HttpStatus.OK).header("Authorization", result.getToken()).body(result);
+		return ResponseEntity.status(HttpStatus.OK).body(result);
 	}
 
 	@Secured("ROLE_USER")
