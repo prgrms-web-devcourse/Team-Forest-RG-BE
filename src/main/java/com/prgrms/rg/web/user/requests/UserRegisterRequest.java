@@ -14,7 +14,7 @@ public class UserRegisterRequest {
 	List<String> bicycles;
 	private String level;
 	private String phoneNumber;
-	private String nickName;
+	private String nickname;
 
 	public UserRegisterRequest(int ridingStartYear, int favoriteRegionCode, List<String> bicycles,
 		String level, String phoneNumber, String nickName) {
@@ -23,6 +23,6 @@ public class UserRegisterRequest {
 		this.bicycles = bicycles;
 		this.level = level;
 		this.phoneNumber = phoneNumber;
-		this.nickName = nickName;
+		this.nickname = nickName;
 	}
 }
