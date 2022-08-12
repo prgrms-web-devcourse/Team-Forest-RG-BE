@@ -18,7 +18,7 @@ import lombok.NoArgsConstructor;
 public class RidingThumbnailImage extends AttachedImage {
 
 	@OneToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "post_id", nullable = false)
+	@JoinColumn(name = "post_id")
 	private RidingPost post;
 
 	public RidingThumbnailImage(Long id, String originalFileName, String url,

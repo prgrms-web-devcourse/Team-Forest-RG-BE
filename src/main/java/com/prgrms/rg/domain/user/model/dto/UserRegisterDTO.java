@@ -1,8 +1,8 @@
 package com.prgrms.rg.domain.user.model.dto;
 
-import java.util.List;
-
 import javax.validation.constraints.Pattern;
+
+import com.prgrms.rg.domain.ridingpost.model.AddressCode;
 
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -12,8 +12,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class UserRegisterDTO {
 	private int ridingStartYear;
-	private int favoriteRegionCode;
-	private List<String> bicycles;
+	private AddressCode favoriteRegionCode;
 	private String level;
 	private String phoneNumber;
 	private String nickName;
@@ -21,7 +20,6 @@ public class UserRegisterDTO {
 	private UserRegisterDTO(Builder builder) {
 		this.ridingStartYear = builder.ridingStartYear;
 		this.favoriteRegionCode = builder.favoriteRegionCode;
-		this.bicycles = builder.bicycles;
 		this.level = builder.level;
 		this.phoneNumber = builder.phoneNumber;
 		this.nickName = builder.nickName;
@@ -33,8 +31,7 @@ public class UserRegisterDTO {
 
 	public static class Builder {
 		private int ridingStartYear;
-		private Integer favoriteRegionCode;
-		private List<String> bicycles;
+		private AddressCode favoriteRegionCode;
 		private String level;
 		@Pattern(regexp = "^01(?:0|1|[6-9])-(?:\\d{3}|\\d{4})-\\d{4}$", message = "전화번호는 01x-xxx(x)-9999 형식입니다.")
 		private String phoneNumber;
@@ -55,13 +52,8 @@ public class UserRegisterDTO {
 			return this;
 		}
 
-		public Builder favoriteRegionCode(int favoriteRegionCode) {
+		public Builder favoriteRegionCode(AddressCode favoriteRegionCode) {
 			this.favoriteRegionCode = favoriteRegionCode;
-			return this;
-		}
-
-		public Builder bicycles(List<String> bicycles) {
-			this.bicycles = bicycles;
 			return this;
 		}
 

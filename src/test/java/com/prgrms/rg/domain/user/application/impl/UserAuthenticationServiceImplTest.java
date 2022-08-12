@@ -9,15 +9,20 @@ import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.test.context.jdbc.Sql;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.prgrms.rg.domain.common.model.metadata.BicycleRepository;
 import com.prgrms.rg.domain.common.model.metadata.RidingLevel;
+import com.prgrms.rg.domain.ridingpost.model.AddressCodeRepository;
 import com.prgrms.rg.domain.user.application.UserAuthenticationService;
 import com.prgrms.rg.domain.user.application.command.UserRegisterCommand;
 import com.prgrms.rg.domain.user.model.User;
@@ -40,7 +45,17 @@ class UserAuthenticationServiceImplTest {
 	@Autowired
 	private UserRepository userRepository;
 
+	@Autowired
+	private BicycleRepository bicycleRepository;
+
+	@Autowired
+	private AddressCodeRepository addressCodeRepository;
+
 	private static ConcurrentMap<String, String> concurrentMap;
+
+
+	@PersistenceContext
+	EntityManager em;
 
 	@BeforeAll
 	static void 초기값_셋팅() {
@@ -73,32 +88,31 @@ class UserAuthenticationServiceImplTest {
 	}
 
 	@Test
+	@Sql(scripts = {"classpath:address_code.sql", "classpath:bicycle.sql"})
 	void updateUserByRegistration_성공_테스트() {
 		//given
 		User user = TestEntityDataFactory.createUser();
 		User savedUser = userRepository.save(user);
 		UserRegisterCommand testCommand = createTestRegisterCommand(savedUser.getId());
+		em.flush();
+		em.clear();
 		//when
 		UserRegisterResult userRegisterResult = userService.updateUserByRegistration(testCommand);
-
 		//then
 		assertThat(userRepository.findById(savedUser.getId()).isPresent()).isTrue();
 		User updatedUser = userRepository.findById(savedUser.getId()).get();
 		assertThat(userRegisterResult.isRegistered()).isTrue();
 		assertThat(updatedUser.getNickname()).isEqualTo(testCommand.getNickName());
-		assertThat(updatedUser.getAddressCode().getCode()).isEqualTo(23);
-		assertThat(updatedUser.getRiderInformation().getBicycles()).hasSize(2);
+		assertThat(updatedUser.getAddressCode().getCode()).isEqualTo(11010);
+		assertThat(updatedUser.getRiderInformation().getBicycles()).hasSize(1);
 		assertThat(updatedUser.getRiderInformation().getRidingYears()).isEqualTo(1996);
 		assertThat(updatedUser.getPhoneNumber()).isEqualTo("010-1234-5678");
 		assertThat(updatedUser.getRiderInformation().getLevel()).isEqualTo(RidingLevel.BEGINNER);
-
-
 	}
 
 	private UserRegisterCommand createTestRegisterCommand(Long userId) {
 		List<String> bicycles = new ArrayList<>();
 		bicycles.add("MTB");
-		bicycles.add("Road");
-		return UserRegisterCommand.of(new UserRegisterRequest(1996,23,bicycles,"하", "010-1234-5678","김훈기"),userId);
+		return UserRegisterCommand.of(new UserRegisterRequest(1996,11010,bicycles,"하", "010-1234-5678","김훈기"),userId);
 	}
 }
