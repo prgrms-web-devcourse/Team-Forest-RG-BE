@@ -4,9 +4,11 @@ import static org.assertj.core.api.Assertions.*;
 
 import org.junit.jupiter.api.Test;
 
+
+import com.prgrms.rg.domain.common.model.metadata.RidingLevel;
+
 import com.prgrms.rg.domain.ridingpost.model.AddressCode;
 import com.prgrms.rg.domain.user.model.dto.UserRegisterDTO;
-import com.prgrms.rg.testutil.TestEntityDataFactory;
 
 class UserTest {
 
@@ -23,7 +25,17 @@ class UserTest {
 			.ridingStartYearAndPhoneNumber(ridingStartYear, phoneNumber)
 			.nickNameAndLevel(nickName, level)
 			.build();
-		User user = TestEntityDataFactory.createUser();
+		// Bicycle mtb = bicycleRepository.save(new Bicycle(999L,"MTB"));
+		User user = User.builder()
+			.nickname(new Nickname("adminNickname"))
+			.manner(Manner.create())
+			.isRegistered(true)
+			.introduction(new Introduction("관리자입니다."))
+			.provider("kakao")
+			.providerId("provider_id")
+			.profile(new RiderProfile(1996, RidingLevel.BEGINNER))
+			.addressCode(new AddressCode(1))
+			.build();
 		//when
 		user.updateByRegistration(dto);
 		// then
@@ -52,7 +64,16 @@ class UserTest {
 			.ridingStartYearAndPhoneNumber(ridingStartYear, wrongPhoneNumber)
 			.nickNameAndLevel(nickName, level)
 			.build();
-		User user = TestEntityDataFactory.createUser();
+		User user = User.builder()
+			.nickname(new Nickname("adminNickname"))
+			.manner(Manner.create())
+			.isRegistered(true)
+			.introduction(new Introduction("관리자입니다."))
+			.provider("kakao")
+			.providerId("provider_id")
+			.profile(new RiderProfile(1996, RidingLevel.BEGINNER))
+			.addressCode(new AddressCode(1))
+			.build();
 		//when // then
 		assertThatThrownBy(() -> {
 			user.updateByRegistration(dto);
