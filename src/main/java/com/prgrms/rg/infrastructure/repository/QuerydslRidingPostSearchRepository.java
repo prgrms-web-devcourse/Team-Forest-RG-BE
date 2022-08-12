@@ -31,7 +31,10 @@ import com.prgrms.rg.infrastructure.repository.querydslconditions.RidingPostUser
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.JPQLQuery;
 
+import lombok.extern.slf4j.Slf4j;
+
 @Repository
+@Slf4j
 public class QuerydslRidingPostSearchRepository extends QuerydslRepositorySupport
 	implements RidingPostSearchRepository {
 
@@ -47,16 +50,16 @@ public class QuerydslRidingPostSearchRepository extends QuerydslRepositorySuppor
 		JPQLQuery<RidingPost> query = from(ridingPost)
 			.leftJoin(ridingPost.leader).fetchJoin() //m:1
 			.leftJoin(ridingPost.thumbnail).fetchJoin() // 1:1
-			.leftJoin(ridingConditionBicycle).on(ridingConditionBicycle.id.eq(ridingPost.id)).fetchJoin()// 1:m
+			.leftJoin(ridingConditionBicycle).on(ridingConditionBicycle.post.id.eq(ridingPost.id)).fetchJoin()
 			.leftJoin(bicycle).on(bicycle.id.eq(ridingConditionBicycle.id)).fetchJoin()
 			.where(ridingLevelEq(condition.getRidingLevel()),
-				postStatusEq(condition.getPostStatus()),
-				zoneEq(condition.getZone()),
-				bicycleEq(condition.getBicycleType())
+				ridingStatusEq(condition.getRidingStatus()),
+				zoneEq(condition.getAddressCode()),
+				bicycleEq(condition.getBicycleCode())
 			)
 			.offset(pageable.getOffset())
 			.limit(pageable.getPageSize() + 1L)
-			.select(ridingPost);
+			.select(ridingPost).distinct();
 
 		Objects.requireNonNull(getQuerydsl()).applySorting(pageable.getSort(), query);
 
@@ -82,8 +85,8 @@ public class QuerydslRidingPostSearchRepository extends QuerydslRepositorySuppor
 		return ridingLevel != null ? ridingPost.ridingConditionSection.level.eq(RidingLevel.of(ridingLevel)) : null;
 	}
 
-	private BooleanExpression postStatusEq(String postStatus) {
-		return postStatus != null ? ridingPost.ridingParticipantSection.status.eq(RidingStatus.valueOf(postStatus)) :
+	private BooleanExpression ridingStatusEq(RidingStatus ridingStatus) {
+		return ridingStatus != null ? ridingPost.ridingParticipantSection.status.eq(ridingStatus) :
 			null;
 	}
 
@@ -92,7 +95,8 @@ public class QuerydslRidingPostSearchRepository extends QuerydslRepositorySuppor
 	}
 
 	private BooleanExpression bicycleEq(Long bicycleCode) {
-		return bicycleCode != null ? bicycle.id.eq(bicycleCode).or(bicycle.id.eq(Bicycle.BicycleCode.ALL)) : null;
+		return bicycleCode != null ? ridingConditionBicycle.bicycle.id.eq(bicycleCode)
+			.or(ridingConditionBicycle.bicycle.id.eq(Bicycle.BicycleCode.ALL)) : null;
 	}
 
 	@Override

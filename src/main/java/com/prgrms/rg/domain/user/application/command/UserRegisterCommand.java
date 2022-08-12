@@ -29,7 +29,7 @@ public class UserRegisterCommand {
 		command.setLevel(userRegisterRequest.getLevel());
 		command.setPhoneNumber(userRegisterRequest.getPhoneNumber());
 		command.setUserId(userId);
-		command.setNickName(userRegisterRequest.getNickName());
+		command.setNickName(userRegisterRequest.getNickname());
 		return command;
 	}
 }

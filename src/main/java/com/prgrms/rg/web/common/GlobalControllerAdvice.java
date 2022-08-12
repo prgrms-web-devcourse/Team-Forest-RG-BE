@@ -4,6 +4,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
@@ -25,9 +26,15 @@ public class GlobalControllerAdvice {
 
 	@ExceptionHandler(Exception.class)
 	public ResponseEntity<GlobalServerErrorResult> handleUnhandledException(Exception exception, HttpServletRequest request) {
-
 		globalMessageSender.send(exception, request);
 		return ResponseEntity.internalServerError().body(GlobalServerErrorResult.INTERNAL_SERVER_ERROR);
+	}
+
+	// TODO : 나중에 WebSecuriyConfigure에서 따로 AccessDeniedHandler 처리하기
+	@ExceptionHandler(AccessDeniedException.class)
+	public ResponseEntity<GlobalServerErrorResult> handleAccessDeniedException(AccessDeniedException exception, HttpServletRequest request) {
+		globalMessageSender.send(exception, request);
+		return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(GlobalServerErrorResult.ACCESS_DENIED);
 	}
 
 	@ExceptionHandler(UnAuthorizedException.class)
