@@ -4,7 +4,9 @@ import static org.assertj.core.api.Assertions.*;
 
 import org.junit.jupiter.api.Test;
 
+
 import com.prgrms.rg.domain.common.model.metadata.RidingLevel;
+
 import com.prgrms.rg.domain.ridingpost.model.AddressCode;
 import com.prgrms.rg.domain.user.model.dto.UserRegisterDTO;
 

@@ -23,9 +23,11 @@ import com.auth0.jwt.interfaces.DecodedJWT;
 import com.prgrms.rg.domain.auth.JwtRefreshToken;
 import com.prgrms.rg.domain.auth.JwtRefreshTokenRepository;
 import com.prgrms.rg.domain.auth.jwt.JwtTokenProvider;
+
 import com.prgrms.rg.domain.common.model.metadata.Bicycle;
 import com.prgrms.rg.domain.common.model.metadata.BicycleRepository;
 import com.prgrms.rg.domain.common.model.metadata.RidingLevel;
+
 import com.prgrms.rg.domain.ridingpost.model.AddressCode;
 import com.prgrms.rg.domain.ridingpost.model.AddressCodeRepository;
 import com.prgrms.rg.domain.user.application.UserAuthenticationService;
@@ -33,11 +35,11 @@ import com.prgrms.rg.domain.user.application.command.UserRegisterCommand;
 import com.prgrms.rg.domain.user.model.Introduction;
 import com.prgrms.rg.domain.user.model.Manner;
 import com.prgrms.rg.domain.user.model.Nickname;
-import com.prgrms.rg.domain.user.model.RiderProfile;
 import com.prgrms.rg.domain.user.model.User;
 import com.prgrms.rg.domain.user.model.UserRepository;
 import com.prgrms.rg.domain.user.model.dto.UserRegisterDTO;
 import com.prgrms.rg.infrastructure.oauth.OAuthManager;
+import com.prgrms.rg.web.user.requests.UserRegisterRequest;
 import com.prgrms.rg.web.user.results.OAuthLoginResult;
 import com.prgrms.rg.web.user.results.UserMeResult;
 import com.prgrms.rg.web.user.results.UserRegisterResult;
@@ -176,5 +178,9 @@ public class UserAuthenticationServiceImpl implements UserAuthenticationService 
 
 	private String generateToken(User user) {
 		return jwtTokenProvider.createAdminToken("ROLE_USER", user.getId());
+	}
+
+	private String generateToken(User user) {
+		return jwtTokenProvider.createToken("ROLE_USER", user.getId());
 	}
 }
