@@ -1,3 +1,4 @@
+INSERT INTO address_code (code,area,district) VALUES (11,'서울특별시',null);
 INSERT INTO address_code (code,area,district) VALUES (11010,'서울특별시','종로구');
 INSERT INTO address_code (code,area,district) VALUES (11020,'서울특별시','중구');
 INSERT INTO address_code (code,area,district) VALUES (11030,'서울특별시','용산구');
@@ -23,6 +24,7 @@ INSERT INTO address_code (code,area,district) VALUES (11220,'서울특별시','�
 INSERT INTO address_code (code,area,district) VALUES (11230,'서울특별시','강남구');
 INSERT INTO address_code (code,area,district) VALUES (11240,'서울특별시','송파구');
 INSERT INTO address_code (code,area,district) VALUES (11250,'서울특별시','강동구');
+INSERT INTO address_code (code,area,district) VALUES (21,'부산광역시',null);
 INSERT INTO address_code (code,area,district) VALUES (21010,'부산광역시','중구');
 INSERT INTO address_code (code,area,district) VALUES (21020,'부산광역시','서구');
 INSERT INTO address_code (code,area,district) VALUES (21030,'부산광역시','동구');
@@ -39,6 +41,7 @@ INSERT INTO address_code (code,area,district) VALUES (21130,'부산광역시','�
 INSERT INTO address_code (code,area,district) VALUES (21140,'부산광역시','수영구');
 INSERT INTO address_code (code,area,district) VALUES (21150,'부산광역시','사상구');
 INSERT INTO address_code (code,area,district) VALUES (21310,'부산광역시','기장군');
+INSERT INTO address_code (code,area,district) VALUES (22,'대구광역시',null);
 INSERT INTO address_code (code,area,district) VALUES (22010,'대구광역시','중구');
 INSERT INTO address_code (code,area,district) VALUES (22020,'대구광역시','동구');
 INSERT INTO address_code (code,area,district) VALUES (22030,'대구광역시','서구');
@@ -47,6 +50,7 @@ INSERT INTO address_code (code,area,district) VALUES (22050,'대구광역시','�
 INSERT INTO address_code (code,area,district) VALUES (22060,'대구광역시','수성구');
 INSERT INTO address_code (code,area,district) VALUES (22070,'대구광역시','달서구');
 INSERT INTO address_code (code,area,district) VALUES (22310,'대구광역시','달성군');
+INSERT INTO address_code (code,area,district) VALUES (23,'인천광역시',null);
 INSERT INTO address_code (code,area,district) VALUES (23010,'인천광역시','중구');
 INSERT INTO address_code (code,area,district) VALUES (23020,'인천광역시','동구');
 INSERT INTO address_code (code,area,district) VALUES (23040,'인천광역시','연수구');
@@ -57,22 +61,27 @@ INSERT INTO address_code (code,area,district) VALUES (23080,'인천광역시','�
 INSERT INTO address_code (code,area,district) VALUES (23090,'인천광역시','미추홀구');
 INSERT INTO address_code (code,area,district) VALUES (23310,'인천광역시','강화군');
 INSERT INTO address_code (code,area,district) VALUES (23320,'인천광역시','옹진군');
+INSERT INTO address_code (code,area,district) VALUES (24,'광주광역시',null);
 INSERT INTO address_code (code,area,district) VALUES (24010,'광주광역시','동구');
 INSERT INTO address_code (code,area,district) VALUES (24020,'광주광역시','서구');
 INSERT INTO address_code (code,area,district) VALUES (24030,'광주광역시','남구');
 INSERT INTO address_code (code,area,district) VALUES (24040,'광주광역시','북구');
 INSERT INTO address_code (code,area,district) VALUES (24050,'광주광역시','광산구');
+INSERT INTO address_code (code,area,district) VALUES (25,'대전광역시',null);
 INSERT INTO address_code (code,area,district) VALUES (25010,'대전광역시','동구');
 INSERT INTO address_code (code,area,district) VALUES (25020,'대전광역시','중구');
 INSERT INTO address_code (code,area,district) VALUES (25030,'대전광역시','서구');
 INSERT INTO address_code (code,area,district) VALUES (25040,'대전광역시','유성구');
 INSERT INTO address_code (code,area,district) VALUES (25050,'대전광역시','대덕구');
+INSERT INTO address_code (code,area,district) VALUES (26,'울산광역시','중구');
 INSERT INTO address_code (code,area,district) VALUES (26010,'울산광역시','중구');
 INSERT INTO address_code (code,area,district) VALUES (26020,'울산광역시','남구');
 INSERT INTO address_code (code,area,district) VALUES (26030,'울산광역시','동구');
 INSERT INTO address_code (code,area,district) VALUES (26040,'울산광역시','북구');
 INSERT INTO address_code (code,area,district) VALUES (26310,'울산광역시','울주군');
+INSERT INTO address_code (code,area,district) VALUES (29,'세종특별자치시',null);
 INSERT INTO address_code (code,area,district) VALUES (29010,'세종특별자치시','세종시');
+INSERT INTO address_code (code,area,district) VALUES (31,'경기도',null);
 INSERT INTO address_code (code,area,district) VALUES (31010,'경기도','수원시');
 INSERT INTO address_code (code,area,district) VALUES (31011,'경기도','수원시 장안구');
 INSERT INTO address_code (code,area,district) VALUES (31012,'경기도','수원시 권선구');
@@ -121,6 +130,7 @@ INSERT INTO address_code (code,area,district) VALUES (31280,'경기도','여주�
 INSERT INTO address_code (code,area,district) VALUES (31350,'경기도','연천군');
 INSERT INTO address_code (code,area,district) VALUES (31370,'경기도','가평군');
 INSERT INTO address_code (code,area,district) VALUES (31380,'경기도','양평군');
+INSERT INTO address_code (code,area,district) VALUES (32,'강원도',null);
 INSERT INTO address_code (code,area,district) VALUES (32010,'강원도','춘천시');
 INSERT INTO address_code (code,area,district) VALUES (32020,'강원도','원주시');
 INSERT INTO address_code (code,area,district) VALUES (32030,'강원도','강릉시');
@@ -139,6 +149,7 @@ INSERT INTO address_code (code,area,district) VALUES (32380,'강원도','양구�
 INSERT INTO address_code (code,area,district) VALUES (32390,'강원도','인제군');
 INSERT INTO address_code (code,area,district) VALUES (32400,'강원도','고성군');
 INSERT INTO address_code (code,area,district) VALUES (32410,'강원도','양양군');
+INSERT INTO address_code (code,area,district) VALUES (33,'충청북도',null);
 INSERT INTO address_code (code,area,district) VALUES (33020,'충청북도','충주시');
 INSERT INTO address_code (code,area,district) VALUES (33030,'충청북도','제천시');
 INSERT INTO address_code (code,area,district) VALUES (33040,'충청북도','청주시');
@@ -154,6 +165,7 @@ INSERT INTO address_code (code,area,district) VALUES (33360,'충청북도','괴�
 INSERT INTO address_code (code,area,district) VALUES (33370,'충청북도','음성군');
 INSERT INTO address_code (code,area,district) VALUES (33380,'충청북도','단양군');
 INSERT INTO address_code (code,area,district) VALUES (33390,'충청북도','증평군');
+INSERT INTO address_code (code,area,district) VALUES (34,'충청남도',null);
 INSERT INTO address_code (code,area,district) VALUES (34010,'충청남도','천안시');
 INSERT INTO address_code (code,area,district) VALUES (34011,'충청남도','천안시 동남구');
 INSERT INTO address_code (code,area,district) VALUES (34012,'충청남도','천안시 서북구');
@@ -171,6 +183,7 @@ INSERT INTO address_code (code,area,district) VALUES (34350,'충청남도','청�
 INSERT INTO address_code (code,area,district) VALUES (34360,'충청남도','홍성군');
 INSERT INTO address_code (code,area,district) VALUES (34370,'충청남도','예산군');
 INSERT INTO address_code (code,area,district) VALUES (34380,'충청남도','태안군');
+INSERT INTO address_code (code,area,district) VALUES (35,'전라북도',null);
 INSERT INTO address_code (code,area,district) VALUES (35010,'전라북도','전주시');
 INSERT INTO address_code (code,area,district) VALUES (35011,'전라북도','전주시 완산구');
 INSERT INTO address_code (code,area,district) VALUES (35012,'전라북도','전주시 덕진구');
@@ -187,6 +200,7 @@ INSERT INTO address_code (code,area,district) VALUES (35350,'전라북도','임�
 INSERT INTO address_code (code,area,district) VALUES (35360,'전라북도','순창군');
 INSERT INTO address_code (code,area,district) VALUES (35370,'전라북도','고창군');
 INSERT INTO address_code (code,area,district) VALUES (35380,'전라북도','부안군');
+INSERT INTO address_code (code,area,district) VALUES (36,'전라남도',null);
 INSERT INTO address_code (code,area,district) VALUES (36010,'전라남도','목포시');
 INSERT INTO address_code (code,area,district) VALUES (36020,'전라남도','여수시');
 INSERT INTO address_code (code,area,district) VALUES (36030,'전라남도','순천시');
@@ -209,6 +223,7 @@ INSERT INTO address_code (code,area,district) VALUES (36450,'전라남도','장�
 INSERT INTO address_code (code,area,district) VALUES (36460,'전라남도','완도군');
 INSERT INTO address_code (code,area,district) VALUES (36470,'전라남도','진도군');
 INSERT INTO address_code (code,area,district) VALUES (36480,'전라남도','신안군');
+INSERT INTO address_code (code,area,district) VALUES (37,'경상북도',null);
 INSERT INTO address_code (code,area,district) VALUES (37010,'경상북도','포항시');
 INSERT INTO address_code (code,area,district) VALUES (37011,'경상북도','포항시 남구');
 INSERT INTO address_code (code,area,district) VALUES (37012,'경상북도','포항시 북구');
@@ -234,6 +249,7 @@ INSERT INTO address_code (code,area,district) VALUES (37400,'경상북도','예�
 INSERT INTO address_code (code,area,district) VALUES (37410,'경상북도','봉화군');
 INSERT INTO address_code (code,area,district) VALUES (37420,'경상북도','울진군');
 INSERT INTO address_code (code,area,district) VALUES (37430,'경상북도','울릉군');
+INSERT INTO address_code (code,area,district) VALUES (38,'경상남도',null);
 INSERT INTO address_code (code,area,district) VALUES (38030,'경상남도','진주시');
 INSERT INTO address_code (code,area,district) VALUES (38050,'경상남도','통영시');
 INSERT INTO address_code (code,area,district) VALUES (38060,'경상남도','사천시');
@@ -257,5 +273,6 @@ INSERT INTO address_code (code,area,district) VALUES (38370,'경상남도','산�
 INSERT INTO address_code (code,area,district) VALUES (38380,'경상남도','함양군');
 INSERT INTO address_code (code,area,district) VALUES (38390,'경상남도','거창군');
 INSERT INTO address_code (code,area,district) VALUES (38400,'경상남도','합천군');
+INSERT INTO address_code (code,area,district) VALUES (39,'제주특별자치도',null);
 INSERT INTO address_code (code,area,district) VALUES (39010,'제주특별자치도','제주시');
 INSERT INTO address_code (code,area,district) VALUES (39020,'제주특별자치도','서귀포시');
