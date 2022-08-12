@@ -21,4 +21,7 @@ public class MessageFactory {
 		return stackStream.toString(StandardCharsets.UTF_8);
 	}
 
+	public static String createStringMessage(String message) {
+		return message;
+	}
 }

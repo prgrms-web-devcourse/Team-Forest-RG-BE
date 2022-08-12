@@ -111,8 +111,10 @@ public class UserAuthenticationServiceImpl implements UserAuthenticationService 
 					.provider(provider)
 					.manner(Manner.create())
 					.isRegistered(false)
+
 					.profile(new RiderProfile(DEFAULT_RIDDING_START_YEAR, RidingLevel.INTERMEDIATE))
 					.addressCode(new AddressCode(DEFAULT_ADDRESS_CODE))
+
 					.build());
 
 				Date now = new Date();
