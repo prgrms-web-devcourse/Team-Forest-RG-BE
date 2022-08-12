@@ -1,5 +1,7 @@
 package com.prgrms.rg.domain.ridingpost.application.impl;
 
+import java.time.LocalDateTime;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -43,13 +45,28 @@ public class RidingJoinService {
 		try {
 			User participant = userReadService.getUserEntityById(userId);
 			RidingPost post = postFinder.loadRidingPostById(ridingPostId);
-			checkIsRidingMember(participant, post);
+			checkCancelable(participant, post);
 			post.removeParticipant(participant);
 		} catch (RidingPostNotFoundException e) {
 			throw new RidingJoinCancelFailException(e.getMessage());
 		}
 		RidingJoinCancelEvent event = new RidingJoinCancelEvent(userId, ridingPostId);
 		eventPublisher.publish(event);
+	}
+
+	private void checkCancelable(User participant, RidingPost post) {
+		checkIsRidingMember(participant, post);
+		checkCancelableTime(post);
+
+	}
+
+	private void checkCancelableTime(RidingPost post) {
+		LocalDateTime ridingDate = post.getRidingMainSection().getRidingDate();
+		LocalDateTime now = LocalDateTime.now();
+		LocalDateTime cancelableTime = ridingDate.minusHours(2);
+		if (now.isAfter(cancelableTime))
+			throw new RidingJoinFailException("cancel is allowed only 2 hours before riding");
+
 	}
 
 	private void checkDuplicateJoin(User participant, RidingPost post) {
