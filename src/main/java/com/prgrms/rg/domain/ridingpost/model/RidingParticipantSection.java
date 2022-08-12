@@ -59,6 +59,10 @@ public class RidingParticipantSection {
 		updateStatus();
 	}
 
+	public void removeParticipant(User participant) {
+		participants.removeIf((ridingParticipant -> ridingParticipant.getUser().equals(participant)));
+	}
+
 	private void addParticipantCount() {
 		checkArgument(participantCount != maxParticipantCount);
 		participantCount++;
