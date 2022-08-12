@@ -5,6 +5,7 @@ import static com.google.common.base.Preconditions.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.prgrms.rg.domain.ridingpost.model.RidingImageSaveManagement;
 import com.prgrms.rg.domain.ridingpost.model.RidingPost;
 import com.prgrms.rg.domain.ridingpost.model.RidingSaveManagement;
 import com.prgrms.rg.domain.ridingpost.application.RidingPostService;
@@ -24,13 +25,21 @@ public class RidingPostServiceImpl implements RidingPostService {
 	private final UserReadService userReadService;
 	private final RidingPostRepository ridingPostRepository;
 	private final RidingSaveManagement saveManagement;
+	private final RidingImageSaveManagement imageSaveManagement;
 
 	@Transactional
 	public Long createRidingPost(Long userId, RidingSaveCommand command) {
 		User user = userReadService.getUserEntityById(userId);
 
 		//post, subsection 저장
-		var savedPost = ridingPostRepository.save(saveManagement.createRidingPost(user, command));
+		RidingPost savedPost = ridingPostRepository.save(saveManagement.createRidingPost(user, command));
+
+		//image save
+		imageSaveManagement.saveThumbnailImage(savedPost, command.getThumbnailId());
+		for (int i = 0; i < savedPost.getSubSectionList().size(); i++) {
+			var subSection = savedPost.getSubSectionList().get(i);
+			imageSaveManagement.saveSubImages(command.getSubCommand().get(i).getImageIdList(), subSection);
+		}
 
 		//saved의 id return
 		return savedPost.getId();
@@ -40,8 +49,15 @@ public class RidingPostServiceImpl implements RidingPostService {
 	@Transactional
 	public Long updateRidingPost(Long leaderId, Long postId, RidingSaveCommand command) {
 
-		var post = checkPostOperationCommand(leaderId, postId);
-		saveManagement.updateRidingPost(post.getLeader(), post, command);
+		var post = checkAndFindPost(leaderId, postId);
+		var updatedPost = saveManagement.updateRidingPost(post.getLeader(), post, command);
+
+		// image
+		imageSaveManagement.saveThumbnailImage(updatedPost, command.getThumbnailId());
+		for (int i = 0; i < updatedPost.getSubSectionList().size(); i++) {
+			var subSection = updatedPost.getSubSectionList().get(i);
+			imageSaveManagement.updateSubImages(command.getSubCommand().get(i).getImageIdList(), subSection);
+		}
 
 		return post.getId();
 	}
@@ -49,12 +65,12 @@ public class RidingPostServiceImpl implements RidingPostService {
 	@Override
 	@Transactional(readOnly = true)
 	public void deleteRidingPost(Long leaderId, Long postId) {
-		checkPostOperationCommand(leaderId, postId);
+		checkAndFindPost(leaderId, postId);
 
 		ridingPostRepository.deleteById(postId);
 	}
 
-	private RidingPost checkPostOperationCommand(Long leaderId, Long postId) {
+	private RidingPost checkAndFindPost(Long leaderId, Long postId) {
 		var post = ridingPostRepository.findById(postId).orElseThrow(() -> new RidingPostNotFoundException(postId));
 		var leader = post.getLeader();
 		checkArgument(leader.getId().equals(leaderId), new UnAuthorizedException(leaderId));
