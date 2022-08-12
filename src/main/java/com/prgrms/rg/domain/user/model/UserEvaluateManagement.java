@@ -11,7 +11,7 @@ import lombok.RequiredArgsConstructor;
 
 @Component
 @RequiredArgsConstructor
-public class EvaluationgManagement {
+public class UserEvaluateManagement {
 
 	public void evaluate(List<RidingParticipant> participantList, RidingParticipant evaluator, Long memberId,
 		boolean recommended, boolean noshow) {
