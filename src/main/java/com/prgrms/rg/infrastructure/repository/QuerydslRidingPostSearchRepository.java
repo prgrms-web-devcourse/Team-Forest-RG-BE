@@ -5,6 +5,7 @@ import static com.prgrms.rg.domain.ridingpost.model.QRidingConditionBicycle.*;
 import static com.prgrms.rg.domain.ridingpost.model.QRidingPost.*;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
@@ -21,6 +22,12 @@ import com.prgrms.rg.domain.ridingpost.model.RidingPostInfo;
 import com.prgrms.rg.domain.ridingpost.model.RidingPostSearchRepository;
 import com.prgrms.rg.domain.ridingpost.model.RidingSearchCondition;
 import com.prgrms.rg.domain.ridingpost.model.RidingStatus;
+import com.prgrms.rg.domain.user.model.User;
+import com.prgrms.rg.infrastructure.repository.projections.querydsl.QRidingBicyclesInfoQueryDslProjection;
+import com.prgrms.rg.infrastructure.repository.projections.querydsl.QRidingPostBriefInfoQueryDslProjection;
+import com.prgrms.rg.infrastructure.repository.projections.querydsl.RidingBicyclesInfoQueryDslProjection;
+import com.prgrms.rg.infrastructure.repository.projections.querydsl.RidingPostBriefInfoQueryDslProjection;
+import com.prgrms.rg.infrastructure.repository.querydslconditions.RidingPostUserSearchType;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.JPQLQuery;
 
@@ -30,6 +37,8 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class QuerydslRidingPostSearchRepository extends QuerydslRepositorySupport
 	implements RidingPostSearchRepository {
+
+	private static final int MAXIMUM_USER_SEARCH_RESULT = 20;
 
 	public QuerydslRidingPostSearchRepository() {
 		super(RidingPost.class);
@@ -88,6 +97,25 @@ public class QuerydslRidingPostSearchRepository extends QuerydslRepositorySuppor
 	private BooleanExpression bicycleEq(Long bicycleCode) {
 		return bicycleCode != null ? ridingConditionBicycle.bicycle.id.eq(bicycleCode)
 			.or(ridingConditionBicycle.bicycle.id.eq(Bicycle.BicycleCode.ALL)) : null;
+	}
+
+	@Override
+	public List<RidingPostBriefInfoQueryDslProjection> searchRidingPostByUser(User user,
+		RidingPostUserSearchType searchType) {
+		JPQLQuery<RidingPostBriefInfoQueryDslProjection> query = from(ridingPost)
+			.leftJoin(ridingPost.leader)
+			.leftJoin(ridingPost.thumbnail)
+			.where(ridingPost.userConditionOf(user, searchType))
+			.orderBy(ridingPost.ridingMainSection.ridingDate.desc(), ridingPost.id.desc())
+			.limit(MAXIMUM_USER_SEARCH_RESULT)
+			.select(new QRidingPostBriefInfoQueryDslProjection(
+				ridingPost.id, ridingPost.ridingMainSection.title,
+				ridingPost.thumbnail.url,
+				ridingPost.ridingConditionSection.level.stringValue(), ridingPost.ridingMainSection.ridingDate,
+				ridingPost.ridingMainSection.departurePlace));
+		List<RidingPostBriefInfoQueryDslProjection> result = query.fetch();
+
+		return result;
 	}
 }
 
