@@ -4,6 +4,9 @@ import static com.prgrms.rg.testutil.TestEntityDataFactory.*;
 import static org.assertj.core.api.Assertions.*;
 import static org.assertj.core.api.ThrowableAssert.*;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,6 +41,9 @@ class RidingPostCommentServiceImplTest {
 
 	@Autowired
 	RidingPostCommentRepository ridingPostCommentRepository;
+
+	@PersistenceContext
+	EntityManager entityManager;
 
 	@Test
 	@DisplayName("요청을 받아 사용자와 라이딩 게시물 정보와 연결된 댓글을 저장한다. - 부모 댓글")
@@ -193,6 +199,38 @@ class RidingPostCommentServiceImplTest {
 
 		// Then
 		assertThat(ridingPostCommentRepository.findById(commentId)).isNull();
+
+	}
+
+	@Test
+	@DisplayName("권한을 가진 사용자의 댓글 삭제 요청을 받고 자식 댓글들도 삭제한다.")
+	void handle_delete_command_with_authorized_user_child() {
+
+		// Given
+		var commentAuthor = createUser();
+		var leader = User.builder().nickname(new Nickname("leader")).manner(Manner.create()).build();
+		userRepository.save(commentAuthor);
+		userRepository.save(leader);
+
+		var post = createRidingPost(leader.getId());
+		post = ridingPostRepository.save(post);
+
+		var parent = RidingPostComment.createRootComment(commentAuthor, post, "parent");
+		parent = ridingPostCommentRepository.save(parent);
+		var parentId = parent.getId();
+
+		var child = RidingPostComment.createChildComment(commentAuthor, parent, "child");
+		child = ridingPostCommentRepository.save(child);
+		var childId = child.getId();
+
+		// When
+		ridingPostCommentService.removeComment(commentAuthor.getId(), parentId);
+
+		// Then
+		entityManager.flush();
+		entityManager.clear();
+		assertThat(ridingPostCommentRepository.findById(parentId)).isNull();
+		assertThat(ridingPostCommentRepository.findById(childId)).isNull();
 
 	}
 
