@@ -28,7 +28,7 @@ import lombok.NoArgsConstructor;
 public class RidingParticipantSection {
 
 	@Column(name = "participant_count")
-	private int participantCount = 1;
+	private int participantCount = 0;
 
 	@Range(min = 5, max = 30)
 	@Column(name = "min_participant_count", nullable = false)
