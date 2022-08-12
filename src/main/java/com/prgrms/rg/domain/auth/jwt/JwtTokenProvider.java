@@ -19,7 +19,7 @@ import io.jsonwebtoken.Jwts;
 public class JwtTokenProvider {
 
 	@Value("${jwt.expiry-seconds}")
-	private long tokenValidMillisecond; // 10시간
+	private long tokenValidMillisecond;
 	private final Jwt jwt;
 	private final String secretKey;
 	private static final int MILLISECOND_CORRECTION = 1000;
@@ -28,8 +28,7 @@ public class JwtTokenProvider {
 		this.jwt = jwt;
 		this.secretKey = jwt.getClientSecret();
 	}
-
-	// Jwt 토큰 생성
+	
 	public String createToken(String role, Long userId) {
 		Claims claims = Jwts.claims();
 		claims.put("role", role);

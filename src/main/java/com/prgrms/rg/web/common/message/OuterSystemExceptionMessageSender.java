@@ -25,4 +25,16 @@ public class OuterSystemExceptionMessageSender implements ExceptionMessageSender
 			log.error(messageException.getMessage(), messageException);
 		}
 	}
+
+	@Override
+	public void send(String message, HttpServletRequest request) {
+		log.warn(message);
+		try {
+			String prefixMessage = MessageFactory.createHttpMessage(request);
+			String bodyMessage = MessageFactory.createStringMessage(message);
+			CriticalMessageSender.send(prefixMessage + "\n" + bodyMessage);
+		} catch (Exception messageException) {
+			log.error(messageException.getMessage(), messageException);
+		}
+	}
 }
