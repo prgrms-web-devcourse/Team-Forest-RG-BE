@@ -9,6 +9,6 @@ public class RidingLeaderEvaluateRequest {
 
 	private Long postId;
 
-	private List<EvaluatedMemberRequest> evaluatedMemberList;
+	private List<EvaluatedFromLeaderRequest> evaluatedMemberList;
 
 }

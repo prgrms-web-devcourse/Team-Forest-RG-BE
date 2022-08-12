@@ -43,6 +43,7 @@ public class UserEvaluateServiceImpl implements UserEvaluateService {
 		evaluator.setEvaluated();
 	}
 
+	@Override
 	public void evaluateFromMember(Long userId, Long postId, List<EvaluatedFromMemberCommand> commandList) {
 		var ridingpost = postReadService.loadRidingPostById(postId);
 		var members = ridingpost.getRidingParticipantSection().getParticipants();
