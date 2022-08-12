@@ -1,6 +1,7 @@
 package com.prgrms.rg.domain.ridingpost.model;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -85,10 +86,11 @@ public class RidingPostInfo {
 		private static void mapMainSection(RidingMainSection mainSection, RidingInfo instance) {
 			if (mainSection == null)
 				return;
+			List<String> loadedCourse = new ArrayList<>(mainSection.getRoutes());
 			instance.setTitle(mainSection.getTitle());
 			instance.setRidingDate(mainSection.getRidingDate());
 			instance.setFee(mainSection.getFee());
-			instance.setRidingCourses(mainSection.getRoutes());
+			instance.setRidingCourses(loadedCourse);
 			instance.setDeparturePosition(mainSection.getDeparturePlace());
 			instance.setZone(ZoneInfo.from(mainSection.getAddressCode()));
 			instance.setEstimatedTime(mainSection.getEstimatedTime());
