@@ -100,9 +100,9 @@ public class RidingPost extends BaseTimeEntity implements ImageOwner {
 	}
 
 	public boolean equalToThumbnail(Long thumbnailId) {
-		if (thumbnail == null)
+		if (this.thumbnail == null)
 			return thumbnailId == null;
-		return thumbnail.getId().equals(thumbnailId);
+		return this.thumbnail.getId().equals(thumbnailId);
 	}
 
 	public void removeCurrentSubSection() {
