@@ -57,7 +57,6 @@ public class RidingJoinService {
 	private void checkCancelable(User participant, RidingPost post) {
 		checkIsRidingMember(participant, post);
 		checkCancelableTime(post);
-
 	}
 
 	private void checkCancelableTime(RidingPost post) {
@@ -78,5 +77,4 @@ public class RidingJoinService {
 		if (!ridingParticipantRepository.existsByUserAndPost(participant, post))
 			throw new RidingJoinCancelFailException("this user not participate in riding '" + post.getId() + "'");
 	}
-
 }
