@@ -39,7 +39,6 @@ public class Notification {
 		Notification instance = new Notification();
 		instance.setUser(user);
 		instance.setRidingPost(post);
-		//TODO 알림 내용은 프론트랑 상의 후 정합니다.
 		instance.setContents("new user join your riding");
 		instance.setType(NotificationType.RIDING_JOIN);
 		return instance;

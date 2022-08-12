@@ -20,8 +20,6 @@ import org.springframework.data.domain.SliceImpl;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.prgrms.rg.domain.auth.jwt.JwtTokenProvider;
 import com.prgrms.rg.domain.ridingpost.application.RidingPostReadService;
 import com.prgrms.rg.domain.ridingpost.model.RidingPost;
 import com.prgrms.rg.domain.ridingpost.model.RidingPostInfo;
@@ -34,14 +32,9 @@ import com.prgrms.rg.testutil.TestEntityDataFactory;
 @ControllerTest(controllers = RidingPostInquiryController.class)
 @AutoConfigureMockMvc
 class RidingPostInquiryControllerTest {
-	@Autowired
-	JwtTokenProvider tokenProvider;
 	@MockBean
 	RidingPostReadService readService;
-	@Autowired
-	RidingPostInquiryController controller;
-	@Autowired
-	ObjectMapper mapper;
+
 	Long userId = 1L;
 	Long postId = 10L;
 	RidingPost ridingPost;
