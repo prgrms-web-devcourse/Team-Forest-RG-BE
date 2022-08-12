@@ -29,24 +29,12 @@ public class JwtConfigure {
 		return issuer;
 	}
 
-	public void setIssuer(String issuer) {
-		this.issuer = issuer;
-	}
-
 	public String getClientSecret() {
 		return clientSecret;
 	}
 
-	public void setClientSecret(String clientSecret) {
-		this.clientSecret = clientSecret;
-	}
-
 	public int getExpirySeconds() {
 		return expirySeconds;
-	}
-
-	public void setExpirySeconds(int expirySeconds) {
-		this.expirySeconds = expirySeconds;
 	}
 
 	@Override

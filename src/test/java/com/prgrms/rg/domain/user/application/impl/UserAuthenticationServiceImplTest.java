@@ -99,20 +99,20 @@ class UserAuthenticationServiceImplTest {
 		//when
 		UserRegisterResult userRegisterResult = userService.updateUserByRegistration(testCommand);
 		//then
-		assertThat(userRepository.findById(savedUser.getId()).isPresent()).isTrue();
+		assertThat(userRepository.findById(savedUser.getId())).isPresent();
 		User updatedUser = userRepository.findById(savedUser.getId()).get();
 		assertThat(userRegisterResult.isRegistered()).isTrue();
 		assertThat(updatedUser.getNickname()).isEqualTo(testCommand.getNickName());
 		assertThat(updatedUser.getAddressCode().getCode()).isEqualTo(11010);
 		assertThat(updatedUser.getRiderInformation().getBicycles()).hasSize(1);
 		assertThat(updatedUser.getRiderInformation().getRidingYears()).isEqualTo(1996);
-		assertThat(updatedUser.getPhoneNumber()).isEqualTo("010-1234-5678");
+		assertThat(updatedUser.getPhoneNumber()).isEqualTo("01012345678");
 		assertThat(updatedUser.getRiderInformation().getLevel()).isEqualTo(RidingLevel.BEGINNER);
 	}
 
 	private UserRegisterCommand createTestRegisterCommand(Long userId) {
 		List<String> bicycles = new ArrayList<>();
 		bicycles.add("MTB");
-		return UserRegisterCommand.of(new UserRegisterRequest(1996,11010,bicycles,"하", "010-1234-5678","김훈기"),userId);
+		return UserRegisterCommand.of(new UserRegisterRequest(1996,11010,bicycles,"하", "01012345678","김훈기"),userId);
 	}
 }
