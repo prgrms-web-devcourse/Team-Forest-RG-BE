@@ -2,6 +2,7 @@ package com.prgrms.rg.web.ridingpost.api;
 
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,9 +15,11 @@ import com.prgrms.rg.domain.ridingpost.model.RidingPostInfo;
 import com.prgrms.rg.domain.ridingpost.model.RidingSearchCondition;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 @RestController
 @RequiredArgsConstructor
+@Slf4j
 public class RidingPostInquiryController {
 	private final RidingPostReadService postReadService;
 
@@ -29,9 +32,11 @@ public class RidingPostInquiryController {
 	@GetMapping("api/v1/ridingposts")
 	public ResponseEntity<Slice<RidingPostInfo>> getRidingPostList(
 		@ModelAttribute RidingSearchCondition searchCondition,
-		@PageableDefault Pageable pageable) {
+		@PageableDefault(sort = "created_at", direction = Sort.Direction.DESC) Pageable pageable) {
+		log.info(searchCondition.toString());
+		log.info(pageable.toString());
 		var ridingPostSlice = postReadService.loadFilteredRidingPostByCondition(searchCondition, pageable);
-		return ResponseEntity.status(200).body(ridingPostSlice);
+		return ResponseEntity.ok(ridingPostSlice);
 	}
 
 }
