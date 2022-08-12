@@ -60,6 +60,8 @@ public class UserAuthenticationServiceImpl implements UserAuthenticationService 
 	private long refreshTokenExpiryTime;
 
 	private static final int MILLISECOND_CORRECTION = 1000;
+	private static final int DEFAULT_ADDRESS_CODE = 11010;
+	private static final int DEFAULT_RIDDING_START_YEAR = 2022;
 
 	@Override
 	@Transactional
@@ -109,8 +111,8 @@ public class UserAuthenticationServiceImpl implements UserAuthenticationService 
 					.provider(provider)
 					.manner(Manner.create())
 					.isRegistered(false)
-					.profile(new RiderProfile(2022, RidingLevel.INTERMEDIATE))
-					.addressCode(new AddressCode(0))
+					.profile(new RiderProfile(DEFAULT_RIDDING_START_YEAR, RidingLevel.INTERMEDIATE))
+					.addressCode(new AddressCode(DEFAULT_ADDRESS_CODE))
 					.build());
 
 				Date now = new Date();
