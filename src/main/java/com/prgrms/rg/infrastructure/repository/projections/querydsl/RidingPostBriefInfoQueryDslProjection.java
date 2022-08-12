@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.prgrms.rg.domain.common.model.metadata.RidingLevel;
 import com.prgrms.rg.domain.ridingpost.application.information.RidingPostBriefInfo;
 import com.prgrms.rg.domain.ridingpost.model.Coordinate;
 import com.prgrms.rg.domain.ridingpost.model.RidingConditionBicycle;
@@ -32,7 +33,7 @@ public class RidingPostBriefInfoQueryDslProjection implements RidingPostBriefInf
 		this.id = id;
 		this.title = title;
 		this.thumbnail = thumbnail;
-		this.ridingLevel = ridingLevel;
+		this.ridingLevel = RidingLevel.valueOf(ridingLevel).getLevelName();
 		this.ridingDate = ridingDate;
 		this.departurePosition = departurePosition;
 	}

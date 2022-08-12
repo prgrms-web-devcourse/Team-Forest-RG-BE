@@ -109,8 +109,6 @@ class UserReadServiceImplTest {
 			.ridingParticipantSection(new RidingParticipantSection(0, 10))
 			.build();
 
-		anotherPost.addParticipant(user);
-
 		ridingPostRepository.save(ridingPost);
 		ridingPostRepository.save(otherRidingPost);
 		ridingPostRepository.save(anotherPost);
@@ -123,7 +121,7 @@ class UserReadServiceImplTest {
 
 		//Then
 		Assertions.assertThat(info.getRidings().getFinished().size()).isEqualTo(0);
-		Assertions.assertThat(info.getRidings().getScheduled().size()).isEqualTo(1);
+		Assertions.assertThat(info.getRidings().getScheduled().size()).isEqualTo(2);
 		Assertions.assertThat(info.getRidings().getLeading().size()).isEqualTo(2);
 	}
 }
