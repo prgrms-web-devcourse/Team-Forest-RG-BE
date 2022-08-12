@@ -38,6 +38,7 @@ public class UserCommandServiceImpl implements UserCommandService {
 		changeNickname(command.getNickname(), user);
 		changeRiderProfile(command, user);
 		user.changeIntroduction(new Introduction(command.getIntroduction()));
+		changePhoneNumber(command.getPhoneNumber(), user);
 
 		return user.getId();
 	}
@@ -63,5 +64,9 @@ public class UserCommandServiceImpl implements UserCommandService {
 		}
 
 		user.changeRiderProfile(command.getRidingYears(), RidingLevel.of(command.getRidingLevel()), bicyclesToApply);
+	}
+
+	private void changePhoneNumber(String phoneNumber, User user) {
+		user.setPhoneNumber(phoneNumber);
 	}
 }

@@ -3,8 +3,6 @@ package com.prgrms.rg.domain.user.application.command;
 import java.util.Arrays;
 import java.util.Objects;
 
-import com.prgrms.rg.domain.user.model.User;
-
 import lombok.Getter;
 
 @Getter
@@ -15,15 +13,17 @@ public class UserUpdateCommand {
 	private String ridingLevel;
 	private String[] bicycles;
 	private String introduction;
+	private String phoneNumber;
 
 	public UserUpdateCommand(Long id, String nickname, int ridingYears, String ridingLevel, String[] bicycles,
-		String introduction) {
+		String introduction, String phoneNumber) {
 		this.id = id;
 		this.nickname = nickname;
 		this.ridingYears = ridingYears;
 		this.ridingLevel = ridingLevel;
 		this.bicycles = bicycles;
 		this.introduction = introduction;
+		this.phoneNumber = phoneNumber;
 	}
 
 	@Override
@@ -46,7 +46,9 @@ public class UserUpdateCommand {
 		// Probably incorrect - comparing Object[] arrays with Arrays.equals
 		if (!Arrays.equals(bicycles, that.bicycles))
 			return false;
-		return Objects.equals(introduction, that.introduction);
+		if (!Objects.equals(introduction, that.introduction))
+			return false;
+		return Objects.equals(phoneNumber, that.phoneNumber);
 	}
 
 	@Override
@@ -57,6 +59,7 @@ public class UserUpdateCommand {
 		result = 31 * result + (ridingLevel != null ? ridingLevel.hashCode() : 0);
 		result = 31 * result + Arrays.hashCode(bicycles);
 		result = 31 * result + (introduction != null ? introduction.hashCode() : 0);
+		result = 31 * result + (phoneNumber != null ? phoneNumber.hashCode() : 0);
 		return result;
 	}
 }

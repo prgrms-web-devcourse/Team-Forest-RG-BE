@@ -65,7 +65,6 @@ public class User extends BaseTimeEntity implements ImageOwner {
 
 	private boolean isRegistered;
 
-	//TODO: Partey 머지 이후 이메일과 전화번호 VO 분리 훈 리팩토링
 	private String phoneNumber;
 
 	private String email;
@@ -88,7 +87,7 @@ public class User extends BaseTimeEntity implements ImageOwner {
 		setPhoneNumber(userRegisterDTO.getPhoneNumber());
 	}
 
-	private void setPhoneNumber(String phoneNumber) {
+	public void setPhoneNumber(String phoneNumber) {
 		if (!Pattern.matches("^01(?:0|1|[6-9])(?:\\d{3}|\\d{4})\\d{4}$", phoneNumber))
 			throw new IllegalArgumentException("잘못된 번호입니다.");
 		this.phoneNumber = phoneNumber;

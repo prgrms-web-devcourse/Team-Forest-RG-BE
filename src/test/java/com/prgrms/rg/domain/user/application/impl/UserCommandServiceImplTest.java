@@ -66,7 +66,7 @@ class UserCommandServiceImplTest {
 		user.addBicycle(seoulBike);
 
 		UserUpdateCommand command = new UserUpdateCommand(user.getId(), "changedName", 2017, BEGINNER.getLevelName(),
-			new String[] {"따릉이", "MTB"}, "반갑습니다.");
+			new String[] {"따릉이", "MTB"}, "반갑습니다.", "01012345678");
 
 		em.flush();
 		em.clear();
@@ -83,6 +83,8 @@ class UserCommandServiceImplTest {
 		List<String> changedBicycles = afterEdited.getRiderInformation().getBicycles();
 		assertThat(changedBicycles).containsAll(List.of("따릉이", "MTB")).doesNotContain("로드");
 		assertThat(afterEdited.getIntroduction()).isEqualTo("반갑습니다.");
+		assertThat(afterEdited.getPhoneNumber()).isEqualTo("01012345678");
+
 	}
 
 	@Test
@@ -103,7 +105,7 @@ class UserCommandServiceImplTest {
 			.build());
 
 		UserUpdateCommand command = new UserUpdateCommand(user.getId(), "changedName", 5
-			, MASTER.getLevelName(), new String[] {}, "한강 라이딩을 즐겨합니다.");
+			, MASTER.getLevelName(), new String[] {}, "한강 라이딩을 즐겨합니다.", "01012345678");
 
 		em.flush();
 		em.clear();
