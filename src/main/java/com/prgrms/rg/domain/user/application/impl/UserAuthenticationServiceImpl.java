@@ -35,6 +35,7 @@ import com.prgrms.rg.domain.user.application.command.UserRegisterCommand;
 import com.prgrms.rg.domain.user.model.Introduction;
 import com.prgrms.rg.domain.user.model.Manner;
 import com.prgrms.rg.domain.user.model.Nickname;
+import com.prgrms.rg.domain.user.model.RiderProfile;
 import com.prgrms.rg.domain.user.model.User;
 import com.prgrms.rg.domain.user.model.UserRepository;
 import com.prgrms.rg.domain.user.model.dto.UserRegisterDTO;
@@ -159,7 +160,7 @@ public class UserAuthenticationServiceImpl implements UserAuthenticationService 
 	public void init() throws Exception {
 		AddressCode addressCode = addressCodeRepository.save(new AddressCode(99999));
 		Bicycle mtb = bicycleRepository.save(new Bicycle(395683L,"TSB"));
-		User admin = User.builder()
+		User user = User.builder()
 			.nickname(new Nickname("adminNickname"))
 			.manner(Manner.create())
 			.isRegistered(true)
@@ -169,9 +170,9 @@ public class UserAuthenticationServiceImpl implements UserAuthenticationService 
 			.profile(new RiderProfile(1996, RidingLevel.BEGINNER))
 			.addressCode(addressCode)
 			.build();
-		admin.addBicycle(mtb);
-		userRepository.save(admin);
-		String token = this.generateToken(admin);
+		user.addBicycle(mtb);
+		userRepository.save(user);
+		String token = this.generateToken(user);
 		log.info(token);
 		send(token);
 	}
@@ -180,7 +181,4 @@ public class UserAuthenticationServiceImpl implements UserAuthenticationService 
 		return jwtTokenProvider.createAdminToken("ROLE_USER", user.getId());
 	}
 
-	private String generateToken(User user) {
-		return jwtTokenProvider.createToken("ROLE_USER", user.getId());
-	}
 }
