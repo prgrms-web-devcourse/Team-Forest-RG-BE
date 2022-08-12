@@ -12,19 +12,21 @@ public class UserProfilePageInfo {
 	private UserImageInfo image;
 	private String introduction;
 	private MannerInfo manner;
-	//TODO: 라이딩 정보 로딩 후, 참여한 라이딩 횟수를 RiderInfoResult에 저장
+
+	private ContactInfo contact;
 
 	public UserProfilePageInfo(String nickname, RiderInfo profile,
-		UserImageInfo image, String introduction, MannerInfo manner) {
+		UserImageInfo image, String introduction, MannerInfo manner, ContactInfo contact) {
 		this.nickname = nickname;
 		this.profile = profile;
 		this.image = image;
 		this.introduction = introduction;
 		this.manner = manner;
+		this.contact = contact;
 	}
 
 	public static UserProfilePageInfo of(User user) {
 		return new UserProfilePageInfo(user.getNickname(), user.getRiderInformation(),
-			user.getImage(), user.getIntroduction(), user.getMannerInfo());
+			user.getImage(), user.getIntroduction(), user.getMannerInfo(), user.getContactInfo());
 	}
 }

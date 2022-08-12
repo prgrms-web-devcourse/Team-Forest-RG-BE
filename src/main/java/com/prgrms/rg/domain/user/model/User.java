@@ -3,8 +3,9 @@ package com.prgrms.rg.domain.user.model;
 import static javax.persistence.GenerationType.*;
 import static lombok.AccessLevel.*;
 
-import java.util.regex.Pattern;
+import java.util.HashSet;
 import java.util.Set;
+import java.util.regex.Pattern;
 
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
@@ -23,7 +24,7 @@ import com.prgrms.rg.domain.common.model.metadata.Bicycle;
 import com.prgrms.rg.domain.common.model.metadata.RidingLevel;
 import com.prgrms.rg.domain.ridingpost.model.AddressCode;
 import com.prgrms.rg.domain.user.model.dto.UserRegisterDTO;
-
+import com.prgrms.rg.domain.user.model.information.ContactInfo;
 import com.prgrms.rg.domain.user.model.information.MannerInfo;
 import com.prgrms.rg.domain.user.model.information.RiderInfo;
 import com.prgrms.rg.domain.user.model.information.UserImageInfo;
@@ -55,8 +56,6 @@ public class User extends BaseTimeEntity implements ImageOwner {
 	@OneToOne(mappedBy = "user")
 	private ProfileImage profileImage;
 
-	//TODO: 연락처 추가
-
 	@Embedded
 	private Introduction introduction;
 
@@ -66,7 +65,10 @@ public class User extends BaseTimeEntity implements ImageOwner {
 
 	private boolean isRegistered;
 
+	//TODO: Partey 머지 이후 이메일과 전화번호 VO 분리 훈 리팩토링
 	private String phoneNumber;
+
+	private String email;
 
 	@JoinColumn(name = "address_code")
 	@ManyToOne(fetch = FetchType.LAZY)
@@ -76,19 +78,19 @@ public class User extends BaseTimeEntity implements ImageOwner {
 	private Manner manner;
 
 	public void updateByRegistration(UserRegisterDTO userRegisterDTO) {
-		 this.nickname = new Nickname(userRegisterDTO.getNickName());
-		 this.profile = new RiderProfile(userRegisterDTO.getRidingStartYear(), RidingLevel.of(userRegisterDTO.getLevel()));
+		this.nickname = new Nickname(userRegisterDTO.getNickName());
 
-		for (String bicycle : userRegisterDTO.getBicycles()) {
-			this.profile.addBicycle(this, new Bicycle(bicycle));
-		}
-		this.addressCode = new AddressCode(userRegisterDTO.getFavoriteRegionCode());
+		this.changeRiderProfile(userRegisterDTO.getRidingStartYear(),
+			RidingLevel.of(userRegisterDTO.getLevel()), this.profile.getBicycles());
+
+		this.addressCode = userRegisterDTO.getFavoriteRegionCode();
 		this.isRegistered = true;
 		setPhoneNumber(userRegisterDTO.getPhoneNumber());
 	}
 
+
 	private void setPhoneNumber(String phoneNumber) {
-		if(!Pattern.matches("^01(?:0|1|[6-9])-(?:\\d{3}|\\d{4})-\\d{4}$", phoneNumber))
+		if (!Pattern.matches("^01(?:0|1|[6-9])-(?:\\d{3}|\\d{4})-\\d{4}$", phoneNumber))
 			throw new IllegalArgumentException("잘못된 번호입니다.");
 		this.phoneNumber = phoneNumber;
 	}
@@ -108,7 +110,7 @@ public class User extends BaseTimeEntity implements ImageOwner {
 	public boolean addBicycle(Bicycle bicycle) {
 		return profile.addBicycle(this, bicycle);
 	}
-	
+
 	public String getNickname() {
 		return nickname.get();
 	}
@@ -128,6 +130,10 @@ public class User extends BaseTimeEntity implements ImageOwner {
 
 	public MannerInfo getMannerInfo() {
 		return manner.information();
+	}
+
+	public ContactInfo getContactInfo() {
+		return new ContactInfo(phoneNumber, email);
 	}
 
 	@Override

@@ -8,9 +8,10 @@ import org.springframework.util.CollectionUtils;
 
 import com.prgrms.rg.domain.common.file.application.ImageAttachManger;
 import com.prgrms.rg.domain.common.file.model.AttachedImageRepository;
+import com.prgrms.rg.domain.common.model.metadata.Bicycle;
+import com.prgrms.rg.domain.common.model.metadata.BicycleRepository;
 import com.prgrms.rg.domain.ridingpost.application.command.RidingSaveCommand;
 import com.prgrms.rg.domain.ridingpost.application.command.RidingSubSaveCommand;
-import com.prgrms.rg.domain.common.model.metadata.BicycleRepository;
 import com.prgrms.rg.domain.user.model.User;
 
 import lombok.RequiredArgsConstructor;
@@ -100,6 +101,10 @@ public class RidingSaveManagement {
 					.orElseThrow(IllegalArgumentException::new);
 				conditionSection.addBicycle(post, bicycle);
 			}
+		} else {
+			Bicycle bicycle = bicycleRepository.findByName(Bicycle.BicycleName.ALL)
+				.orElseThrow(IllegalArgumentException::new);
+			conditionSection.addBicycle(post, bicycle);
 		}
 		return post;
 	}
