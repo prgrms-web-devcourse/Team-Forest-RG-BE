@@ -12,21 +12,23 @@ public class UserProfilePageInfo {
 	private UserImageInfo image;
 	private String introduction;
 	private MannerInfo manner;
-
 	private ContactInfo contact;
+	private ParticipatedRidingInfo ridings;
 
-	public UserProfilePageInfo(String nickname, RiderInfo profile,
-		UserImageInfo image, String introduction, MannerInfo manner, ContactInfo contact) {
+	private UserProfilePageInfo(String nickname, RiderInfo profile,
+		UserImageInfo image, String introduction, MannerInfo manner, ContactInfo contact,
+		ParticipatedRidingInfo ridings) {
 		this.nickname = nickname;
 		this.profile = profile;
 		this.image = image;
 		this.introduction = introduction;
 		this.manner = manner;
 		this.contact = contact;
+		this.ridings = ridings;
 	}
 
-	public static UserProfilePageInfo of(User user) {
+	public static UserProfilePageInfo from(User user, ParticipatedRidingInfo ridings) {
 		return new UserProfilePageInfo(user.getNickname(), user.getRiderInformation(),
-			user.getImage(), user.getIntroduction(), user.getMannerInfo(), user.getContactInfo());
+			user.getImage(), user.getIntroduction(), user.getMannerInfo(), user.getContactInfo(), ridings);
 	}
 }
