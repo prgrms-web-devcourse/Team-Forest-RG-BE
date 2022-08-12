@@ -81,16 +81,15 @@ public class User extends BaseTimeEntity implements ImageOwner {
 		this.nickname = new Nickname(userRegisterDTO.getNickName());
 
 		this.changeRiderProfile(userRegisterDTO.getRidingStartYear(),
-			RidingLevel.of(userRegisterDTO.getLevel()), this.profile.getBicycles());
+				RidingLevel.of(userRegisterDTO.getLevel()), this.profile.getBicycles());
 
 		this.addressCode = userRegisterDTO.getFavoriteRegionCode();
 		this.isRegistered = true;
 		setPhoneNumber(userRegisterDTO.getPhoneNumber());
 	}
 
-
 	private void setPhoneNumber(String phoneNumber) {
-		if (!Pattern.matches("^01(?:0|1|[6-9])-(?:\\d{3}|\\d{4})-\\d{4}$", phoneNumber))
+		if (!Pattern.matches("^01(?:0|1|[6-9])(?:\\d{3}|\\d{4})\\d{4}$", phoneNumber))
 			throw new IllegalArgumentException("잘못된 번호입니다.");
 		this.phoneNumber = phoneNumber;
 	}
