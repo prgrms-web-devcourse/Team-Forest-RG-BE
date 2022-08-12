@@ -18,12 +18,14 @@ import lombok.extern.slf4j.Slf4j;
 @Order(500)
 public class RidingJoinExceptionHandler {
 	private static final String LOG_MARKER = "[RidingJoinExceptionHandler]";
-	private static final Integer CANCEL_DEADLINE_EXCEPTION_CODE = 0;
+	public static final Integer CANCEL_DEADLINE_EXCEPTION_CODE = 0;
+	public static final Integer INVALID_ARGUMENT_EXCEPTION_CODE = 1;
 
 	@ExceptionHandler({RidingJoinFailException.class, RidingJoinCancelFailException.class})
-	public ResponseEntity<String> handleRidingJoinFailException(RuntimeException e) {
+	public ResponseEntity<ErrorResult> handleRidingJoinFailException(RuntimeException e) {
 		log.info(LOG_MARKER, e);
-		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+		ErrorResult errorResult = new ErrorResult(INVALID_ARGUMENT_EXCEPTION_CODE, e.getMessage());
+		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResult);
 	}
 
 	@ExceptionHandler(CancelDeadlineOverException.class)
