@@ -120,7 +120,7 @@ public class User extends BaseTimeEntity implements ImageOwner {
 	}
 
 	public String getIntroduction() {
-		return introduction.get();
+		return (introduction != null) ? introduction.get() : "";
 	}
 
 	public RiderInfo getRiderInformation() {

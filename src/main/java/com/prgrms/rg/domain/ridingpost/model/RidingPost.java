@@ -43,7 +43,7 @@ public class RidingPost extends BaseTimeEntity implements ImageOwner {
 	@ManyToOne(optional = false, fetch = LAZY)
 	private User leader;
 
-	@OneToOne(mappedBy = "post")
+	@OneToOne(mappedBy = "post", cascade = ALL)
 	private RidingThumbnailImage thumbnail;
 
 	@Embedded
@@ -63,7 +63,7 @@ public class RidingPost extends BaseTimeEntity implements ImageOwner {
 		RidingMainSection ridingMainSection,
 		RidingParticipantSection ridingParticipantSection,
 		RidingConditionSection ridingConditionSection
-		) {
+	) {
 		this.ridingMainSection = ridingMainSection;
 		this.ridingParticipantSection = ridingParticipantSection;
 		this.ridingConditionSection = ridingConditionSection;
@@ -71,7 +71,7 @@ public class RidingPost extends BaseTimeEntity implements ImageOwner {
 	}
 
 	public void changePost(RidingPost newPost) {
-		subSectionList.clear();
+		removeCurrentSubSection();
 		ridingMainSection.update(newPost.getRidingMainSection());
 		ridingParticipantSection.update(newPost.getRidingParticipantSection());
 		ridingConditionSection.update(newPost.getRidingConditionSection());
@@ -104,12 +104,15 @@ public class RidingPost extends BaseTimeEntity implements ImageOwner {
 	}
 
 	public boolean equalToThumbnail(Long thumbnailId) {
-		if (thumbnail == null)
+		if (this.thumbnail == null)
 			return thumbnailId == null;
-		return thumbnail.getId().equals(thumbnailId);
+		return this.thumbnail.getId().equals(thumbnailId);
 	}
 
 	public void removeCurrentSubSection() {
+		for (int i = 0; i < subSectionList.size(); i++) {
+			subSectionList.get(i).removeCurrentImage();
+		}
 		this.subSectionList.clear();
 	}
 
@@ -130,9 +133,9 @@ public class RidingPost extends BaseTimeEntity implements ImageOwner {
 
 	@Override
 	public AttachedImage attach(TemporaryImage storedImage) {
-		var image = new RidingThumbnailImage(storedImage.getId(), storedImage.getOriginalFileName(), storedImage.getUrl(), this);
-		this.thumbnail = image;
-		return image;
+		this.thumbnail = new RidingThumbnailImage(storedImage.getId(), storedImage.getOriginalFileName(),
+			storedImage.getUrl(), this);
+		return thumbnail;
 	}
 
 	@Override

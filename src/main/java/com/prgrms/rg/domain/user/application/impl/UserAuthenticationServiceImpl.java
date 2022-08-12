@@ -138,7 +138,7 @@ public class UserAuthenticationServiceImpl implements UserAuthenticationService 
 		}
 
 		AddressCode addressCode = addressCodeRepository.findByCode(userRegisterCommand.getFavoriteRegionCode())
-			.orElseGet(() -> new AddressCode(0));
+			.orElseGet(() -> addressCodeRepository.findByCode(DEFAULT_ADDRESS_CODE).get());
 
 		UserRegisterDTO userRegisterDTO = createUserRegisterDTO(addressCode, userRegisterCommand.getNickName(),
 			userRegisterCommand.getLevel(), userRegisterCommand.getRidingStartYear(),
