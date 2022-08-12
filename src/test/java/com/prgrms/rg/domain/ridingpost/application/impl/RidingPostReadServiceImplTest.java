@@ -87,8 +87,6 @@ class RidingPostReadServiceImplTest {
 
 		//when
 		RidingPostInfo ridingPostInfo = readService.loadRidingPostInfoById(savedPostId);
-		em.flush();
-		em.clear();
 
 		//then
 		RidingPostInfo.LeaderInfo leaderInfo = ridingPostInfo.getLeaderInfo();
