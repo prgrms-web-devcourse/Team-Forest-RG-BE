@@ -5,6 +5,8 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
+import java.util.Locale;
+
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -57,8 +59,30 @@ class UserCommandRestControllerV1Test {
 	}
 
 	@Test
+	@DisplayName("User 정보 수정 - 잘못된 요청")
+	void updateUserTest_fail_with_Argument() throws Exception {
+		//Given
+		var token = tokenProvider.createToken("ROLE_USER", 1L);
+
+		var request = new UserUpdateRequest("RG라이더", 5, "",
+			new String[] {"MTB", "로드"}, "잘 부탁드립니다. 한강 라이딩을 즐겨 합니다.");
+
+		var body = objectMapper.writeValueAsString(request);
+
+		when(userCommandService.edit(isA(UserUpdateCommand.class))).thenReturn(1L);
+
+		//When
+		mockMvc.perform(put(("/api/v1/users/1"))
+				.header("Authorization", "token " + token)
+				.content(body)
+				.contentType("application/json")
+			).andExpect(status().isBadRequest())
+			.andDo(print());
+	}
+
+	@Test
 	@DisplayName("User 정보 수정 실패 - 잘못된 ID로 요청")
-	void request_without_token() throws Exception {
+	void request_with_invalid_id() throws Exception {
 
 		//Given
 		var token = tokenProvider.createToken("ROLE_USER", 1L);
