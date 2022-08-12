@@ -1,13 +1,8 @@
 package com.prgrms.rg.domain.ridingpost.model;
 
-import java.util.List;
-import java.util.Objects;
-
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 
-import com.prgrms.rg.domain.common.file.application.ImageAttachManger;
-import com.prgrms.rg.domain.common.file.model.AttachedImageRepository;
 import com.prgrms.rg.domain.common.model.metadata.Bicycle;
 import com.prgrms.rg.domain.common.model.metadata.BicycleRepository;
 import com.prgrms.rg.domain.ridingpost.application.command.RidingSaveCommand;
@@ -20,10 +15,9 @@ import lombok.RequiredArgsConstructor;
 @Component
 public class RidingSaveManagement {
 
-	private final ImageAttachManger imageManager;
 	private final AddressCodeRepository addressCodeRepository;
 	private final BicycleRepository bicycleRepository;
-	private final AttachedImageRepository imageRepository;
+	private final RidingSubSectionRepository ridingSubSectionRepository;
 
 	public RidingPost updateRidingPost(User leader, RidingPost post, RidingSaveCommand command) {
 
@@ -31,22 +25,11 @@ public class RidingSaveManagement {
 		var newPost = toPost(leader, command);
 		post.changePost(newPost);
 
-		//thumbnail -> 비교
-		if (!post.equalToThumbnail(command.getThumbnailId())) {
-			post.removeCurrentImage();
-			//null이 아닌 썸네일 삽입
-			if (!Objects.isNull(command.getThumbnailId())) {
-				imageManager.store(command.getThumbnailId(), post);
-			}
-		}
-
 		//subsection 새로 생성
 		post.removeCurrentSubSection();
 		if (!CollectionUtils.isEmpty(command.getSubCommand()) && command.getSubCommand().size() <= 5) {
 			for (RidingSubSaveCommand subCommand : command.getSubCommand()) {
-				var subSection = new RidingSubSection(subCommand.getTitle(), subCommand.getContent());
-
-				addImagesToSubSection(subCommand.getImageIdList(), subSection);
+				var subSection = ridingSubSectionRepository.save(createSubSection(subCommand));
 				post.addSubSection(subSection);
 			}
 		}
@@ -57,11 +40,6 @@ public class RidingSaveManagement {
 
 	public RidingPost createRidingPost(User leader, RidingSaveCommand command) {
 		var createdPost = toPost(leader, command);
-
-		//썸네일 이미지
-		if (!Objects.isNull(command.getThumbnailId())) {
-			imageManager.store(command.getThumbnailId(), createdPost);
-		}
 
 		//post-subsection mapping
 		if (!CollectionUtils.isEmpty(command.getSubCommand()) && command.getSubCommand().size() <= 5) {
@@ -110,26 +88,6 @@ public class RidingSaveManagement {
 	}
 
 	private RidingSubSection createSubSection(RidingSubSaveCommand command) {
-		var section = new RidingSubSection(command.getTitle(), command.getContent());
-
-		//section - image mapping
-		if (!CollectionUtils.isEmpty(command.getImageIdList()) && command.getImageIdList().size() <= 2) {
-			imageManager.store(command.getImageIdList(), section);
-		}
-		return section;
-	}
-
-	private void addImagesToSubSection(List<Long> imageIdList, RidingSubSection subSection) {
-		if (!CollectionUtils.isEmpty(imageIdList) && imageIdList.size() <= 2) {
-			//image check
-			for (Long id : imageIdList) {
-				var findImage = imageRepository.findById(id);
-				if (findImage.isPresent()) { //기존 저정되어 있던 image
-					subSection.addImage(findImage.get());
-				} else {                    //새로운 image
-					imageManager.store(id, subSection);
-				}
-			}
-		}
+		return new RidingSubSection(command.getTitle(), command.getContent());
 	}
 }

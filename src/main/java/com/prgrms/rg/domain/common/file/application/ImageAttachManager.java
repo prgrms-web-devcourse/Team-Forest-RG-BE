@@ -5,7 +5,7 @@ import java.util.List;
 import com.prgrms.rg.domain.common.file.model.AttachedImage;
 import com.prgrms.rg.domain.common.file.model.ImageOwner;
 
-public interface ImageAttachManger {
+public interface ImageAttachManager {
 	<T extends ImageOwner> List<AttachedImage> store(List<Long> temporaryImageIds, T owner);
 
 	<T extends ImageOwner> AttachedImage store(Long temporaryImageId, T owner);

@@ -44,7 +44,7 @@ public class RidingSubSection implements ImageOwner {
 	private String content;
 
 	//0-2개의 사진
-	@OneToMany(mappedBy = "subInformation", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+	@OneToMany(mappedBy = "subInformation", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<SubImage> images = new ArrayList<>();
 
 	public RidingSubSection(String title, String content) {
@@ -63,10 +63,11 @@ public class RidingSubSection implements ImageOwner {
 	}
 
 	public void addImage(AttachedImage attachedImage) {
-		var image = new SubImage(attachedImage.getId(),attachedImage, this);
+		if (!(attachedImage instanceof SubImage))	throw new IllegalArgumentException();
+		var image = (SubImage)attachedImage;
+		image.updateOwner(this);
 		images.add(image);
 	}
-
 
 	@Override
 	public AttachedImage attach(TemporaryImage storedImage) {
