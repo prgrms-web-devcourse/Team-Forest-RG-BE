@@ -18,4 +18,9 @@ public class LocalSystemExceptionMessageSender implements ExceptionMessageSender
 	public void send(Exception exception, HttpServletRequest request) {
 		log.warn(MessageFactory.createHttpMessage(request), exception);
 	}
+
+	@Override
+	public void send(String message, HttpServletRequest request) {
+		log.warn(message);
+	}
 }
