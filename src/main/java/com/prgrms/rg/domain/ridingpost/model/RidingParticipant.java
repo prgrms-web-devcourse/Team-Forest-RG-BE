@@ -1,5 +1,7 @@
 package com.prgrms.rg.domain.ridingpost.model;
 
+import static com.google.common.base.Preconditions.*;
+
 import java.util.Objects;
 
 import javax.persistence.Entity;
@@ -39,6 +41,15 @@ public class RidingParticipant {
 	public RidingParticipant(RidingPost post, User user) {
 		this.post = post;
 		this.user = user;
+	}
+
+	public void setEvaluated() {
+		isEvaluated = true;
+	}
+
+	public void checkEvaluated() {
+		//todo exception make
+		checkArgument(!isEvaluated);
 	}
 
 	@Override

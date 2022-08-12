@@ -52,6 +52,10 @@ public class Manner {
 		}
 	}
 
+	public void addPoint() {
+		point++;
+	}
+
 	@Override
 	public String toString() {
 		return "Manner{" +
