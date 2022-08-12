@@ -23,7 +23,11 @@ import com.auth0.jwt.interfaces.DecodedJWT;
 import com.prgrms.rg.domain.auth.JwtRefreshToken;
 import com.prgrms.rg.domain.auth.JwtRefreshTokenRepository;
 import com.prgrms.rg.domain.auth.jwt.JwtTokenProvider;
+
+import com.prgrms.rg.domain.common.model.metadata.Bicycle;
 import com.prgrms.rg.domain.common.model.metadata.BicycleRepository;
+import com.prgrms.rg.domain.common.model.metadata.RidingLevel;
+
 import com.prgrms.rg.domain.ridingpost.model.AddressCode;
 import com.prgrms.rg.domain.ridingpost.model.AddressCodeRepository;
 import com.prgrms.rg.domain.user.application.UserAuthenticationService;
@@ -31,6 +35,7 @@ import com.prgrms.rg.domain.user.application.command.UserRegisterCommand;
 import com.prgrms.rg.domain.user.model.Introduction;
 import com.prgrms.rg.domain.user.model.Manner;
 import com.prgrms.rg.domain.user.model.Nickname;
+import com.prgrms.rg.domain.user.model.RiderProfile;
 import com.prgrms.rg.domain.user.model.User;
 import com.prgrms.rg.domain.user.model.UserRepository;
 import com.prgrms.rg.domain.user.model.dto.UserRegisterDTO;
@@ -153,35 +158,27 @@ public class UserAuthenticationServiceImpl implements UserAuthenticationService 
 
 	@PostConstruct
 	public void init() throws Exception {
-		User admin = User.builder()
+		AddressCode addressCode = addressCodeRepository.save(new AddressCode(99999));
+		Bicycle mtb = bicycleRepository.save(new Bicycle(395683L,"TSB"));
+		User user = User.builder()
 			.nickname(new Nickname("adminNickname"))
 			.manner(Manner.create())
 			.isRegistered(true)
 			.introduction(new Introduction("관리자입니다."))
 			.provider("kakao")
 			.providerId("provider_id")
+			.profile(new RiderProfile(1996, RidingLevel.BEGINNER))
+			.addressCode(addressCode)
 			.build();
-		AddressCode save = addressCodeRepository.save(new AddressCode(99999));
-		UserRegisterCommand userRegisterCommand = createTestRegisterCommand(admin.getId());
-		UserRegisterDTO userRegisterDTO = UserRegisterDTO.builder()
-			.favoriteRegionCode(save)
-			.nickNameAndLevel(userRegisterCommand.getNickName(), userRegisterCommand.getLevel())
-			.ridingStartYearAndPhoneNumber(userRegisterCommand.getRidingStartYear(),
-				userRegisterCommand.getPhoneNumber())
-			.build();
-		admin.updateByRegistration(userRegisterDTO);
-		userRepository.save(admin);
-		send(this.generateToken(admin));
-	}
-
-	private UserRegisterCommand createTestRegisterCommand(Long userId) {
-		List<String> bicycles = new ArrayList<>();
-		bicycles.add("MTB");
-		return UserRegisterCommand.of(new UserRegisterRequest(1996, 11010, bicycles, "하", "010-1234-5678", "김훈기"),
-			userId);
+		user.addBicycle(mtb);
+		userRepository.save(user);
+		String token = this.generateToken(user);
+		log.info(token);
+		send(token);
 	}
 
 	private String generateToken(User user) {
-		return jwtTokenProvider.createToken("ROLE_USER", user.getId());
+		return jwtTokenProvider.createAdminToken("ROLE_USER", user.getId());
 	}
+
 }
