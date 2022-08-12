@@ -40,16 +40,11 @@ public class RidingPostCommentServiceImpl implements RidingPostCommentService {
 		this.ridingPostCommentRepository = ridingPostCommentRepository;
 	}
 
-	/*
-	parentId가 있으면 대댓글
-	parentId가 없으면 댓글
-	 */
 	@Override
 	@Transactional
 	public long createComment(RidingPostCommentCreateCommand command) {
 		User author;
 		RidingPost post;
-		Long parentId = command.getParentCommentId();
 
 		try {
 			author = userReadService.getUserEntityById(command.getAuthorId());
@@ -58,8 +53,7 @@ public class RidingPostCommentServiceImpl implements RidingPostCommentService {
 			throw new RelatedEntityNotFoundException(exception);
 		}
 
-		// 부모 comment가 있을 경우 자식 comment는 post와 연관 관계를 갖지 않는다.
-		// 추후 postid 기반으로 탐색할 때 nested된 comment들을 탐색하는 것을 막기 위함
+		Long parentId = command.getParentCommentId();
 		if (Objects.nonNull(parentId) && parentId > 0) {
 			var parentComment = ridingPostCommentRepository.findById(parentId);
 			var comment = RidingPostComment.createChildComment(author, parentComment, command.getContent());
@@ -81,7 +75,7 @@ public class RidingPostCommentServiceImpl implements RidingPostCommentService {
 			throw new RelatedEntityNotFoundException(exception);
 		}
 
-		var comments = ridingPostCommentRepository.findAllByRidingPost(post);
+		var comments = ridingPostCommentRepository.findAllByRidingPostAndParentCommentIsNull(post);
 
 		return comments.stream()
 			.map(RidingPostCommentInfo::from)
