@@ -16,12 +16,14 @@ public class UserMeResult {
 	private Long userId;
 	private String username;
 	private boolean isRegistered;
+	private String token;
 
-	public static UserMeResult of(String username, Long userId, boolean isRegistered) {
+	public static UserMeResult of(String username, Long userId, boolean isRegistered, String token) {
 		UserMeResult result = new UserMeResult();
 		result.setUserId(userId);
 		result.setUsername(username);
 		result.setRegistered(isRegistered);
+		result.setToken(token);
 		return result;
 	}
 

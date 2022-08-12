@@ -1,12 +1,15 @@
 package com.prgrms.rg.domain.auth.jwt;
 
 import static org.apache.commons.lang3.ObjectUtils.*;
+import static org.springframework.http.HttpStatus.*;
 
 import java.io.IOException;
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
-
+import java.util.Map;
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
@@ -16,11 +19,17 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.MediaType;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.web.filter.GenericFilterBean;
+
+import com.auth0.jwt.JWT;
+import com.auth0.jwt.exceptions.JWTVerificationException;
+import com.auth0.jwt.interfaces.DecodedJWT;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class JwtAuthenticationFilter extends GenericFilterBean {
 
@@ -47,7 +56,6 @@ public class JwtAuthenticationFilter extends GenericFilterBean {
 				try {
 					Jwt.Claims claims = verify(token);
 					log.debug("Jwt parse result: {}", claims);
-
 					Long userId = claims.userId;
 					GrantedAuthority authority = getAuthorities(claims);
 
@@ -57,8 +65,19 @@ public class JwtAuthenticationFilter extends GenericFilterBean {
 						authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
 						SecurityContextHolder.getContext().setAuthentication(authentication);
 					}
+					DecodedJWT decode = JWT.decode(token);
+					if (decode.getExpiresAt().before(new Date()) && !"/api/v1/user/me".equals(request.getRequestURI())) {
+						throw new JWTVerificationException("jwt 만료시간 초과");
+					}
 				} catch (Exception e) {
 					log.warn("Jwt processing failed: {}", e.getMessage());
+					request.setAttribute("exception",e);
+					response.setHeader("error", e.getMessage());
+					response.setStatus(UNAUTHORIZED.value());
+					Map<String, String> error = new HashMap<>();
+					error.put("error_message", e.getMessage());
+					response.setContentType(MediaType.APPLICATION_JSON_VALUE);
+					new ObjectMapper().writeValue(response.getOutputStream(), error);
 				}
 			}
 		} else {

@@ -80,14 +80,11 @@ public class User extends BaseTimeEntity implements ImageOwner {
 		this.nickname = new Nickname(userRegisterDTO.getNickName());
 		this.profile = new RiderProfile(userRegisterDTO.getRidingStartYear(),
 			RidingLevel.of(userRegisterDTO.getLevel()));
-
-		for (String bicycle : userRegisterDTO.getBicycles()) {
-			this.profile.addBicycle(this, new Bicycle(bicycle));
-		}
-		this.addressCode = new AddressCode(userRegisterDTO.getFavoriteRegionCode());
+		this.addressCode = userRegisterDTO.getFavoriteRegionCode();
 		this.isRegistered = true;
 		setPhoneNumber(userRegisterDTO.getPhoneNumber());
 	}
+
 
 	private void setPhoneNumber(String phoneNumber) {
 		if (!Pattern.matches("^01(?:0|1|[6-9])-(?:\\d{3}|\\d{4})-\\d{4}$", phoneNumber))
