@@ -38,7 +38,6 @@ class UserControllerTest {
 	@Test
 	@DisplayName("요청 클라이언트 토큰의 유효성을 검증하고, 토큰에 할당된 사용자 ID를 제공한다.")
 	void validate_token_and_display_granted_authorizations() throws Exception {
-
 		// 임시 사용자 생성 및 토큰 주입
 		var template = new JdbcTemplate(dataSource);
 		template.update("INSERT INTO user(id,nickname,no_show,point,is_registered) VALUES(3,'kms',0,0,false)");
@@ -50,7 +49,6 @@ class UserControllerTest {
 		// When
 		result.andDo(print())
 			.andExpectAll(status().is2xxSuccessful(),
-				jsonPath("username", equalTo("kms")),
 				jsonPath("userId", equalTo(3))
 			);
 	}
