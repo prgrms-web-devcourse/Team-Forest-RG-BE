@@ -4,6 +4,8 @@ import static com.prgrms.rg.testutil.TestEntityDataFactory.*;
 import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.time.LocalDateTime;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -21,6 +23,7 @@ import com.prgrms.rg.domain.ridingpost.model.RidingPost;
 import com.prgrms.rg.domain.ridingpost.model.RidingStatus;
 import com.prgrms.rg.domain.ridingpost.model.event.RidingJoinCancelEvent;
 import com.prgrms.rg.domain.ridingpost.model.event.RidingJoinEvent;
+import com.prgrms.rg.domain.ridingpost.model.exception.CancelDeadlineOverException;
 import com.prgrms.rg.domain.ridingpost.model.exception.RidingJoinCancelFailException;
 import com.prgrms.rg.domain.ridingpost.model.exception.RidingJoinFailException;
 import com.prgrms.rg.domain.user.model.User;
@@ -149,5 +152,18 @@ class RidingJoinServiceTest {
 
 		//when then
 		assertThrows(RidingJoinCancelFailException.class, () -> joinService.cancelJoin(user.getId(), postId));
+	}
+
+	@DisplayName("라이딩 모집 마감 시간 이후로 취소 요청이 들어오면 CancelDeadlineOverException 발생시킨다.")
+	@Test
+	void test7() {
+		//given
+		RidingSaveCommand command = createRidingPostCreateCommandWithRidingDate(LocalDateTime.now().plusHours(1));
+		postId = ridingService.createRidingPost(leader.getId(), command);
+		participant = userRepository.save(createUser("participant"));
+		joinService.joinUserToRiding(participant.getId(), postId);
+
+		//when then
+		assertThrows(CancelDeadlineOverException.class, () -> joinService.cancelJoin(participant.getId(), postId));
 	}
 }

@@ -133,4 +133,28 @@ public class TestEntityDataFactory {
 		);
 	}
 
+	public static RidingSaveCommand createRidingPostCreateCommandWithRidingDate(LocalDateTime ridingDate) {
+		String title = "testTitle";
+		String estimatedTime = "120";
+		int fee = 0;
+		AddressCode addressCode = new AddressCode(11010);
+		List<String> routes = List.of("start", "end");
+		var mainCreateCommand = RidingMainSaveCommand.builder()
+			.title(title)
+			.estimatedTime(estimatedTime)
+			.ridingDate(ridingDate)
+			.fee(fee)
+			.addressCode(addressCode)
+			.routes(routes)
+			.departurePlace(new Coordinate(37.660666, 126.229333))
+			.build();
+
+		return new RidingSaveCommand(null,
+			mainCreateCommand,
+			new RidingParticipantSaveCommand(1, 3),
+			new RidingConditionSaveCommand("상", List.of("MTB", "픽시")),
+			null
+		);
+	}
+
 }

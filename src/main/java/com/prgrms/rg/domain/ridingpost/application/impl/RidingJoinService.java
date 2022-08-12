@@ -11,6 +11,7 @@ import com.prgrms.rg.domain.ridingpost.model.RidingParticipantRepository;
 import com.prgrms.rg.domain.ridingpost.model.RidingPost;
 import com.prgrms.rg.domain.ridingpost.model.event.RidingJoinCancelEvent;
 import com.prgrms.rg.domain.ridingpost.model.event.RidingJoinEvent;
+import com.prgrms.rg.domain.ridingpost.model.exception.CancelDeadlineOverException;
 import com.prgrms.rg.domain.ridingpost.model.exception.RidingJoinCancelFailException;
 import com.prgrms.rg.domain.ridingpost.model.exception.RidingJoinFailException;
 import com.prgrms.rg.domain.ridingpost.model.exception.RidingPostNotFoundException;
@@ -56,16 +57,15 @@ public class RidingJoinService {
 
 	private void checkCancelable(User participant, RidingPost post) {
 		checkIsRidingMember(participant, post);
-		checkCancelableTime(post);
+		checkCancelDeadline(post);
 	}
 
-	private void checkCancelableTime(RidingPost post) {
+	private void checkCancelDeadline(RidingPost post) {
 		LocalDateTime ridingDate = post.getRidingMainSection().getRidingDate();
 		LocalDateTime now = LocalDateTime.now();
 		LocalDateTime cancelableTime = ridingDate.minusHours(2);
 		if (now.isAfter(cancelableTime))
-			throw new RidingJoinFailException("cancel is allowed only 2 hours before riding");
-
+			throw new CancelDeadlineOverException("cancel is allowed only 2 hours before riding");
 	}
 
 	private void checkDuplicateJoin(User participant, RidingPost post) {
