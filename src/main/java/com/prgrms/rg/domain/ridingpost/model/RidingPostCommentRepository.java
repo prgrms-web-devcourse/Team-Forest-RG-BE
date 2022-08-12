@@ -7,7 +7,7 @@ public interface RidingPostCommentRepository {
 
 	RidingPostComment save(RidingPostComment ridingPostComment);
 
-	List<RidingPostComment> findAllByRidingPost(RidingPost ridingPost);
+	List<RidingPostComment> findAllByRidingPostAndParentCommentIsNull(RidingPost ridingPost);
 
 	void delete(RidingPostComment ridingPostComment);
 }
