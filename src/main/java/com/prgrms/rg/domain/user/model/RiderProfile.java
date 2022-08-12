@@ -33,7 +33,7 @@ public class RiderProfile {
 	@Enumerated(value = STRING)
 	private RidingLevel level;
 
-	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
 	private Set<UserBicycle> bicycles = new HashSet<>();
 
 	/*	Tree와의 논의에서 자전거 경력을 입력 쪽에서는 "5년차" 형태로 받고,
