@@ -17,6 +17,8 @@ import org.springframework.test.context.jdbc.Sql;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.prgrms.rg.domain.common.file.model.AttachedImageRepository;
+import com.prgrms.rg.domain.common.file.model.TemporaryImage;
+import com.prgrms.rg.domain.common.file.model.TemporaryImageRepository;
 import com.prgrms.rg.domain.common.model.metadata.RidingLevel;
 import com.prgrms.rg.domain.ridingpost.application.command.RidingConditionSaveCommand;
 import com.prgrms.rg.domain.ridingpost.application.command.RidingSaveCommand;
@@ -48,6 +50,9 @@ class RidingPostServiceImplTest {
 	private UserRepository userRepository;
 
 	@Autowired
+	private TemporaryImageRepository temporaryImageRepository;
+
+	@Autowired
 	private AttachedImageRepository imageRepository;
 
 	@PersistenceContext
@@ -64,13 +69,19 @@ class RidingPostServiceImplTest {
 			.build();
 		User savedUser = userRepository.save(user);
 
+		var tempThumbnailImage = new TemporaryImage("test.png", "http://test.png");
+		var thumbnailId = temporaryImageRepository.save(tempThumbnailImage).getId();
+		var tempSubImage = new TemporaryImage("test2.png", "http://test2.png");
+		var subImageId = temporaryImageRepository.save(tempSubImage).getId();
+
 		List<String> routes = List.of("start", "end");
 		var mainCreateCommand = RidingMainSaveCommand.builder()
 			.title("testTitle")
 			.estimatedTime("2시간").ridingDate(LocalDateTime.now().plusDays(10L))
 			.fee(0).addressCode(new AddressCode(11010)).routes(routes).build();
+		var subCommand = new RidingSubSaveCommand("sub-title", "sub-content", List.of(subImageId));
 
-		var createCommand = new RidingSaveCommand(null,
+		var createCommand = new RidingSaveCommand(thumbnailId,
 			mainCreateCommand,
 			new RidingParticipantSaveCommand(6, 10),
 			new RidingConditionSaveCommand(RidingLevel.BEGINNER.getLevelName(), List.of("MTB")), null

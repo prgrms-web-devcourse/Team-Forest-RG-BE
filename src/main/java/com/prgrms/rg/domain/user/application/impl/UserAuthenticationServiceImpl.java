@@ -153,7 +153,9 @@ public class UserAuthenticationServiceImpl implements UserAuthenticationService 
 	@PostConstruct
 	public void init() throws Exception {
 		AddressCode addressCode = addressCodeRepository.save(new AddressCode(99999));
+    
 		Bicycle mtb = bicycleRepository.save(new Bicycle(395683L, "TSB"));
+    
 		User user = User.builder()
 			.nickname(new Nickname("adminNickname"))
 			.manner(Manner.create())
@@ -200,5 +202,4 @@ public class UserAuthenticationServiceImpl implements UserAuthenticationService 
 				new Date(now.getTime() + refreshTokenExpiryTime * MILLISECOND_CORRECTION)));
 		}
 	}
-
 }

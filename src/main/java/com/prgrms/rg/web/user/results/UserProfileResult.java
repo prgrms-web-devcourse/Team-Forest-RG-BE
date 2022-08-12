@@ -2,6 +2,7 @@ package com.prgrms.rg.web.user.results;
 
 import java.time.LocalDate;
 
+import com.prgrms.rg.domain.user.model.information.ParticipatedRidingInfo;
 import com.prgrms.rg.domain.user.model.information.UserProfilePageInfo;
 
 import lombok.Data;
@@ -14,12 +15,14 @@ public class UserProfileResult {
 	private PrivacyProfileResult privacyProfile;
 	private RiderProfileResult ridingProfile;
 	private MannerResult manner;
+	private ParticipatedRidingInfo ridings;
 
 	private UserProfileResult(PrivacyProfileResult privacyProfile, RiderProfileResult ridingProfile,
-		MannerResult manner) {
+		MannerResult manner, ParticipatedRidingInfo ridings) {
 		this.privacyProfile = privacyProfile;
 		this.ridingProfile = ridingProfile;
 		this.manner = manner;
+		this.ridings = ridings;
 	}
 
 	public static UserProfileResult of(UserProfilePageInfo info) {
@@ -29,7 +32,8 @@ public class UserProfileResult {
 				info.getProfile().getRidingYears(),
 				info.getProfile().getLevel().getLevelName(), info.getProfile().getBicyclesAsArray()),
 			new MannerResult(info.getManner().getMannerPoint(), info.getManner().getNoShow(),
-				info.getManner().getBannedUntil()));
+				info.getManner().getBannedUntil()),
+			info.getRidings());
 	}
 
 	@Data

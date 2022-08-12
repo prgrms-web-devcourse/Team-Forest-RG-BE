@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import com.prgrms.rg.domain.ridingpost.model.exception.RidingPostNotFoundException;
+import com.prgrms.rg.domain.ridingpost.model.exception.RidingSearchFailException;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -19,5 +20,11 @@ public class RidingPostInquiryExceptionHandler {
 	public ResponseEntity<String> handleRidingPostNotFoundException(RidingPostNotFoundException e) {
 		log.info(e.getMessage(), e);
 		return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+	}
+
+	@ExceptionHandler(RidingSearchFailException.class)
+	public ResponseEntity<String> handleRidingSearchFailException(RidingSearchFailException e) {
+		log.info(e.getMessage(), e);
+		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
 	}
 }
