@@ -17,6 +17,7 @@ public class RidingSaveManagement {
 
 	private final AddressCodeRepository addressCodeRepository;
 	private final BicycleRepository bicycleRepository;
+	private final RidingSubSectionRepository ridingSubSectionRepository;
 
 	public RidingPost updateRidingPost(User leader, RidingPost post, RidingSaveCommand command) {
 
@@ -28,7 +29,8 @@ public class RidingSaveManagement {
 		post.removeCurrentSubSection();
 		if (!CollectionUtils.isEmpty(command.getSubCommand()) && command.getSubCommand().size() <= 5) {
 			for (RidingSubSaveCommand subCommand : command.getSubCommand()) {
-				post.addSubSection(createSubSection(subCommand));
+				var subSection = ridingSubSectionRepository.save(createSubSection(subCommand));
+				post.addSubSection(subSection);
 			}
 		}
 
