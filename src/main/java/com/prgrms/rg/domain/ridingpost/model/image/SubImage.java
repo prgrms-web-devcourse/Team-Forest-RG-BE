@@ -1,4 +1,4 @@
-package com.prgrms.rg.domain.ridingpost.model;
+package com.prgrms.rg.domain.ridingpost.model.image;
 
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -7,6 +7,7 @@ import javax.persistence.ManyToOne;
 import com.prgrms.rg.domain.common.file.model.AttachedImage;
 import com.prgrms.rg.domain.common.file.model.ImageOwner;
 import com.prgrms.rg.domain.common.file.model.TemporaryImage;
+import com.prgrms.rg.domain.ridingpost.model.RidingSubSection;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;

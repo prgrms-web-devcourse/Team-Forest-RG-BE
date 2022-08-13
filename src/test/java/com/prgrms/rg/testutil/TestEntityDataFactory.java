@@ -16,7 +16,7 @@ import com.prgrms.rg.domain.ridingpost.model.RidingMainSection;
 import com.prgrms.rg.domain.ridingpost.model.RidingParticipantSection;
 import com.prgrms.rg.domain.ridingpost.model.RidingPost;
 import com.prgrms.rg.domain.ridingpost.model.RidingSubSection;
-import com.prgrms.rg.domain.ridingpost.model.SubImage;
+import com.prgrms.rg.domain.ridingpost.model.image.SubImage;
 import com.prgrms.rg.domain.user.model.Manner;
 import com.prgrms.rg.domain.user.model.Nickname;
 import com.prgrms.rg.domain.user.model.User;

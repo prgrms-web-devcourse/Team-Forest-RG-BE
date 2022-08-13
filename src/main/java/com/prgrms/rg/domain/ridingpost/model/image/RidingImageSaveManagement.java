@@ -1,4 +1,4 @@
-package com.prgrms.rg.domain.ridingpost.model;
+package com.prgrms.rg.domain.ridingpost.model.image;
 
 import java.util.List;
 import java.util.Objects;
@@ -8,6 +8,8 @@ import org.springframework.util.CollectionUtils;
 
 import com.prgrms.rg.domain.common.file.application.ImageAttachManager;
 import com.prgrms.rg.domain.common.file.model.AttachedImageRepository;
+import com.prgrms.rg.domain.ridingpost.model.RidingPost;
+import com.prgrms.rg.domain.ridingpost.model.RidingSubSection;
 
 import lombok.RequiredArgsConstructor;
 
