@@ -15,7 +15,6 @@ import com.prgrms.rg.domain.user.model.User;
 import com.prgrms.rg.domain.user.model.UserRepository;
 import com.prgrms.rg.domain.user.model.information.ParticipatedRidingInfo;
 import com.prgrms.rg.domain.user.model.information.UserProfilePageInfo;
-import com.prgrms.rg.infrastructure.repository.projections.querydsl.RidingPostBriefInfoQueryDslProjection;
 
 import lombok.RequiredArgsConstructor;
 
@@ -35,10 +34,12 @@ public class UserReadServiceImpl implements UserReadService {
 	@Override
 	public UserProfilePageInfo getUserProfilePageInfo(Long userId) {
 		User user = userRepository.findById(userId).orElseThrow(() -> new NoSuchUserException(userId));
-		List<? extends RidingPostBriefInfo> leading = postSearchRepository.searchRidingPostByUser(user, LEADER);
-		List<? extends RidingPostBriefInfo> finished = postSearchRepository.searchRidingPostByUser(user, PARTICIPATED);
-		List<? extends RidingPostBriefInfo> scheduled = postSearchRepository.searchRidingPostByUser(user, WILL_PARTICIPATE);
-		ParticipatedRidingInfo participatedRidingInfo = ParticipatedRidingInfo.from(leading, finished, scheduled);
+		List<RidingPostBriefInfo> leading = postSearchRepository.searchRidingPostByUser(user, LEADER);
+		List<RidingPostBriefInfo> finished = postSearchRepository.searchRidingPostByUser(user, PARTICIPATED);
+		List<RidingPostBriefInfo> scheduled = postSearchRepository.searchRidingPostByUser(user, WILL_PARTICIPATE);
+		List<RidingPostBriefInfo> canEvaluate = postSearchRepository.searchRidingPostByUser(user, WILL_EVALUATE);
+
+		ParticipatedRidingInfo participatedRidingInfo = ParticipatedRidingInfo.from(leading, finished, scheduled, canEvaluate);
 
 		return UserProfilePageInfo.from(user, participatedRidingInfo);
 	}

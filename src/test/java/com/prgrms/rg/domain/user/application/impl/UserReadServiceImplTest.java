@@ -119,6 +119,9 @@ class UserReadServiceImplTest {
 		//When
 		UserProfilePageInfo info = userReadService.getUserProfilePageInfo(user.getId());
 
+		String s = objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(info);
+		System.out.println(s);
+
 		//Then
 		Assertions.assertThat(info.getRidings().getFinished().size()).isEqualTo(0);
 		Assertions.assertThat(info.getRidings().getScheduled().size()).isEqualTo(2);

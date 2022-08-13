@@ -7,6 +7,7 @@ import javax.transaction.Transactional;
 
 import org.springframework.stereotype.Service;
 
+import com.prgrms.rg.domain.common.file.application.ImageAttachManager;
 import com.prgrms.rg.domain.common.model.metadata.Bicycle;
 import com.prgrms.rg.domain.common.model.metadata.BicycleRepository;
 import com.prgrms.rg.domain.common.model.metadata.RidingLevel;
@@ -29,6 +30,7 @@ public class UserCommandServiceImpl implements UserCommandService {
 
 	private final UserRepository userRepository;
 	private final BicycleRepository bicycleRepository;
+	private final ImageAttachManager imageManager;
 
 	@Override
 	public Long edit(UserUpdateCommand command) {
