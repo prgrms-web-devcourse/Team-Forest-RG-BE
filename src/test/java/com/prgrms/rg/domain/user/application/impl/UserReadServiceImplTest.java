@@ -138,7 +138,7 @@ class UserReadServiceImplTest {
 		em.flush();
 		em.clear();
 
-		Assertions.assertThat(info.getRidings().getCanEvaluated().size()).isEqualTo(3);
+		Assertions.assertThat(info.getRidings().getCanEvaluated().size()).isEqualTo(2);
 
 	}
 }
