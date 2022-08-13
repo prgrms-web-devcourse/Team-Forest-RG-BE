@@ -3,7 +3,6 @@ package com.prgrms.rg.domain.user.model;
 import static javax.persistence.GenerationType.*;
 import static lombok.AccessLevel.*;
 
-import java.util.HashSet;
 import java.util.Set;
 import java.util.regex.Pattern;
 
@@ -65,7 +64,6 @@ public class User extends BaseTimeEntity implements ImageOwner {
 
 	private boolean isRegistered;
 
-	//TODO: Partey 머지 이후 이메일과 전화번호 VO 분리 훈 리팩토링
 	private String phoneNumber;
 
 	private String email;
@@ -81,14 +79,14 @@ public class User extends BaseTimeEntity implements ImageOwner {
 		this.nickname = new Nickname(userRegisterDTO.getNickName());
 
 		this.changeRiderProfile(userRegisterDTO.getRidingStartYear(),
-				RidingLevel.of(userRegisterDTO.getLevel()), this.profile.getBicycles());
+			RidingLevel.of(userRegisterDTO.getLevel()), this.profile.getBicycles());
 
 		this.addressCode = userRegisterDTO.getFavoriteRegionCode();
 		this.isRegistered = true;
 		setPhoneNumber(userRegisterDTO.getPhoneNumber());
 	}
 
-	private void setPhoneNumber(String phoneNumber) {
+	public void setPhoneNumber(String phoneNumber) {
 		if (!Pattern.matches("^01(?:0|1|[6-9])(?:\\d{3}|\\d{4})\\d{4}$", phoneNumber))
 			throw new IllegalArgumentException("잘못된 번호입니다.");
 		this.phoneNumber = phoneNumber;
@@ -104,6 +102,10 @@ public class User extends BaseTimeEntity implements ImageOwner {
 
 	public void changeIntroduction(Introduction introduction) {
 		this.introduction = introduction;
+	}
+
+	public void changeAddress(AddressCode addressCode) {
+		this.addressCode = addressCode;
 	}
 
 	public boolean addBicycle(Bicycle bicycle) {
@@ -123,6 +125,10 @@ public class User extends BaseTimeEntity implements ImageOwner {
 		return (introduction != null) ? introduction.get() : "";
 	}
 
+	public Integer getRegionCode() {
+		return addressCode.getCode();
+	}
+
 	public RiderInfo getRiderInformation() {
 		return profile.information();
 	}
@@ -133,6 +139,14 @@ public class User extends BaseTimeEntity implements ImageOwner {
 
 	public ContactInfo getContactInfo() {
 		return new ContactInfo(phoneNumber, email);
+	}
+
+	public boolean isNewImage(Long imageId) {
+		return !imageId.equals(profileImage.getId());
+	}
+
+	public String getAddressCodeInfo() {
+		return addressCode.getArea();
 	}
 
 	@Override

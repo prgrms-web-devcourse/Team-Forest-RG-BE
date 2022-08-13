@@ -7,9 +7,12 @@ import javax.transaction.Transactional;
 
 import org.springframework.stereotype.Service;
 
+import com.prgrms.rg.domain.common.file.application.ImageAttachManager;
 import com.prgrms.rg.domain.common.model.metadata.Bicycle;
 import com.prgrms.rg.domain.common.model.metadata.BicycleRepository;
 import com.prgrms.rg.domain.common.model.metadata.RidingLevel;
+import com.prgrms.rg.domain.ridingpost.model.AddressCode;
+import com.prgrms.rg.domain.ridingpost.model.AddressCodeRepository;
 import com.prgrms.rg.domain.user.application.UserCommandService;
 import com.prgrms.rg.domain.user.application.command.UserUpdateCommand;
 import com.prgrms.rg.domain.user.application.exception.DuplicateNicknameException;
@@ -29,6 +32,8 @@ public class UserCommandServiceImpl implements UserCommandService {
 
 	private final UserRepository userRepository;
 	private final BicycleRepository bicycleRepository;
+	private final AddressCodeRepository addressRepository;
+	private final ImageAttachManager imageManager;
 
 	@Override
 	public Long edit(UserUpdateCommand command) {
@@ -38,6 +43,9 @@ public class UserCommandServiceImpl implements UserCommandService {
 		changeNickname(command.getNickname(), user);
 		changeRiderProfile(command, user);
 		user.changeIntroduction(new Introduction(command.getIntroduction()));
+		changeAddress(command.getFavoriteRegionCode(), user);
+		user.setPhoneNumber(command.getPhoneNumber());
+		changeImage(command.getProfileImageId(), user);
 
 		return user.getId();
 	}
@@ -63,5 +71,16 @@ public class UserCommandServiceImpl implements UserCommandService {
 		}
 
 		user.changeRiderProfile(command.getRidingYears(), RidingLevel.of(command.getRidingLevel()), bicyclesToApply);
+	}
+
+	private void changeAddress(Integer favoriteRegionCode, User user) {
+		AddressCode address = addressRepository.findByCode(favoriteRegionCode).orElseThrow();
+		user.changeAddress(address);
+	}
+
+	private void changeImage(Long imageId, User user) {
+		if (user.isNewImage(imageId)) {
+			imageManager.store(imageId, user);
+		}
 	}
 }
