@@ -28,6 +28,14 @@ import com.prgrms.rg.domain.user.model.User;
 public class TestEntityDataFactory {
 	public static int ADDRESS_CODE = 11010;
 
+	public static User createUser(Long id, String nickname) {
+		return User.builder()
+			.id(id)
+			.nickname(new Nickname(nickname))
+			.manner(Manner.create())
+			.build();
+	}
+
 	public static User createUser(Long id) {
 		return User.builder()
 			.id(id)
