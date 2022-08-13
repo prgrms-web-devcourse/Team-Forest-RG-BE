@@ -76,7 +76,7 @@ class UserReadRestControllerV1Test {
 			INTERMEDIATE.name(), LocalDateTime.of(2022, 12, 22, 22, 22), new Coordinate(37.660666, 126.229333));
 
 		UserProfilePageInfo result = UserProfilePageInfo.from(
-			user, ParticipatedRidingInfo.from(List.of(riding), Collections.emptyList(), List.of(riding)));
+			user, ParticipatedRidingInfo.from(List.of(riding), Collections.emptyList(), List.of(riding), Collections.emptyList()));
 
 		when(userReadService.getUserProfilePageInfo(1L)).thenReturn(result);
 

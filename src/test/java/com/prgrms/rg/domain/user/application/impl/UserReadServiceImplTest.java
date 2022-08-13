@@ -124,4 +124,21 @@ class UserReadServiceImplTest {
 		Assertions.assertThat(info.getRidings().getScheduled().size()).isEqualTo(2);
 		Assertions.assertThat(info.getRidings().getLeading().size()).isEqualTo(2);
 	}
+
+
+	@Test
+	@DisplayName("유저 정보를 성공적으로 읽어올 수 있음 - evaluable ridingpost")
+	@Sql(scripts = {"classpath:address_code.sql", "classpath:bicycle.sql", "classpath:evaluation_data.sql"})
+	void userProfileWithEvaluableRidingPostTest(){
+
+		Long leaderId = 10L;
+
+		var info = userReadService.getUserProfilePageInfo(leaderId);
+
+		em.flush();
+		em.clear();
+
+		Assertions.assertThat(info.getRidings().getEvaluabled().size()).isEqualTo(2);
+
+	}
 }
