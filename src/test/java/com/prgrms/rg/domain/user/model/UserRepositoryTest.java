@@ -27,7 +27,6 @@ class UserRepositoryTest {
 		String nickname = "nickname";
 		User user = userRepository.save(User.builder()
 			.nickname(new Nickname(nickname))
-			.profileImages(profileImage)
 			.providerId(providerId)
 			.provider(provider)
 			.manner(Manner.create())
