@@ -88,6 +88,31 @@ public class TestEntityDataFactory {
 		return post;
 	}
 
+	public static RidingPost createSimplePost(Long leaderId) {
+		User leader = createUser(leaderId);
+		RidingConditionSection conditionSection = new RidingConditionSection(RidingLevel.MASTER);
+		RidingParticipantSection participantSection = new RidingParticipantSection(2, 5);
+
+		RidingMainSection mainSection = RidingMainSection.builder()
+			.title("자전거가 타고싶어요")
+			.ridingDate(LocalDateTime.now().plusDays(10L))
+			.routes(List.of("중앙 공원", "능골 공원", "탑골 공원"))
+			.estimatedTime("120분")
+			.addressCode(new AddressCode(ADDRESS_CODE))
+			.fee(10000)
+			.departurePlace(new Coordinate(35.232600, 127.650250))
+			.build();
+
+		RidingPost post = RidingPost.builder()
+			.leader(leader)
+			.ridingMainSection(mainSection)
+			.ridingConditionSection(conditionSection)
+			.ridingParticipantSection(participantSection)
+			.build();
+
+		return post;
+	}
+
 	public static RidingSaveCommand createRidingPostCreateCommand(List<String> bicycle, String level, int zoneCode,
 		Long leaderId) {
 		String title = "testTitle";
