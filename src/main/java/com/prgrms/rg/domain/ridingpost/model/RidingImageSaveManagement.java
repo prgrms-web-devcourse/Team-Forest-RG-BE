@@ -31,7 +31,9 @@ public class RidingImageSaveManagement {
 	}
 
 	public void saveSubImages(List<Long> imageIdList, RidingSubSection subSection) {
-		imageManager.store(imageIdList, subSection);
+		if (!CollectionUtils.isEmpty(imageIdList) && imageIdList.size() <= 2) {
+			imageManager.store(imageIdList, subSection);
+		}
 	}
 
 	public void updateSubImages(List<Long> imageIdList, RidingSubSection subSection) {
