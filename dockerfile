@@ -13,6 +13,9 @@ ENV LOG_PATH=./log
 ENV SLACK_CHANNEL_NAME=$SLACK_CHANNEL_NAME
 ENV SLACK_AUTH_TOKEN=$SLACK_AUTH_TOKEN
 
+# Localtime 설정
+RUN ln -sf /usr/share/zoneinfo/Asia/Seoul /etc/localtime
+
 # naver pinpoint 설치 및 환경 설정
 RUN mkdir /app
 WORKDIR /app
