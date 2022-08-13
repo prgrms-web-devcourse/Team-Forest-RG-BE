@@ -82,7 +82,7 @@ public class KakaoOauth implements OAuthManager {
 
 		infoResult.put("id", tree.get("id").asText());
 		infoResult.put("nickname", oauthUserProfile.get("nickname").asText());
-		infoResult.put("profile_image_url", oauthUserProfile.get("profile_image_url").asText());
+		infoResult.put("profile_image", oauthUserProfile.get("profile_image_url").asText());
 		return infoResult;
 	}
 }

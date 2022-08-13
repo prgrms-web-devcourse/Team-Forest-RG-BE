@@ -1,10 +1,10 @@
 --user
-insert into user(id, created_at, updated_at, address_code, email, introduction, is_registered, banned_until, no_show, point, nickname, phone_number, level, riding_start_year, profile_images, provider, provider_id)
-values (10, date_sub(now(), interval 3 day), NULL, NULL, NULL, NULL, false, NULL, 0, 0, 'leader', NULL, NULL, x'ACED00057372000D6A6176612E74696D652E536572955D84BA1B2248B20C0000787077050B000007E378', NULL, NULL, NULL);
-insert into user(id, created_at, updated_at, address_code, email, introduction, is_registered, banned_until, no_show, point, nickname, phone_number, level, riding_start_year, profile_images, provider, provider_id)
-values (2, date_sub(now(), interval 3 day), NULL, NULL, NULL, NULL, false, NULL, 0, 0, 'memberOne', NULL, NULL, NULL, NULL, NULL, NULL);
-insert into user(id, created_at, updated_at, address_code, email, introduction, is_registered, banned_until, no_show, point, nickname, phone_number, level, riding_start_year, profile_images, provider, provider_id)
-values (3, date_sub(now(), interval 3 day), NULL, NULL, NULL, NULL, false, NULL, 0, 0, 'memberTwo', NULL, NULL, NULL, NULL, NULL, NULL);
+insert into user(id, created_at, updated_at, address_code, email, introduction, is_registered, banned_until, no_show, point, nickname, phone_number, level, riding_start_year,  provider, provider_id)
+values (10, date_sub(now(), interval 3 day), NULL, NULL, NULL, NULL, false, NULL, 0, 0, 'leader', NULL, NULL, x'ACED00057372000D6A6176612E74696D652E536572955D84BA1B2248B20C0000787077050B000007E378',  NULL, NULL);
+insert into user(id, created_at, updated_at, address_code, email, introduction, is_registered, banned_until, no_show, point, nickname, phone_number, level, riding_start_year,  provider, provider_id)
+values (2, date_sub(now(), interval 3 day), NULL, NULL, NULL, NULL, false, NULL, 0, 0, 'memberOne', NULL, NULL, NULL,  NULL, NULL);
+insert into user(id, created_at, updated_at, address_code, email, introduction, is_registered, banned_until, no_show, point, nickname, phone_number, level, riding_start_year,  provider, provider_id)
+values (3, date_sub(now(), interval 3 day), NULL, NULL, NULL, NULL, false, NULL, 0, 0, 'memberTwo', NULL, NULL, NULL,  NULL, NULL);
 
 
 --ridingpost
