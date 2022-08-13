@@ -2,10 +2,11 @@ package com.prgrms.rg.infrastructure.repository;
 
 import static com.prgrms.rg.domain.common.model.metadata.QBicycle.*;
 import static com.prgrms.rg.domain.ridingpost.model.QRidingConditionBicycle.*;
+import static com.prgrms.rg.domain.ridingpost.model.QRidingParticipant.*;
 import static com.prgrms.rg.domain.ridingpost.model.QRidingPost.*;
+import static com.prgrms.rg.infrastructure.repository.querydslconditions.RidingPostUserSearchType.*;
 
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
@@ -115,6 +116,28 @@ public class QuerydslRidingPostSearchRepository extends QuerydslRepositorySuppor
 				ridingPost.ridingMainSection.departurePlace));
 		List<RidingPostBriefInfoQueryDslProjection> result = query.fetch();
 
+		return result;
+	}
+
+	public List<RidingPostBriefInfoQueryDslProjection> searchEvaluabledRidingPostByUser(User user) {
+		JPQLQuery<RidingPostBriefInfoQueryDslProjection> query = from(ridingPost)
+			.leftJoin(ridingPost.leader)
+			.leftJoin(ridingPost.thumbnail)
+			.leftJoin(ridingParticipant).on(ridingParticipant.user.id.eq(user.getId())
+				.and(ridingParticipant.post.id.eq(ridingPost.id))).fetchJoin()
+			// .leftJoin(ridingParticipant.user).on(ridingParticipant.user.id.eq(user.getId()).and().fetchJoin()
+			.where(ridingPost.userConditionOf(user, PARTICIPATED).and(
+				ridingPost.participantConditionOf(ridingParticipant, user)
+			))
+			.orderBy(ridingPost.ridingMainSection.ridingDate.desc())
+			.limit(MAXIMUM_USER_SEARCH_RESULT)
+			.select(new QRidingPostBriefInfoQueryDslProjection(
+				ridingPost.id, ridingPost.ridingMainSection.title,
+				ridingPost.thumbnail.url,
+				ridingPost.ridingConditionSection.level.stringValue(), ridingPost.ridingMainSection.ridingDate,
+				ridingPost.ridingMainSection.departurePlace));
+
+		List<RidingPostBriefInfoQueryDslProjection> result = query.fetch();
 		return result;
 	}
 }
