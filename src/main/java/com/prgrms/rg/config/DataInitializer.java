@@ -337,11 +337,10 @@ public class DataInitializer {
 		var temporaryImageRepository = context.getBean(TemporaryImageRepository.class);
 		var ridingPostService = context.getBean(RidingPostService.class);
 		var postRepository = context.getBean(RidingPostRepository.class);
-		//given
 
-		var tempThumbnailImage = new TemporaryImage("test.png", "http://test.png");
+		var tempThumbnailImage = new TemporaryImage("RG_Logo.png", "https://team-05-storage.s3.ap-northeast-2.amazonaws.com/static/RG_Logo.png");
 		var thumbnailId = temporaryImageRepository.save(tempThumbnailImage).getId();
-		var tempSubImage = new TemporaryImage("test2.png", "http://test2.png");
+		var tempSubImage = new TemporaryImage("rogo2.png", "https://team-05-storage.s3.ap-northeast-2.amazonaws.com/static/09be3f01-f808-41a6-aadb-0cd63c57a7c6.png");
 		var subImageId = temporaryImageRepository.save(tempSubImage).getId();
 
 		List<String> routes = List.of("서울특별시", "경기도");
