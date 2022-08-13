@@ -13,8 +13,7 @@ import com.prgrms.rg.domain.ridingpost.model.RidingParticipant;
 import com.prgrms.rg.domain.ridingpost.model.RidingPost;
 import com.prgrms.rg.domain.ridingpost.model.exception.UnAuthorizedException;
 import com.prgrms.rg.domain.user.application.UserEvaluateService;
-import com.prgrms.rg.domain.user.application.command.EvaluatedFromLeaderCommand;
-import com.prgrms.rg.domain.user.application.command.EvaluatedFromMemberCommand;
+import com.prgrms.rg.domain.user.application.command.ParticipantEvaluateCommand;
 import com.prgrms.rg.domain.user.application.exception.EvaluationFailException;
 import com.prgrms.rg.domain.user.model.UserEvaluateManagement;
 
@@ -29,35 +28,27 @@ public class UserEvaluateServiceImpl implements UserEvaluateService {
 	private final UserEvaluateManagement userEvaluateManagement;
 
 	@Override
-	public void evaluateFromLeader(Long userId, Long postId, List<EvaluatedFromLeaderCommand> commandList) {
+	public void evaluateMembers(Long userId, Long postId, List<ParticipantEvaluateCommand> commandList) {
 
 		var ridingpost = postReadService.loadRidingPostById(postId);
-
-		//user가 leader인지 확인
-		checkArgument(ridingpost.getLeader().getId().equals(userId), new UnAuthorizedException(userId));
 
 		var members = ridingpost.getRidingParticipantSection().getParticipants();
 		var evaluator = findParticipant(members, userId);
 		//평가를 진행하였는지 여부를 확인
-
 		checkEnabledEvaluation(ridingpost, evaluator);
-		for (EvaluatedFromLeaderCommand command : commandList) {
-			userEvaluateManagement.evaluate(members, evaluator, command.getMemberId(), command.isRecommended(),
-				command.isNoshow());
-		}
-		evaluator.setEvaluated();
-	}
 
-	@Override
-	public void evaluateFromMember(Long userId, Long postId, List<EvaluatedFromMemberCommand> commandList) {
-		var ridingpost = postReadService.loadRidingPostById(postId);
-		var members = ridingpost.getRidingParticipantSection().getParticipants();
-		var evaluator = findParticipant(members, userId);
-
-		checkEnabledEvaluation(ridingpost, evaluator);
-		for (EvaluatedFromMemberCommand command : commandList) {
-			userEvaluateManagement.evaluate(members, evaluator, command.getMemberId(), command.isRecommended());
+		//leader evaluate
+		if (ridingpost.getLeader().getId().equals(userId)) {
+			for (ParticipantEvaluateCommand command : commandList) {
+				userEvaluateManagement.evaluateFromLeader(members, evaluator, command.getMemberId(), command.isRecommended(),
+					command.isNoshow());
+			}
+		} else { //member evaluate
+			for (ParticipantEvaluateCommand command : commandList) {
+				userEvaluateManagement.evaluateFromMember(members, evaluator, command.getMemberId(), command.isRecommended());
+			}
 		}
+
 		evaluator.setEvaluated();
 	}
 

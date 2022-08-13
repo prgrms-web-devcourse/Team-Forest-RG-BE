@@ -13,7 +13,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class UserEvaluateManagement {
 
-	public void evaluate(List<RidingParticipant> participantList, RidingParticipant evaluator, Long memberId,
+	public void evaluateFromLeader(List<RidingParticipant> participantList, RidingParticipant evaluator, Long memberId,
 		boolean recommended, boolean noshow) {
 		if (evaluator.getUser().getId().equals(memberId))
 			throw new EvaluationFailException();
@@ -26,7 +26,7 @@ public class UserEvaluateManagement {
 
 	}
 
-	public void evaluate(List<RidingParticipant> participantList, RidingParticipant evaluator, Long memberId,
+	public void evaluateFromMember(List<RidingParticipant> participantList, RidingParticipant evaluator, Long memberId,
 		boolean recommended) {
 		if (evaluator.getUser().getId().equals(memberId))
 			throw new EvaluationFailException();
