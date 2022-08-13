@@ -53,6 +53,7 @@ public class RidingPostInfo {
 		private Long id;
 		private String title;
 		private String thumbnail;
+		private Long thumbnailId;
 		private String ridingLevel;
 		private ZoneInfo zone;
 		private int fee;
@@ -81,6 +82,7 @@ public class RidingPostInfo {
 			mapSubSection(subSectionList, instance);
 			instance.setId(ridingPost.getId());
 			instance.setThumbnail(ridingPost.getThumbnail());
+			instance.setThumbnailId(ridingPost.getThumbnailId());
 			instance.setCreatedAt(ridingPost.getCreatedAt());
 			return instance;
 		}
