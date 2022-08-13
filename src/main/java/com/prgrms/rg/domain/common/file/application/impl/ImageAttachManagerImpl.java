@@ -6,7 +6,7 @@ import java.util.List;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.prgrms.rg.domain.common.file.application.ImageAttachManger;
+import com.prgrms.rg.domain.common.file.application.ImageAttachManager;
 import com.prgrms.rg.domain.common.file.application.exception.IllegalImageIdException;
 import com.prgrms.rg.domain.common.file.model.AttachedImage;
 import com.prgrms.rg.domain.common.file.model.AttachedImageRepository;
@@ -22,7 +22,7 @@ import lombok.RequiredArgsConstructor;
 @Transactional
 @Component
 @RequiredArgsConstructor
-public class ImageAttachManagerImpl implements ImageAttachManger {
+public class ImageAttachManagerImpl implements ImageAttachManager {
 
 	private final TemporaryImageRepository temporaryImageRepository;
 	private final AttachedImageRepository attachedImageRepository;
@@ -41,7 +41,7 @@ public class ImageAttachManagerImpl implements ImageAttachManger {
 		TemporaryImage storedImage = temporaryImageRepository.findById(temporaryImageId)
 			.orElseThrow(() -> new IllegalImageIdException(temporaryImageId));
 
-		AttachedImage attachedImage = attachedImageRepository.save(owner.attach(storedImage));
+		AttachedImage attachedImage = owner.attach(storedImage);
 		temporaryImageRepository.deleteById(temporaryImageId);
 
 		return attachedImage;

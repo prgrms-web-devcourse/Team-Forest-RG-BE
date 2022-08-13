@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -41,7 +42,7 @@ public class RidingPostComment extends BaseTimeEntity {
 	@ManyToOne(fetch = LAZY)
 	private RidingPostComment parentComment;
 
-	@OneToMany(mappedBy = "parentComment")
+	@OneToMany(mappedBy = "parentComment", cascade = CascadeType.REMOVE)
 	private List<RidingPostComment> childComments;
 
 	@Column(length = 500, nullable = false)
@@ -72,13 +73,12 @@ public class RidingPostComment extends BaseTimeEntity {
 		this.contents = contents;
 	}
 
-	// TODO : 엔티티 분리
-	public boolean isRootComment() {
-		return Objects.nonNull(ridingPost);
+	public boolean isChildComment() {
+		return Objects.nonNull(parentComment);
 	}
 
 	private void assignToParent(RidingPostComment parentComment) {
-		checkArgument(!isRootComment(), "RidingPost가 존재할 경우 부모 댓글에 할당할 수 없습니다.");
+		checkArgument(!isChildComment(), "이미 부모 댓글이 존재합니다.");
 		checkNotNull(parentComment);
 		parentComment.getChildComments().add(this);
 		this.parentComment = parentComment;

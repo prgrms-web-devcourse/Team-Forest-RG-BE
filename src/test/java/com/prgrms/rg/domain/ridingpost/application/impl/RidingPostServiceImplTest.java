@@ -59,7 +59,7 @@ class RidingPostServiceImplTest {
 	EntityManager em;
 
 	@Test
-	@DisplayName("사진x RidingPost 생성")
+	@DisplayName("RidingPost 생성")
 	void createRidingTest(){
 
 	    //given
@@ -74,6 +74,9 @@ class RidingPostServiceImplTest {
 		var tempSubImage = new TemporaryImage("test2.png", "http://test2.png");
 		var subImageId = temporaryImageRepository.save(tempSubImage).getId();
 
+		em.flush();
+		em.clear();
+
 		List<String> routes = List.of("start", "end");
 		var mainCreateCommand = RidingMainSaveCommand.builder()
 			.title("testTitle")
@@ -84,11 +87,16 @@ class RidingPostServiceImplTest {
 		var createCommand = new RidingSaveCommand(thumbnailId,
 			mainCreateCommand,
 			new RidingParticipantSaveCommand(6, 10),
-			new RidingConditionSaveCommand(RidingLevel.BEGINNER.getLevelName(), List.of("MTB")), null
+			new RidingConditionSaveCommand(RidingLevel.BEGINNER.getLevelName(), List.of("MTB")),
+			List.of(subCommand)
 		);
 
 	    //when
 		Long savedPostId = ridingPostService.createRidingPost(user.getId(), createCommand);
+
+		em.flush();
+		em.clear();
+
 		var savedOne = ridingPostRepository.findById(savedPostId);
 
 	    //then
@@ -141,8 +149,10 @@ class RidingPostServiceImplTest {
 		assertThat(updatedPost.get().getRidingMainSection().getEstimatedTime(), is(equalTo(
 			mainCommand.getEstimatedTime())));
 		assertThat(updatedPost.get().getSubSectionList(), is(hasSize(1)));
-		assertThat(updatedPost.get().getSubSectionList().get(0).getTitle(), is(equalTo(subCommand.getTitle())));
 
+		var subsection = updatedPost.get().getSubSectionList().get(0);
+		assertThat(subsection.getTitle(), is(equalTo(subCommand.getTitle())));
+		assertThat(subsection.getImages(), is(hasSize(1)));
 	}
 
 	@Test
