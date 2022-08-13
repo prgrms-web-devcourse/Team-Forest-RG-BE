@@ -140,5 +140,15 @@ public class QuerydslRidingPostSearchRepository extends QuerydslRepositorySuppor
 		List<RidingPostBriefInfoQueryDslProjection> result = query.fetch();
 		return result;
 	}
+
+	public List<RidingPost> searchRidingPostInProgress() {
+		JPQLQuery<RidingPost> query = from(ridingPost)
+			.where(ridingPost.ridingParticipantSection.status.eq(RidingStatus.IN_PROGRESS))
+			.orderBy(ridingPost.createdAt.asc())
+			.limit(50).select(ridingPost);
+
+		List<RidingPost> result = query.fetch();
+		return result;
+	}
 }
 

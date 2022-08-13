@@ -15,4 +15,6 @@ public interface RidingPostSearchRepository {
 	List<RidingPostBriefInfoQueryDslProjection> searchRidingPostByUser(User user, RidingPostUserSearchType searchType);
 
 	List<RidingPostBriefInfoQueryDslProjection> searchEvaluabledRidingPostByUser(User user);
+
+	List<RidingPost> searchRidingPostInProgress();
 }
