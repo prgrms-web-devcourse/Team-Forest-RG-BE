@@ -24,6 +24,7 @@ import com.prgrms.rg.domain.ridingpost.application.command.RidingSaveCommand;
 import com.prgrms.rg.domain.ridingpost.application.command.RidingSubSaveCommand;
 import com.prgrms.rg.domain.ridingpost.model.AddressCode;
 import com.prgrms.rg.domain.ridingpost.model.RidingPostRepository;
+import com.prgrms.rg.domain.user.model.Introduction;
 import com.prgrms.rg.domain.user.model.Manner;
 import com.prgrms.rg.domain.user.model.Nickname;
 import com.prgrms.rg.domain.user.model.User;
@@ -328,6 +329,7 @@ public class DataInitializer {
 		var user = User.builder()
 			.nickname(new Nickname(username))
 			.manner(Manner.create())
+			.introduction(new Introduction("안녕하세요 " + username + "입니다."))
 			.build();
 		return user = userRepository.save(user);
 	}
