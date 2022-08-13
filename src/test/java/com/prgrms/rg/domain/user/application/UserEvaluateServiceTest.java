@@ -7,7 +7,6 @@ import java.util.List;
 
 import javax.persistence.EntityManager;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,12 +17,10 @@ import org.springframework.transaction.annotation.Transactional;
 import com.prgrms.rg.domain.ridingpost.application.impl.RidingJoinService;
 import com.prgrms.rg.domain.ridingpost.model.RidingPostRepository;
 import com.prgrms.rg.domain.user.application.command.ParticipantEvaluateCommand;
-import com.prgrms.rg.domain.user.model.User;
 import com.prgrms.rg.domain.user.model.UserRepository;
-import com.prgrms.rg.testutil.TestEntityDataFactory;
 
 @SpringBootTest
-@Sql(scripts = {"classpath:address_code.sql", "classpath:bicycle.sql", "classpath:riding_post.sql"})
+@Sql(scripts = {"classpath:address_code.sql", "classpath:bicycle.sql", "classpath:evaluation_data.sql"})
 @Transactional
 class UserEvaluateServiceTest {
 
@@ -37,27 +34,13 @@ class UserEvaluateServiceTest {
 	private UserEvaluateService userEvaluateService;
 
 	@Autowired
-	private RidingJoinService joinService;
-
-	@Autowired
 	private EntityManager em;
 
-	User leader;
-	User member1;
-	User member2;
+	Long leaderId = 10L;
+	Long member1Id = 2L;
+	Long member2Id = 3L;
 	Long ridingpostId = 1L;
 
-	@BeforeEach
-	void setup() {
-		leader = userRepository.save(TestEntityDataFactory.createUser(1L, "leader"));
-		member1 = userRepository.save(TestEntityDataFactory.createUser(2L, "memberOne"));
-		member2 = userRepository.save(TestEntityDataFactory.createUser(3L, "memberTwo"));
-
-		joinService.joinUserToRiding(member1.getId(), ridingpostId);
-		joinService.joinUserToRiding(member2.getId(), ridingpostId);
-	}
-
-	//noshow, recommend count 반영 확인
 	@Test
 	@DisplayName("리더의 평가 테스트")
 	void evaluateFromLeaderTest() {
@@ -67,11 +50,11 @@ class UserEvaluateServiceTest {
 		em.clear();
 
 		var commandList = List.of(
-			new ParticipantEvaluateCommand(member1.getId(), true, false),
-			new ParticipantEvaluateCommand(member2.getId(), false, false));
+			new ParticipantEvaluateCommand(member1Id, true, false),
+			new ParticipantEvaluateCommand(member2Id, false, false));
 
 		//when
-		userEvaluateService.evaluateMembers(leader.getId(), ridingpostId, commandList);
+		userEvaluateService.evaluateMembers(leaderId, ridingpostId, commandList);
 
 		em.flush();
 		em.clear();
@@ -94,11 +77,11 @@ class UserEvaluateServiceTest {
 		em.clear();
 
 		var commandList = List.of(
-			new ParticipantEvaluateCommand(leader.getId(), true, false),
-			new ParticipantEvaluateCommand(member2.getId(), false, false));
+			new ParticipantEvaluateCommand(leaderId, true, false),
+			new ParticipantEvaluateCommand(member2Id, false, false));
 
 		//when
-		userEvaluateService.evaluateMembers(member1.getId(), ridingpostId, commandList);
+		userEvaluateService.evaluateMembers(member1Id, ridingpostId, commandList);
 
 		em.flush();
 		em.clear();

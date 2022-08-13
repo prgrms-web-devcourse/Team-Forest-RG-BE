@@ -2,6 +2,7 @@ package com.prgrms.rg.infrastructure.repository.querydslconditions;
 
 import java.time.LocalDateTime;
 
+import com.prgrms.rg.domain.ridingpost.model.QRidingParticipant;
 import com.prgrms.rg.domain.ridingpost.model.QRidingPost;
 import com.prgrms.rg.domain.ridingpost.model.RidingPost;
 import com.prgrms.rg.domain.user.model.User;
@@ -13,11 +14,27 @@ public class RidingPostConditional {
 	@QueryDelegate(RidingPost.class)
 	public static BooleanExpression userConditionOf(QRidingPost post, User user, RidingPostUserSearchType type) {
 		switch (type) {
-			case LEADER: return isHostedBy(post, user);
-			case PARTICIPATED:return isParticipatedBy(post, user).and(isEnded(post));
-			case WILL_PARTICIPATE: return isParticipatedBy(post, user).and(isNotEnded(post));
-			default: throw new IllegalArgumentException("부적절한 검색 조건 대입함");
+			case LEADER:
+				return isHostedBy(post, user);
+			case PARTICIPATED:
+				return isParticipatedBy(post, user).and(isEnded(post));
+			case WILL_PARTICIPATE:
+				return isParticipatedBy(post, user).and(isNotEnded(post));
+			default:
+				throw new IllegalArgumentException("부적절한 검색 조건 대입함");
 		}
+	}
+
+	@QueryDelegate(RidingPost.class)
+	public static BooleanExpression participantConditionOf(QRidingPost post, QRidingParticipant ridingParticipant,
+		User participantUser) {
+		return enabledEvaluate(post, ridingParticipant, participantUser);
+	}
+
+	private static BooleanExpression enabledEvaluate(QRidingPost post, QRidingParticipant ridingParticipant,
+		User participant) {
+		return post.ridingMainSection.evaluationDueDate.after(LocalDateTime.now())
+			.and(ridingParticipant.isEvaluated.eq(false).and(ridingParticipant.user.id.eq(participant.getId())));
 	}
 
 	private static BooleanExpression isHostedBy(QRidingPost post, User leader) {

@@ -38,7 +38,9 @@ public class UserReadServiceImpl implements UserReadService {
 		List<? extends RidingPostBriefInfo> leading = postSearchRepository.searchRidingPostByUser(user, LEADER);
 		List<? extends RidingPostBriefInfo> finished = postSearchRepository.searchRidingPostByUser(user, PARTICIPATED);
 		List<? extends RidingPostBriefInfo> scheduled = postSearchRepository.searchRidingPostByUser(user, WILL_PARTICIPATE);
-		ParticipatedRidingInfo participatedRidingInfo = ParticipatedRidingInfo.from(leading, finished, scheduled);
+		List<? extends RidingPostBriefInfo> evaluabled = postSearchRepository.searchEvaluabledRidingPostByUser(user);
+
+		ParticipatedRidingInfo participatedRidingInfo = ParticipatedRidingInfo.from(leading, finished, scheduled, evaluabled);
 
 		return UserProfilePageInfo.from(user, participatedRidingInfo);
 	}

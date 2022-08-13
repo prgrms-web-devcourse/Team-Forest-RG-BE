@@ -13,4 +13,6 @@ public interface RidingPostSearchRepository {
 	Slice<RidingPostInfo> searchRidingPostSlice(RidingSearchCondition condition, Pageable pageable);
 
 	List<RidingPostBriefInfoQueryDslProjection> searchRidingPostByUser(User user, RidingPostUserSearchType searchType);
+
+	List<RidingPostBriefInfoQueryDslProjection> searchEvaluabledRidingPostByUser(User user);
 }
