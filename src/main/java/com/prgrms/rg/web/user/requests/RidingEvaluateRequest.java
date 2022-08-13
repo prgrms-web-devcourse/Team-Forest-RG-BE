@@ -5,10 +5,10 @@ import java.util.List;
 import lombok.Data;
 
 @Data
-public class RidingLeaderEvaluateRequest {
+public class RidingEvaluateRequest {
 
 	private Long postId;
 
-	private List<EvaluatedFromLeaderRequest> evaluatedMemberList;
+	private List<ParticipantEvaluateRequest> evaluatedMemberList;
 
 }
