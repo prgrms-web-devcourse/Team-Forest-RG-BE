@@ -61,14 +61,14 @@ class UserReadRestControllerV1Test {
 			.profile(new RiderProfile(2012, RidingLevel.INTERMEDIATE))
 			.phoneNumber("010-1234-5678")
 			.email("kakaoemail@naver.com")
-			.profileImage(null)
 			.build();
 		user.addBicycle(new Bicycle(1L, "로드"));
 		user.addBicycle(new Bicycle(2L, "따릉이"));
 
 		var riding = new RidingPostBriefInfo(1L, "한강 라이딩 하실분",
 			"https://programmers.co.kr/assets/icons/apple-icon-6eafc2c4c58a21aef692d6e44ce99d41f999c71789f277317532d0a9c6db8976.png",
-			INTERMEDIATE.name(), LocalDateTime.of(2022, 12, 22, 22, 22), new Coordinate(37.660666, 126.229333), new RidingPostBriefInfo.ZoneInfo(5, "서울시"),
+			INTERMEDIATE.name(), LocalDateTime.of(2022, 12, 22, 22, 22), new Coordinate(37.660666, 126.229333),
+			new RidingPostBriefInfo.ZoneInfo(5, "서울시"),
 			Collections.emptyList(), "1시간 30분", List.of("출발점", "도착점"));
 
 		UserProfilePageInfo result = UserProfilePageInfo.from(
