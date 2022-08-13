@@ -18,8 +18,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
-import com.prgrms.rg.domain.common.file.model.ImageOwner;
 import com.prgrms.rg.domain.common.file.model.AttachedImage;
+import com.prgrms.rg.domain.common.file.model.ImageOwner;
 import com.prgrms.rg.domain.common.file.model.TemporaryImage;
 import com.prgrms.rg.domain.common.model.BaseTimeEntity;
 import com.prgrms.rg.domain.user.model.User;
@@ -91,8 +91,23 @@ public class RidingPost extends BaseTimeEntity implements ImageOwner {
 		subSection.assignPost(this);
 	}
 
+	public void join(User participant) {
+		var ridingStatus = getRidingParticipantSection().getStatus();
+		if (ridingStatus != RidingStatus.IN_PROGRESS)
+			throw new IllegalArgumentException("riding not in progress");
+		addParticipant(participant);
+	}
+
+	public void close() {
+		ridingParticipantSection.changeRidingStatus(RidingStatus.CLOSED);
+	}
+
 	public void addParticipant(User participant) {
 		ridingParticipantSection.addParticipant(this, participant);
+	}
+
+	public void removeParticipant(User participant) {
+		ridingParticipantSection.removeParticipant(participant);
 	}
 
 	public String getThumbnail() {

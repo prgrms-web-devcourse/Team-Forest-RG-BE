@@ -1,6 +1,9 @@
 package com.prgrms.rg.infrastructure.repository.querydslconditions;
 
+import static com.prgrms.rg.domain.ridingpost.model.QRidingParticipant.*;
+
 import java.time.LocalDateTime;
+import java.util.List;
 
 import com.prgrms.rg.domain.ridingpost.model.QRidingPost;
 import com.prgrms.rg.domain.ridingpost.model.RidingPost;
@@ -34,5 +37,10 @@ public class RidingPostConditional {
 
 	private static BooleanExpression isNotEnded(QRidingPost post) {
 		return post.ridingMainSection.ridingDate.after(LocalDateTime.now());
+	}
+
+	@QueryDelegate(RidingPost.class)
+	public static BooleanExpression willEvaluated(QRidingPost post, List<Long> postIds) {
+		return post.id.in(postIds);
 	}
 }

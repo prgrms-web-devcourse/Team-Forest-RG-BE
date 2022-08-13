@@ -10,21 +10,21 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 public final class ParticipatedRidingInfo {
-	List<? extends RidingPostBriefInfo> leading;
-	List<? extends RidingPostBriefInfo> finished;
-	List<? extends RidingPostBriefInfo> scheduled;
+	List<RidingPostBriefInfo> leading;
+	List<RidingPostBriefInfo> finished;
+	List<RidingPostBriefInfo> scheduled;
+	List<RidingPostBriefInfo> canEvaluated;
 
-	private ParticipatedRidingInfo(List<? extends RidingPostBriefInfo> leading,
-		List<? extends RidingPostBriefInfo> finished,
-		List<? extends RidingPostBriefInfo> scheduled) {
+	private ParticipatedRidingInfo(List<RidingPostBriefInfo> leading, List<RidingPostBriefInfo> finished,
+		List<RidingPostBriefInfo> scheduled, List<RidingPostBriefInfo> canEvaluated) {
 		this.leading = leading;
 		this.finished = finished;
 		this.scheduled = scheduled;
+		this.canEvaluated = canEvaluated;
 	}
 
-	public static ParticipatedRidingInfo from(List<? extends RidingPostBriefInfo> leading,
-		List<? extends RidingPostBriefInfo> finished,
-		List<? extends RidingPostBriefInfo> scheduled) {
-		return new ParticipatedRidingInfo(leading, finished, scheduled);
+	public static ParticipatedRidingInfo from(List<RidingPostBriefInfo> leading, List<RidingPostBriefInfo> finished,
+		List<RidingPostBriefInfo> scheduled, List<RidingPostBriefInfo> canEvaluated) {
+		return new ParticipatedRidingInfo(leading, finished, scheduled, canEvaluated);
 	}
 }

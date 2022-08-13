@@ -2,10 +2,12 @@ package com.prgrms.rg.infrastructure.repository;
 
 import static com.prgrms.rg.domain.common.model.metadata.QBicycle.*;
 import static com.prgrms.rg.domain.ridingpost.model.QRidingConditionBicycle.*;
+import static com.prgrms.rg.domain.ridingpost.model.QRidingParticipant.*;
 import static com.prgrms.rg.domain.ridingpost.model.QRidingPost.*;
+import static com.prgrms.rg.infrastructure.repository.querydslconditions.RidingPostUserSearchType.*;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
@@ -17,16 +19,13 @@ import org.springframework.stereotype.Repository;
 
 import com.prgrms.rg.domain.common.model.metadata.Bicycle;
 import com.prgrms.rg.domain.common.model.metadata.RidingLevel;
+import com.prgrms.rg.domain.ridingpost.application.information.RidingPostBriefInfo;
 import com.prgrms.rg.domain.ridingpost.model.RidingPost;
 import com.prgrms.rg.domain.ridingpost.model.RidingPostInfo;
 import com.prgrms.rg.domain.ridingpost.model.RidingPostSearchRepository;
 import com.prgrms.rg.domain.ridingpost.model.RidingSearchCondition;
 import com.prgrms.rg.domain.ridingpost.model.RidingStatus;
 import com.prgrms.rg.domain.user.model.User;
-import com.prgrms.rg.infrastructure.repository.projections.querydsl.QRidingBicyclesInfoQueryDslProjection;
-import com.prgrms.rg.infrastructure.repository.projections.querydsl.QRidingPostBriefInfoQueryDslProjection;
-import com.prgrms.rg.infrastructure.repository.projections.querydsl.RidingBicyclesInfoQueryDslProjection;
-import com.prgrms.rg.infrastructure.repository.projections.querydsl.RidingPostBriefInfoQueryDslProjection;
 import com.prgrms.rg.infrastructure.repository.querydslconditions.RidingPostUserSearchType;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.JPQLQuery;
@@ -100,22 +99,36 @@ public class QuerydslRidingPostSearchRepository extends QuerydslRepositorySuppor
 	}
 
 	@Override
-	public List<RidingPostBriefInfoQueryDslProjection> searchRidingPostByUser(User user,
-		RidingPostUserSearchType searchType) {
-		JPQLQuery<RidingPostBriefInfoQueryDslProjection> query = from(ridingPost)
-			.leftJoin(ridingPost.leader)
-			.leftJoin(ridingPost.thumbnail)
-			.where(ridingPost.userConditionOf(user, searchType))
+	public List<RidingPostBriefInfo> searchRidingPostByUser(User user, RidingPostUserSearchType searchType) {
+		JPQLQuery<RidingPost> query = from(ridingPost)
+			.leftJoin(ridingPost.leader).fetchJoin()
+			.leftJoin(ridingPost.thumbnail).fetchJoin()
+			.leftJoin(ridingConditionBicycle).on(ridingConditionBicycle.post.id.eq(ridingPost.id)).fetchJoin()
+			.leftJoin(bicycle).on(bicycle.id.eq(ridingConditionBicycle.id)).fetchJoin()
 			.orderBy(ridingPost.ridingMainSection.ridingDate.desc(), ridingPost.id.desc())
 			.limit(MAXIMUM_USER_SEARCH_RESULT)
-			.select(new QRidingPostBriefInfoQueryDslProjection(
-				ridingPost.id, ridingPost.ridingMainSection.title,
-				ridingPost.thumbnail.url,
-				ridingPost.ridingConditionSection.level.stringValue(), ridingPost.ridingMainSection.ridingDate,
-				ridingPost.ridingMainSection.departurePlace));
-		List<RidingPostBriefInfoQueryDslProjection> result = query.fetch();
+			.select(ridingPost).distinct();
+		if (searchType == WILL_EVALUATE) {
+			query = searchRidingToEvaluate(user, query);
+		} else {
+			query.where(ridingPost.userConditionOf(user, searchType));
+		}
 
-		return result;
+		List<RidingPost> queryResult = query.fetch();
+
+		List<RidingPostBriefInfo> convertedResult = new ArrayList<>();
+		for (RidingPost ridingPost : queryResult) {
+			convertedResult.add(RidingPostBriefInfo.from(ridingPost));
+		}
+		return convertedResult;
+	}
+
+	public JPQLQuery<RidingPost> searchRidingToEvaluate(User user, JPQLQuery<RidingPost> query) {
+		List<Long> ids = from(ridingParticipant)
+			.join(ridingParticipant.post)
+			.where(ridingParticipant.isEvaluated.isFalse().and(ridingParticipant.user.eq(user)))
+			.select(ridingParticipant.post.id).fetch();
+		return query.where(ridingPost.willEvaluated(ids));
 	}
 }
 

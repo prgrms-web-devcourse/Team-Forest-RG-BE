@@ -15,13 +15,17 @@ public class UserUpdateRequest {
 
 	@NotBlank
 	private String nickname;
-	private int ridingYears;
+	private Integer ridingStartYear;
 	@NotBlank
 	private String ridingLevel;
 	private String[] bicycles;
 	private String introduction;
+	private Integer favoriteRegionCode;
+	private String phoneNumber;
+	private Long profileImageId;
 
 	public UserUpdateCommand toCommand(Long id) {
-		return new UserUpdateCommand(id, nickname, ridingYears, ridingLevel, bicycles, introduction);
+		return new UserUpdateCommand(id, nickname, ridingStartYear, ridingLevel, bicycles, introduction, favoriteRegionCode
+		,phoneNumber, profileImageId);
 	}
 }
