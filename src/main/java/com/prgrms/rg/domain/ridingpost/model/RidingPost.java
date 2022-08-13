@@ -91,6 +91,17 @@ public class RidingPost extends BaseTimeEntity implements ImageOwner {
 		subSection.assignPost(this);
 	}
 
+	public void join(User participant) {
+		var ridingStatus = getRidingParticipantSection().getStatus();
+		if (ridingStatus != RidingStatus.IN_PROGRESS)
+			throw new IllegalArgumentException("riding not in progress");
+		addParticipant(participant);
+	}
+
+	public void close() {
+		ridingParticipantSection.changeRidingStatus(RidingStatus.CLOSED);
+	}
+
 	public void addParticipant(User participant) {
 		ridingParticipantSection.addParticipant(this, participant);
 	}
