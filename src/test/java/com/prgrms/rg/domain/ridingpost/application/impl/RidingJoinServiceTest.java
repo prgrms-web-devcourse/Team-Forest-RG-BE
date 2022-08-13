@@ -104,6 +104,20 @@ class RidingJoinServiceTest {
 		assertThrows(RidingJoinFailException.class, () -> joinService.joinUserToRiding(participant.getId(), postId));
 	}
 
+	@DisplayName("마감된 라이딩에 참가를 요청할 경우 RidingJoinFailException 발생시킨다.")
+	@Test
+	void test8() {
+		//given
+		RidingSaveCommand command = createRidingPostCreateCommandWithParticipant(1, 1);
+		postId = ridingService.createRidingPost(leader.getId(), command);
+		RidingPost ridingPost = postReadService.loadRidingPostById(postId);
+		ridingPost.close();
+		participant = userRepository.save(createUser("participant"));
+
+		//when then
+		assertThrows(RidingJoinFailException.class, () -> joinService.joinUserToRiding(participant.getId(), postId));
+	}
+
 	@DisplayName("참가 취소 시 해당 라이딩 참여자가 줄고 RidingJoinCancelEvent 발행되어야한다.")
 	@Test
 	void test4() {
