@@ -41,6 +41,10 @@ public class RidingParticipant {
 		this.user = user;
 	}
 
+	public void setEvaluated() {
+		isEvaluated = true;
+	}
+
 	@Override
 	public boolean equals(Object o) {
 		if (this == o)
