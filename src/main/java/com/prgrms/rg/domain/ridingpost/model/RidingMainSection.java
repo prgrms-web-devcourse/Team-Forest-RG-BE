@@ -42,6 +42,9 @@ public class RidingMainSection {
 	@Column(name = "riding_date", nullable = false)
 	private LocalDateTime ridingDate;
 
+	@Column(name = "evaluation_due_date", nullable = false)
+	private LocalDateTime evaluationDueDate;
+
 	@Min(value = 0)
 	@Column(name = "fee")
 	private int fee = 0;
@@ -92,6 +95,7 @@ public class RidingMainSection {
 	private void setRidingDate(LocalDateTime ridingDate) {
 		checkArgument(ridingDate.isAfter(LocalDateTime.now()));
 		this.ridingDate = ridingDate;
+		this.evaluationDueDate = ridingDate.plusDays(7L);
 	}
 
 	public void assignAddressCode(AddressCode code) {

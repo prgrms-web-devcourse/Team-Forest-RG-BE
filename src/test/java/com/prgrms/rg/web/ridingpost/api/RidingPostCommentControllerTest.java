@@ -191,5 +191,4 @@ class RidingPostCommentControllerTest {
 		idField.set(target, id);
 		idField.setAccessible(false);
 	}
-
 }

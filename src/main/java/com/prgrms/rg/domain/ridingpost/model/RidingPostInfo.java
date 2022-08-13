@@ -50,6 +50,7 @@ public class RidingPostInfo {
 	@Setter(AccessLevel.PRIVATE)
 	@NoArgsConstructor(access = AccessLevel.PRIVATE)
 	public static class RidingInfo {
+		private Long id;
 		private String title;
 		private String thumbnail;
 		private String ridingLevel;
@@ -78,6 +79,7 @@ public class RidingPostInfo {
 			mapParticipantSection(participantSection, instance);
 			List<RidingSubSection> subSectionList = ridingPost.getSubSectionList();
 			mapSubSection(subSectionList, instance);
+			instance.setId(ridingPost.getId());
 			instance.setThumbnail(ridingPost.getThumbnail());
 			instance.setCreatedAt(ridingPost.getCreatedAt());
 			return instance;

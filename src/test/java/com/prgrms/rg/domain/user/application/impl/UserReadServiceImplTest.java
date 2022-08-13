@@ -19,6 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.prgrms.rg.domain.common.model.metadata.BicycleRepository;
+import com.prgrms.rg.domain.ridingpost.application.information.RidingPostBriefInfo;
 import com.prgrms.rg.domain.ridingpost.model.AddressCode;
 import com.prgrms.rg.domain.ridingpost.model.Coordinate;
 import com.prgrms.rg.domain.ridingpost.model.RidingConditionSection;
@@ -121,7 +122,23 @@ class UserReadServiceImplTest {
 
 		//Then
 		Assertions.assertThat(info.getRidings().getFinished().size()).isEqualTo(0);
-		Assertions.assertThat(info.getRidings().getScheduled().size()).isEqualTo(2);
 		Assertions.assertThat(info.getRidings().getLeading().size()).isEqualTo(2);
+	}
+
+
+	@Test
+	@DisplayName("유저 정보를 성공적으로 읽어올 수 있음 - evaluable ridingpost")
+	@Sql(scripts = {"classpath:address_code.sql", "classpath:bicycle.sql", "classpath:evaluation_data.sql"})
+	void userProfileWithEvaluableRidingPostTest(){
+
+		Long leaderId = 10L;
+
+		var info = userReadService.getUserProfilePageInfo(leaderId);
+
+		em.flush();
+		em.clear();
+
+		Assertions.assertThat(info.getRidings().getCanEvaluated().size()).isEqualTo(3);
+
 	}
 }
