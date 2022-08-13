@@ -79,6 +79,10 @@ public class UserCommandServiceImpl implements UserCommandService {
 	}
 
 	private void changeImage(Long imageId, User user) {
+		if (imageId==null) {
+			return;
+		}
+
 		if (user.isNewImage(imageId)) {
 			imageManager.store(imageId, user);
 		}

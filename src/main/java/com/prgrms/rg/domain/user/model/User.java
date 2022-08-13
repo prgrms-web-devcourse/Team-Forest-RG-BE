@@ -126,6 +126,9 @@ public class User extends BaseTimeEntity implements ImageOwner {
 	}
 
 	public Integer getRegionCode() {
+		if (addressCode==null) {
+			return null;
+		}
 		return addressCode.getCode();
 	}
 
@@ -142,6 +145,9 @@ public class User extends BaseTimeEntity implements ImageOwner {
 	}
 
 	public boolean isNewImage(Long imageId) {
+		if (profileImage==null) {
+			return true;
+		}
 		return !imageId.equals(profileImage.getId());
 	}
 
