@@ -15,15 +15,21 @@ public class UserUpdateCommand {
 	private String ridingLevel;
 	private String[] bicycles;
 	private String introduction;
+	private Integer favoriteRegionCode;
+	private String phoneNumber;
+	private Long profileImageId;
 
 	public UserUpdateCommand(Long id, String nickname, int ridingYears, String ridingLevel, String[] bicycles,
-		String introduction) {
+		String introduction, Integer favoriteRegionCode, String phoneNumber, Long profileImageId) {
 		this.id = id;
 		this.nickname = nickname;
 		this.ridingYears = ridingYears;
 		this.ridingLevel = ridingLevel;
 		this.bicycles = bicycles;
 		this.introduction = introduction;
+		this.favoriteRegionCode = favoriteRegionCode;
+		this.phoneNumber = phoneNumber;
+		this.profileImageId = profileImageId;
 	}
 
 	@Override
@@ -43,7 +49,6 @@ public class UserUpdateCommand {
 			return false;
 		if (!Objects.equals(ridingLevel, that.ridingLevel))
 			return false;
-		// Probably incorrect - comparing Object[] arrays with Arrays.equals
 		if (!Arrays.equals(bicycles, that.bicycles))
 			return false;
 		return Objects.equals(introduction, that.introduction);
