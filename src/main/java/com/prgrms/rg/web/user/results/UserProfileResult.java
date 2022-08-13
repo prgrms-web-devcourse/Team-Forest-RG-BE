@@ -30,7 +30,7 @@ public class UserProfileResult {
 			new PrivacyProfileResult(info.getContact().getPhoneNumber(), info.getContact().getEmail()),
 			new RiderProfileResult(info.getNickname(), info.getImage().getFileUrl(), info.getIntroduction(),
 				info.getProfile().getRidingYears(),
-				info.getProfile().getLevel().getLevelName(), info.getProfile().getBicyclesAsArray()),
+				info.getProfile().getLevel().getLevelName(), info.getRegionCode(), info.getProfile().getBicyclesAsArray()),
 			new MannerResult(info.getManner().getMannerPoint(), info.getManner().getNoShow(),
 				info.getManner().getBannedUntil()),
 			info.getRidings());
@@ -62,16 +62,17 @@ public class UserProfileResult {
 		private String introduction;
 		private int ridingStartYear;
 		private String level;
+		private Integer favoriteRegionCode;
 		private String[] bicycles;
 
-		private RiderProfileResult(String nickname, String profileImage, String introduction, int ridingStartYear,
-			String level,
-			String[] bicycles) {
+		public RiderProfileResult(String nickname, String profileImage, String introduction, int ridingStartYear,
+			String level, Integer favoriteRegionCode, String[] bicycles) {
 			this.nickname = nickname;
 			this.profileImage = profileImage;
 			this.introduction = introduction;
 			this.ridingStartYear = ridingStartYear;
 			this.level = level;
+			this.favoriteRegionCode = favoriteRegionCode;
 			this.bicycles = bicycles;
 		}
 	}

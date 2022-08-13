@@ -20,12 +20,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.prgrms.rg.domain.auth.jwt.JwtTokenProvider;
 import com.prgrms.rg.domain.common.model.metadata.Bicycle;
 import com.prgrms.rg.domain.common.model.metadata.RidingLevel;
-import com.prgrms.rg.domain.ridingpost.model.AddressCode;
+import com.prgrms.rg.domain.ridingpost.application.information.RidingPostBriefInfo;
 import com.prgrms.rg.domain.ridingpost.model.Coordinate;
-import com.prgrms.rg.domain.ridingpost.model.RidingConditionSection;
-import com.prgrms.rg.domain.ridingpost.model.RidingMainSection;
-import com.prgrms.rg.domain.ridingpost.model.RidingParticipantSection;
-import com.prgrms.rg.domain.ridingpost.model.RidingPost;
 import com.prgrms.rg.domain.user.application.UserReadService;
 import com.prgrms.rg.domain.user.model.Introduction;
 import com.prgrms.rg.domain.user.model.Manner;
@@ -34,7 +30,6 @@ import com.prgrms.rg.domain.user.model.RiderProfile;
 import com.prgrms.rg.domain.user.model.User;
 import com.prgrms.rg.domain.user.model.information.ParticipatedRidingInfo;
 import com.prgrms.rg.domain.user.model.information.UserProfilePageInfo;
-import com.prgrms.rg.infrastructure.repository.projections.querydsl.RidingPostBriefInfoQueryDslProjection;
 import com.prgrms.rg.testutil.ControllerTest;
 
 @ControllerTest(controllers = UserReadRestControllerV1.class)
@@ -66,17 +61,19 @@ class UserReadRestControllerV1Test {
 			.profile(new RiderProfile(2012, RidingLevel.INTERMEDIATE))
 			.phoneNumber("010-1234-5678")
 			.email("kakaoemail@naver.com")
-			.profileImage(null)
 			.build();
 		user.addBicycle(new Bicycle(1L, "로드"));
 		user.addBicycle(new Bicycle(2L, "따릉이"));
 
-		var riding = new RidingPostBriefInfoQueryDslProjection(1L, "한강 라이딩 하실분",
+		var riding = new RidingPostBriefInfo(1L, "한강 라이딩 하실분",
 			"https://programmers.co.kr/assets/icons/apple-icon-6eafc2c4c58a21aef692d6e44ce99d41f999c71789f277317532d0a9c6db8976.png",
-			INTERMEDIATE.name(), LocalDateTime.of(2022, 12, 22, 22, 22), new Coordinate(37.660666, 126.229333));
+			INTERMEDIATE.name(), LocalDateTime.of(2022, 12, 22, 22, 22), new Coordinate(37.660666, 126.229333),
+			new RidingPostBriefInfo.ZoneInfo(5, "서울시"),
+			Collections.emptyList(), "1시간 30분", List.of("출발점", "도착점"));
 
 		UserProfilePageInfo result = UserProfilePageInfo.from(
-			user, ParticipatedRidingInfo.from(List.of(riding), Collections.emptyList(), List.of(riding), Collections.emptyList()));
+			user, ParticipatedRidingInfo.from(List.of(riding), Collections.emptyList(), List.of(riding),
+				Collections.emptyList()));
 
 		when(userReadService.getUserProfilePageInfo(1L)).thenReturn(result);
 
