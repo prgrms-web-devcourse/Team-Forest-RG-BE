@@ -6,6 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.prgrms.rg.domain.auth.jwt.JwtAuthentication;
@@ -23,7 +24,7 @@ public class UserEvaluateController {
 	@Secured("ROLE_USER")
 	@PostMapping(value = "/api/v1/user/evaluate")
 	public ResponseEntity<String> evaluate(@AuthenticationPrincipal JwtAuthentication auth,
-		RidingEvaluateRequest request) {
+		@RequestBody RidingEvaluateRequest request) {
 		evaluateService.evaluateMembers(auth.userId, request.getPostId(),
 			request.getEvaluatedMemberList().stream().map(
 				ParticipantEvaluateRequest::toCommand).collect(
