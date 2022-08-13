@@ -9,13 +9,12 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.prgrms.rg.domain.ridingpost.application.information.RidingPostBriefInfo;
 import com.prgrms.rg.domain.ridingpost.model.RidingPostSearchRepository;
-import com.prgrms.rg.domain.user.application.exception.NoSuchUserException;
 import com.prgrms.rg.domain.user.application.UserReadService;
+import com.prgrms.rg.domain.user.application.exception.NoSuchUserException;
 import com.prgrms.rg.domain.user.model.User;
 import com.prgrms.rg.domain.user.model.UserRepository;
 import com.prgrms.rg.domain.user.model.information.ParticipatedRidingInfo;
 import com.prgrms.rg.domain.user.model.information.UserProfilePageInfo;
-import com.prgrms.rg.infrastructure.repository.projections.querydsl.RidingPostBriefInfoQueryDslProjection;
 
 import lombok.RequiredArgsConstructor;
 
@@ -35,12 +34,13 @@ public class UserReadServiceImpl implements UserReadService {
 	@Override
 	public UserProfilePageInfo getUserProfilePageInfo(Long userId) {
 		User user = userRepository.findById(userId).orElseThrow(() -> new NoSuchUserException(userId));
-		List<? extends RidingPostBriefInfo> leading = postSearchRepository.searchRidingPostByUser(user, LEADER);
-		List<? extends RidingPostBriefInfo> finished = postSearchRepository.searchRidingPostByUser(user, PARTICIPATED);
-		List<? extends RidingPostBriefInfo> scheduled = postSearchRepository.searchRidingPostByUser(user, WILL_PARTICIPATE);
-		List<? extends RidingPostBriefInfo> evaluabled = postSearchRepository.searchEvaluabledRidingPostByUser(user);
+		List<RidingPostBriefInfo> leading = postSearchRepository.searchRidingPostByUser(user, LEADER);
+		List<RidingPostBriefInfo> finished = postSearchRepository.searchRidingPostByUser(user, PARTICIPATED);
+		List<RidingPostBriefInfo> scheduled = postSearchRepository.searchRidingPostByUser(user, WILL_PARTICIPATE);
+		List<RidingPostBriefInfo> canEvaluated = postSearchRepository.searchRidingPostByUser(user, WILL_EVALUATE);
 
-		ParticipatedRidingInfo participatedRidingInfo = ParticipatedRidingInfo.from(leading, finished, scheduled, evaluabled);
+		ParticipatedRidingInfo participatedRidingInfo = ParticipatedRidingInfo.from(leading, finished, scheduled,
+			canEvaluated);
 
 		return UserProfilePageInfo.from(user, participatedRidingInfo);
 	}
