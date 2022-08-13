@@ -3,10 +3,10 @@ package com.prgrms.rg.domain.user.model;
 import static javax.persistence.GenerationType.*;
 import static lombok.AccessLevel.*;
 
-import java.util.HashSet;
 import java.util.Set;
 import java.util.regex.Pattern;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -51,9 +51,7 @@ public class User extends BaseTimeEntity implements ImageOwner {
 	@Embedded
 	private RiderProfile profile;
 
-	private String profileImages;
-
-	@OneToOne(mappedBy = "user")
+	@OneToOne(mappedBy = "user",cascade = CascadeType.ALL)
 	private ProfileImage profileImage;
 
 	@Embedded
@@ -141,7 +139,7 @@ public class User extends BaseTimeEntity implements ImageOwner {
 			"id=" + id +
 			", nickname=" + nickname +
 			", profile=" + profile +
-			", profileImage=" + profileImages +
+			", profileImage=" + profileImage +
 			", introduction=" + introduction +
 			", manner=" + manner +
 			'}';
@@ -155,6 +153,6 @@ public class User extends BaseTimeEntity implements ImageOwner {
 
 	@Override
 	public void removeCurrentImage() {
-		profileImages = null;
+		profileImage = null;
 	}
 }

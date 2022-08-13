@@ -22,6 +22,8 @@ import com.prgrms.rg.domain.auth.JwtRefreshToken;
 import com.prgrms.rg.domain.auth.JwtRefreshTokenRepository;
 import com.prgrms.rg.domain.auth.jwt.JwtTokenProvider;
 
+import com.prgrms.rg.domain.common.file.model.TemporaryImage;
+import com.prgrms.rg.domain.common.file.model.TemporaryImageRepository;
 import com.prgrms.rg.domain.common.model.metadata.Bicycle;
 import com.prgrms.rg.domain.common.model.metadata.BicycleRepository;
 import com.prgrms.rg.domain.common.model.metadata.RidingLevel;
@@ -55,6 +57,7 @@ public class UserAuthenticationServiceImpl implements UserAuthenticationService 
 	private final JwtTokenProvider jwtTokenProvider;
 	private final OAuthManager communicator;
 	private final JwtRefreshTokenRepository jwtRefreshTokenRepository;
+	private final TemporaryImageRepository temporaryImageRepository;
 
 	@Value("${jwt.refresh-expiry-seconds}")
 	private long refreshTokenExpiryTime;
@@ -106,7 +109,6 @@ public class UserAuthenticationServiceImpl implements UserAuthenticationService 
 
 				User user = userRepository.save(User.builder()
 					.nickname(new Nickname(nickname))
-					.profileImages(profileImage)
 					.providerId(providerId)
 					.provider(provider)
 					.manner(Manner.create())
@@ -115,6 +117,8 @@ public class UserAuthenticationServiceImpl implements UserAuthenticationService 
 					.addressCode(new AddressCode(DEFAULT_ADDRESS_CODE))
 					.build());
 
+				TemporaryImage image = temporaryImageRepository.save(new TemporaryImage(profileImage, profileImage));
+				user.attach(image);
 				Date now = new Date();
 
 				jwtRefreshTokenRepository.save(new JwtRefreshToken(user.getId(), new Date(now.getTime()),
