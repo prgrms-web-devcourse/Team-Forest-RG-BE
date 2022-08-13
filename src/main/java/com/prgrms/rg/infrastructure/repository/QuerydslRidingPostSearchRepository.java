@@ -105,6 +105,7 @@ public class QuerydslRidingPostSearchRepository extends QuerydslRepositorySuppor
 			.leftJoin(ridingPost.thumbnail).fetchJoin()
 			.leftJoin(ridingConditionBicycle).on(ridingConditionBicycle.post.id.eq(ridingPost.id)).fetchJoin()
 			.leftJoin(bicycle).on(bicycle.id.eq(ridingConditionBicycle.id)).fetchJoin()
+			.leftJoin(ridingPost.ridingMainSection.routes).fetchJoin()
 			.orderBy(ridingPost.ridingMainSection.ridingDate.desc(), ridingPost.id.desc())
 			.limit(MAXIMUM_USER_SEARCH_RESULT)
 			.select(ridingPost).distinct();
