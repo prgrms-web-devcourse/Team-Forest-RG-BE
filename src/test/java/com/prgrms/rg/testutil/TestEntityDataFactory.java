@@ -5,6 +5,10 @@ import java.util.List;
 
 import com.prgrms.rg.domain.common.file.model.TemporaryImage;
 import com.prgrms.rg.domain.common.model.metadata.RidingLevel;
+import com.prgrms.rg.domain.ridingpost.application.command.RidingConditionSaveCommand;
+import com.prgrms.rg.domain.ridingpost.application.command.RidingMainSaveCommand;
+import com.prgrms.rg.domain.ridingpost.application.command.RidingParticipantSaveCommand;
+import com.prgrms.rg.domain.ridingpost.application.command.RidingSaveCommand;
 import com.prgrms.rg.domain.ridingpost.model.AddressCode;
 import com.prgrms.rg.domain.ridingpost.model.Coordinate;
 import com.prgrms.rg.domain.ridingpost.model.RidingConditionSection;
@@ -47,6 +51,13 @@ public class TestEntityDataFactory {
 			.build();
 	}
 
+	public static User createUser(String nickname) {
+		return User.builder()
+			.nickname(new Nickname(nickname))
+			.manner(Manner.create())
+			.build();
+	}
+
 	public static RidingPost createRidingPost(Long leaderId) {
 		User leader = createUser(leaderId);
 		RidingConditionSection conditionSection = new RidingConditionSection(RidingLevel.MASTER);
@@ -75,6 +86,83 @@ public class TestEntityDataFactory {
 
 		post.addSubSection(subSection);
 		return post;
+	}
+
+	public static RidingSaveCommand createRidingPostCreateCommand(List<String> bicycle, String level, int zoneCode,
+		Long leaderId) {
+		String title = "testTitle";
+		String estimatedTime = "120";
+		LocalDateTime ridingDate = LocalDateTime.now().plusDays(10L);
+		int fee = 0;
+		AddressCode addressCode = new AddressCode(zoneCode);
+		int minPart = 4;
+		int maxPart = 10;
+		List<String> routes = List.of("start", "end");
+		var mainCreateCommand = RidingMainSaveCommand.builder()
+			.title(title)
+			.estimatedTime(estimatedTime)
+			.ridingDate(ridingDate)
+			.fee(fee)
+			.addressCode(addressCode)
+			.routes(routes)
+			.departurePlace(new Coordinate(37.660666, 126.229333))
+			.build();
+
+		return new RidingSaveCommand(null,
+			mainCreateCommand,
+			new RidingParticipantSaveCommand(minPart, maxPart),
+			new RidingConditionSaveCommand(level, bicycle),
+			null
+		);
+	}
+
+	public static RidingSaveCommand createRidingPostCreateCommandWithParticipant(int minPart, int maxPart) {
+		String title = "testTitle";
+		String estimatedTime = "120";
+		LocalDateTime ridingDate = LocalDateTime.now().plusDays(10L);
+		int fee = 0;
+		AddressCode addressCode = new AddressCode(11010);
+		List<String> routes = List.of("start", "end");
+		var mainCreateCommand = RidingMainSaveCommand.builder()
+			.title(title)
+			.estimatedTime(estimatedTime)
+			.ridingDate(ridingDate)
+			.fee(fee)
+			.addressCode(addressCode)
+			.routes(routes)
+			.departurePlace(new Coordinate(37.660666, 126.229333))
+			.build();
+
+		return new RidingSaveCommand(null,
+			mainCreateCommand,
+			new RidingParticipantSaveCommand(minPart, maxPart),
+			new RidingConditionSaveCommand("상", List.of("MTB", "픽시")),
+			null
+		);
+	}
+
+	public static RidingSaveCommand createRidingPostCreateCommandWithRidingDate(LocalDateTime ridingDate) {
+		String title = "testTitle";
+		String estimatedTime = "120";
+		int fee = 0;
+		AddressCode addressCode = new AddressCode(11010);
+		List<String> routes = List.of("start", "end");
+		var mainCreateCommand = RidingMainSaveCommand.builder()
+			.title(title)
+			.estimatedTime(estimatedTime)
+			.ridingDate(ridingDate)
+			.fee(fee)
+			.addressCode(addressCode)
+			.routes(routes)
+			.departurePlace(new Coordinate(37.660666, 126.229333))
+			.build();
+
+		return new RidingSaveCommand(null,
+			mainCreateCommand,
+			new RidingParticipantSaveCommand(1, 3),
+			new RidingConditionSaveCommand("상", List.of("MTB", "픽시")),
+			null
+		);
 	}
 
 }

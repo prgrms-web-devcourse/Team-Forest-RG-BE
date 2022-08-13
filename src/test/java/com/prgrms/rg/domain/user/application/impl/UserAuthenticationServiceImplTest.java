@@ -98,6 +98,8 @@ class UserAuthenticationServiceImplTest {
 		em.clear();
 		//when
 		UserRegisterResult userRegisterResult = userService.updateUserByRegistration(testCommand);
+		em.flush();
+		em.clear();
 		//then
 		assertThat(userRepository.findById(savedUser.getId())).isPresent();
 		User updatedUser = userRepository.findById(savedUser.getId()).get();
