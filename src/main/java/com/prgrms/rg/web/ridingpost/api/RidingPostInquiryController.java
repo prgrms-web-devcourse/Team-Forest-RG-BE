@@ -32,7 +32,7 @@ public class RidingPostInquiryController {
 	@GetMapping("api/v1/ridingposts")
 	public ResponseEntity<Slice<RidingPostInfo>> getRidingPostList(
 		@ModelAttribute RidingSearchCondition searchCondition,
-		@PageableDefault(sort = "created_at", direction = Sort.Direction.DESC) Pageable pageable) {
+		@PageableDefault(sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable) {
 		log.info(searchCondition.toString());
 		log.info(pageable.toString());
 		var ridingPostSlice = postReadService.loadFilteredRidingPostByCondition(searchCondition, pageable);
