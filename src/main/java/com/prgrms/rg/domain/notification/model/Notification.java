@@ -54,6 +54,10 @@ public class Notification {
 			switch (type) {
 				case RIDING_JOIN:
 					return buildRidingJoinMessage(ridingTitle);
+				case RIDING_JOIN_CANCEL:
+					return buildJoinCancelMessage(ridingTitle);
+				case RIDING_DELETE:
+					return buildRidingDeleteMessage(ridingTitle);
 				default:
 					throw new IllegalArgumentException("invalid notification type");
 			}
@@ -64,6 +68,20 @@ public class Notification {
 				+ ridingTitle
 				+ "' "
 				+ "라이딩에 새로운 라이더가 참가했어요!";
+		}
+
+		private static String buildJoinCancelMessage(String ridingTitle) {
+			return "'"
+				+ ridingTitle
+				+ "' "
+				+ "라이딩에 참가 취소자가 생겼어요!";
+		}
+
+		private static String buildRidingDeleteMessage(String ridingTitle) {
+			return "'"
+				+ ridingTitle
+				+ "' "
+				+ "라이딩이 취소되었어요!";
 		}
 
 	}
