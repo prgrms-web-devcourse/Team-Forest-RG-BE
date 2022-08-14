@@ -111,9 +111,8 @@ public class QuerydslRidingPostSearchRepository extends QuerydslRepositorySuppor
 			.select(ridingPost).distinct();
 		if (searchType == WILL_EVALUATE) {
 			query = searchRidingToEvaluate(user, query);
-		} else {
-			query.where(ridingPost.userConditionOf(user, searchType));
 		}
+		query.where(ridingPost.userConditionOf(user, searchType));
 
 		List<RidingPost> queryResult = query.fetch();
 
