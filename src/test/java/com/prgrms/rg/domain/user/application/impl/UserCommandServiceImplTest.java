@@ -76,7 +76,7 @@ class UserCommandServiceImplTest {
 		em.clear();
 
 		//When
-		Long editedUserId = sut.edit(command);
+		Long editedUserId = sut.edit(command, command.getId());
 
 		User afterEdited = userRepository.findById(editedUserId).get();
 
@@ -113,6 +113,6 @@ class UserCommandServiceImplTest {
 		em.clear();
 
 		//When
-		assertThrows(DuplicateNicknameException.class, () -> sut.edit(command));
+		assertThrows(DuplicateNicknameException.class, () -> sut.edit(command, command.getId()));
 	}
 }

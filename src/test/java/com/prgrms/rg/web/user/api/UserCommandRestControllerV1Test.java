@@ -43,9 +43,11 @@ class UserCommandRestControllerV1Test {
 		var request = new UserUpdateRequest("RG라이더", 5, "하",
 			new String[] {"MTB", "로드"}, "잘 부탁드립니다. 한강 라이딩을 즐겨 합니다.", 110, "01012345678", 3L);
 
+		var command = request.toCommand(1L);
+
 		var body = objectMapper.writeValueAsString(request);
 
-		when(userCommandService.edit(isA(UserUpdateCommand.class))).thenReturn(1L);
+		when(userCommandService.edit(command, 1L)).thenReturn(1L);
 
 		//When
 		mockMvc.perform(put(("/api/v1/users/1"))
@@ -64,10 +66,11 @@ class UserCommandRestControllerV1Test {
 
 		var request = new UserUpdateRequest("", 5, "",
 			new String[] {"MTB", "로드"}, "잘 부탁드립니다. 한강 라이딩을 즐겨 합니다.", 110, "01012345678", null);
+		var command = request.toCommand(1L);
 
 		var body = objectMapper.writeValueAsString(request);
 
-		when(userCommandService.edit(isA(UserUpdateCommand.class))).thenReturn(1L);
+		when(userCommandService.edit(command, 1L)).thenReturn(1L);
 
 		//When
 		mockMvc.perform(put(("/api/v1/users/1"))
@@ -92,7 +95,7 @@ class UserCommandRestControllerV1Test {
 
 		var body = objectMapper.writeValueAsString(request);
 
-		when(userCommandService.edit(command)).thenThrow(new NoSuchUserException(1L));
+		when(userCommandService.edit(command, 1L)).thenThrow(new NoSuchUserException(1L));
 
 		//When
 		mockMvc.perform(put(("/api/v1/users/1"))
