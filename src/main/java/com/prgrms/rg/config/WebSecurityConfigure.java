@@ -1,5 +1,7 @@
 package com.prgrms.rg.config;
 
+import java.util.List;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
@@ -55,10 +57,7 @@ public class WebSecurityConfigure extends WebSecurityConfigurerAdapter {
 
 	public CorsConfigurationSource corsConfigurationSource() {
 		CorsConfiguration configuration = new CorsConfiguration();
-		configuration.addAllowedOrigin("https://cool-dusk-ced14a.netlify.app"); // 나중에 바꾸기
-		configuration.addAllowedOrigin("http://211.201.93.105:[*]");
-		configuration.addAllowedOrigin("http://124.50.252.111:[*]");
-		configuration.addAllowedOrigin("http://211.226.115.222:[*]");
+		configuration.setAllowedOriginPatterns(List.of("https://cool-dusk-ced14a.netlify.app","http://211.201.93.105:[*]","http://124.50.252.111:[*]","http://211.226.115.222:[*]"));
 		configuration.addAllowedHeader("*");
 		configuration.addAllowedMethod("*");
 		configuration.setAllowCredentials(true);
