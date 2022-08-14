@@ -13,6 +13,8 @@ import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.OneToMany;
 
+import org.springframework.util.CollectionUtils;
+
 import com.prgrms.rg.domain.common.model.metadata.Bicycle;
 import com.prgrms.rg.domain.common.model.metadata.RidingLevel;
 
@@ -36,10 +38,14 @@ public class RidingConditionSection {
 		setLevel(level);
 	}
 
-	public void update(RidingConditionSection section) {
+	public void update(RidingPost post, RidingConditionSection section) {
 		setLevel(level);
-		bicycleList.retainAll(section.getBicycleList());
-		bicycleList.addAll(section.getBicycleList());
+		bicycleList.clear();
+		if (!CollectionUtils.isEmpty(section.getBicycleList())) {
+			for (RidingConditionBicycle conditionBicycle : section.getBicycleList()) {
+				addBicycle(post, conditionBicycle.getBicycle());
+			}
+		}
 	}
 
 	public void addBicycle(RidingPost post, Bicycle bicycle) {
