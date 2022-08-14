@@ -6,6 +6,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 import com.prgrms.rg.domain.notification.model.Notification;
+import com.prgrms.rg.domain.notification.model.NotificationInfo;
 
 public interface NotificationService {
 	Notification createRidingJoinNotification(Long hostId, Long ridingPostId);
@@ -14,7 +15,7 @@ public interface NotificationService {
 
 	List<Notification> createRidingDeleteNotification(Long ridingPostId);
 
-	Page<Notification> loadPagedNotificationByUser(Long userId, Pageable pageable);
+	Page<NotificationInfo> loadPagedNotificationByUser(Long userId, Pageable pageable);
 
 	void deleteAllNotificationByUser(Long userId);
 }
