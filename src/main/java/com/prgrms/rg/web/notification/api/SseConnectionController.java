@@ -43,4 +43,5 @@ public class SseConnectionController {
 		sender.sendNotification(userId, "data", "health-string");
 		return ResponseEntity.ok("job success");
 	}
+
 }
