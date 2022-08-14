@@ -4,6 +4,7 @@ import static javax.persistence.CascadeType.*;
 import static javax.persistence.FetchType.*;
 import static lombok.AccessLevel.*;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -22,6 +23,7 @@ import com.prgrms.rg.domain.common.file.model.AttachedImage;
 import com.prgrms.rg.domain.common.file.model.ImageOwner;
 import com.prgrms.rg.domain.common.file.model.TemporaryImage;
 import com.prgrms.rg.domain.common.model.BaseTimeEntity;
+import com.prgrms.rg.domain.ridingpost.model.image.RidingThumbnailImage;
 import com.prgrms.rg.domain.user.model.User;
 
 import lombok.Builder;
@@ -86,9 +88,24 @@ public class RidingPost extends BaseTimeEntity implements ImageOwner {
 		this.ridingConditionSection = ridingConditionSection;
 	}
 
+	public boolean checkneededStatus() {
+		return ridingMainSection.getRidingDate().isBefore(LocalDateTime.now());
+	}
+
 	public void addSubSection(RidingSubSection subSection) {
 		subSectionList.add(subSection);
 		subSection.assignPost(this);
+	}
+
+	public void join(User participant) {
+		var ridingStatus = getRidingParticipantSection().getStatus();
+		if (ridingStatus != RidingStatus.IN_PROGRESS)
+			throw new IllegalArgumentException("riding not in progress");
+		addParticipant(participant);
+	}
+
+	public void close() {
+		ridingParticipantSection.changeRidingStatus(RidingStatus.CLOSED);
 	}
 
 	public void addParticipant(User participant) {
@@ -101,6 +118,10 @@ public class RidingPost extends BaseTimeEntity implements ImageOwner {
 
 	public String getThumbnail() {
 		return (thumbnail != null) ? thumbnail.getUrl() : DEFAULT_IMAGE_URL;
+	}
+
+	public Long getThumbnailId() {
+		return (thumbnail != null) ? thumbnail.getId() : null;
 	}
 
 	public boolean equalToThumbnail(Long thumbnailId) {

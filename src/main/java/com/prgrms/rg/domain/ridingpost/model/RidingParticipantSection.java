@@ -59,10 +59,18 @@ public class RidingParticipantSection {
 		updateStatus();
 	}
 
+	public void changeRidingStatus(RidingStatus status) {
+		this.status = status;
+	}
+
 	public void removeParticipant(User participant) {
 		participants.removeIf((ridingParticipant -> ridingParticipant.getUser().equals(participant)));
 		reduceParticipantCount();
 		updateStatus();
+	}
+
+	public boolean isRecruiting() {
+		return status == IN_PROGRESS;
 	}
 
 	private void addParticipantCount() {

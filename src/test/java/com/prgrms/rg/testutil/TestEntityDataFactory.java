@@ -16,7 +16,7 @@ import com.prgrms.rg.domain.ridingpost.model.RidingMainSection;
 import com.prgrms.rg.domain.ridingpost.model.RidingParticipantSection;
 import com.prgrms.rg.domain.ridingpost.model.RidingPost;
 import com.prgrms.rg.domain.ridingpost.model.RidingSubSection;
-import com.prgrms.rg.domain.ridingpost.model.SubImage;
+import com.prgrms.rg.domain.ridingpost.model.image.SubImage;
 import com.prgrms.rg.domain.user.model.Manner;
 import com.prgrms.rg.domain.user.model.Nickname;
 import com.prgrms.rg.domain.user.model.User;
@@ -27,6 +27,14 @@ import com.prgrms.rg.domain.user.model.User;
  * */
 public class TestEntityDataFactory {
 	public static int ADDRESS_CODE = 11010;
+
+	public static User createUser(Long id, String nickname) {
+		return User.builder()
+			.id(id)
+			.nickname(new Nickname(nickname))
+			.manner(Manner.create())
+			.build();
+	}
 
 	public static User createUser(Long id) {
 		return User.builder()
@@ -77,6 +85,31 @@ public class TestEntityDataFactory {
 			.build();
 
 		post.addSubSection(subSection);
+		return post;
+	}
+
+	public static RidingPost createSimplePost(Long leaderId) {
+		User leader = createUser(leaderId);
+		RidingConditionSection conditionSection = new RidingConditionSection(RidingLevel.MASTER);
+		RidingParticipantSection participantSection = new RidingParticipantSection(2, 5);
+
+		RidingMainSection mainSection = RidingMainSection.builder()
+			.title("자전거가 타고싶어요")
+			.ridingDate(LocalDateTime.now().plusDays(10L))
+			.routes(List.of("중앙 공원", "능골 공원", "탑골 공원"))
+			.estimatedTime("120분")
+			.addressCode(new AddressCode(ADDRESS_CODE))
+			.fee(10000)
+			.departurePlace(new Coordinate(35.232600, 127.650250))
+			.build();
+
+		RidingPost post = RidingPost.builder()
+			.leader(leader)
+			.ridingMainSection(mainSection)
+			.ridingConditionSection(conditionSection)
+			.ridingParticipantSection(participantSection)
+			.build();
+
 		return post;
 	}
 

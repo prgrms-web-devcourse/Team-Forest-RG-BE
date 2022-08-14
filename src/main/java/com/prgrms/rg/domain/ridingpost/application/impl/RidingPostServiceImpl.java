@@ -6,12 +6,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.prgrms.rg.domain.common.event.DomainEventPublisher;
+import com.prgrms.rg.domain.ridingpost.model.image.RidingImageSaveManagement;
+import com.prgrms.rg.domain.ridingpost.model.RidingPost;
+import com.prgrms.rg.domain.ridingpost.model.RidingSaveManagement;
 import com.prgrms.rg.domain.ridingpost.application.RidingPostService;
 import com.prgrms.rg.domain.ridingpost.application.command.RidingSaveCommand;
-import com.prgrms.rg.domain.ridingpost.model.RidingImageSaveManagement;
-import com.prgrms.rg.domain.ridingpost.model.RidingPost;
 import com.prgrms.rg.domain.ridingpost.model.RidingPostRepository;
-import com.prgrms.rg.domain.ridingpost.model.RidingSaveManagement;
 import com.prgrms.rg.domain.ridingpost.model.event.RidingPostDeleteEvent;
 import com.prgrms.rg.domain.ridingpost.model.exception.RidingPostNotFoundException;
 import com.prgrms.rg.domain.ridingpost.model.exception.UnAuthorizedException;

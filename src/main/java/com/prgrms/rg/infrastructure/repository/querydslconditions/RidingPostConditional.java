@@ -1,6 +1,7 @@
 package com.prgrms.rg.infrastructure.repository.querydslconditions;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 import com.prgrms.rg.domain.ridingpost.model.QRidingPost;
 import com.prgrms.rg.domain.ridingpost.model.RidingPost;
@@ -16,6 +17,7 @@ public class RidingPostConditional {
 			case LEADER: return isHostedBy(post, user);
 			case PARTICIPATED:return isParticipatedBy(post, user).and(isEnded(post));
 			case WILL_PARTICIPATE: return isParticipatedBy(post, user).and(isNotEnded(post));
+			case WILL_EVALUATE: return isEnded(post);
 			default: throw new IllegalArgumentException("부적절한 검색 조건 대입함");
 		}
 	}
@@ -34,5 +36,10 @@ public class RidingPostConditional {
 
 	private static BooleanExpression isNotEnded(QRidingPost post) {
 		return post.ridingMainSection.ridingDate.after(LocalDateTime.now());
+	}
+
+	@QueryDelegate(RidingPost.class)
+	public static BooleanExpression willEvaluated(QRidingPost post, List<Long> postIds) {
+		return post.id.in(postIds);
 	}
 }

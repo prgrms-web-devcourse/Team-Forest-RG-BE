@@ -5,12 +5,15 @@ import java.util.List;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 
+import com.prgrms.rg.domain.ridingpost.application.information.RidingPostBriefInfo;
 import com.prgrms.rg.domain.user.model.User;
-import com.prgrms.rg.infrastructure.repository.projections.querydsl.RidingPostBriefInfoQueryDslProjection;
 import com.prgrms.rg.infrastructure.repository.querydslconditions.RidingPostUserSearchType;
 
 public interface RidingPostSearchRepository {
 	Slice<RidingPostInfo> searchRidingPostSlice(RidingSearchCondition condition, Pageable pageable);
 
-	List<RidingPostBriefInfoQueryDslProjection> searchRidingPostByUser(User user, RidingPostUserSearchType searchType);
+	List<RidingPostBriefInfo> searchRidingPostByUser(User user, RidingPostUserSearchType searchType);
+
+	List<RidingPost> searchRidingPostInProgress();
+
 }
