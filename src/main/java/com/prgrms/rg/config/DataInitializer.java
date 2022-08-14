@@ -6,7 +6,6 @@ import static org.apache.commons.lang3.RandomUtils.*;
 import java.time.LocalDateTime;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
 
 import org.springframework.boot.context.event.ApplicationReadyEvent;
@@ -16,6 +15,7 @@ import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.prgrms.rg.domain.auth.jwt.JwtTokenProvider;
 import com.prgrms.rg.domain.common.file.model.TemporaryImage;
 import com.prgrms.rg.domain.common.file.model.TemporaryImageRepository;
 import com.prgrms.rg.domain.common.model.metadata.RidingLevel;
@@ -33,12 +33,11 @@ import com.prgrms.rg.domain.user.model.Nickname;
 import com.prgrms.rg.domain.user.model.RiderProfile;
 import com.prgrms.rg.domain.user.model.User;
 import com.prgrms.rg.domain.user.model.UserRepository;
+import com.prgrms.rg.web.common.message.CriticalMessageSender;
 
 @Component
 @Profile("!test")
 public class DataInitializer {
-
-	private static final ThreadLocalRandom RANDOM = ThreadLocalRandom.current();
 
 	static final List<Integer> addressCodes = List.of(11, 21, 22, 23, 24, 25, 26, 29, 31, 32, 33, 34, 35, 36, 37, 38,
 		39, 11010, 11020, 11030, 11040, 11050, 11060, 11070, 11080, 11090, 11100, 11110, 11120, 11130, 11140, 11150,
@@ -58,6 +57,7 @@ public class DataInitializer {
 		37310, 37320, 37330, 37340, 37350, 37360, 37370, 37380, 37390, 37400, 37410, 37420, 37430, 38030, 38050, 38060,
 		38070, 38080, 38090, 38100, 38110, 38111, 38112, 38113, 38114, 38115, 38310, 38320, 38330, 38340, 38350, 38360,
 		38370, 38380, 38390, 38400, 39010, 39020, 99999);
+	private static final ThreadLocalRandom RANDOM = ThreadLocalRandom.current();
 
 	/*
 		배포 서버 테스트용 기본 데이터
@@ -140,16 +140,26 @@ public class DataInitializer {
 
 	@EventListener(ApplicationReadyEvent.class)
 	@Transactional
-	public void insertData(ApplicationReadyEvent event) {
+	public void insertData(ApplicationReadyEvent event) throws Exception {
 		List<User> userList = new LinkedList<>();
 		var bicycleList = List.of("MTB", "TSB", "따릉이", "로드", "상관없음", "픽시", "하이브리드");
 
 		var userNames = List.of("Bob민성", "Matt승범", "Partey훈기", "Pray민재", "Kant한빈", "Kiko채우", "Tree인수", "Didi현정");
-		for (int i = 0; i < userNames.size(); i++) {
-			userList.add(createUser(event.getApplicationContext().getBean(UserRepository.class), userNames.get(i)));
+		for (String userName : userNames) {
+			userList.add(createUser(event.getApplicationContext().getBean(UserRepository.class), userName));
 		}
 
-		for (int i = 0; i < 1000; i++) {
+		var evaluatorNames = List.of("민성","승범","훈기","현정","민재","한빈","채우","인수");
+
+		for (int i = 0; i < evaluatorNames.size(); i++ ) {
+			var evaluator = createUser(event.getApplicationContext().getBean(UserRepository.class), evaluatorNames.get(i));
+			var tokenProvider = event.getApplicationContext().getBean(JwtTokenProvider.class);
+
+			var evaluatorToken = tokenProvider.createToken("ROLE_USER", evaluator.getId());
+			CriticalMessageSender.send("평가자 토큰 " + (i + 1) + " : " + evaluatorToken);
+		}
+
+		for (int i = 0; i < 50; i++) {
 			insertRidingPost(event.getApplicationContext(), bicycleList.get(nextInt(0, bicycleList.size())),
 				addressCodes.get(nextInt(0, addressCodes.size())),
 				values()[nextInt(0, values().length)],
