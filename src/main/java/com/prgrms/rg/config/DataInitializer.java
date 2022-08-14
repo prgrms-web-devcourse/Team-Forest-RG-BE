@@ -159,7 +159,7 @@ public class DataInitializer {
 			CriticalMessageSender.send("평가자 토큰 " + (i + 1) + " : " + evaluatorToken);
 		}
 
-		for (int i = 0; i < 50; i++) {
+		for (int i = 0; i < 1000; i++) {
 			insertRidingPost(event.getApplicationContext(), bicycleList.get(nextInt(0, bicycleList.size())),
 				addressCodes.get(nextInt(0, addressCodes.size())),
 				values()[nextInt(0, values().length)],
