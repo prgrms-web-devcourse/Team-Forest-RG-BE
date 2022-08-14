@@ -45,7 +45,7 @@ public class RidingPost extends BaseTimeEntity implements ImageOwner {
 	@ManyToOne(optional = false, fetch = LAZY)
 	private User leader;
 
-	@OneToOne(mappedBy = "post", cascade = ALL)
+	@OneToOne(mappedBy = "post", cascade = ALL, orphanRemoval = true)
 	private RidingThumbnailImage thumbnail;
 
 	@Embedded
@@ -116,7 +116,7 @@ public class RidingPost extends BaseTimeEntity implements ImageOwner {
 		ridingParticipantSection.removeParticipant(participant);
 	}
 
-	public String getThumbnail() {
+	public String getThumbnailUrl() {
 		return (thumbnail != null) ? thumbnail.getUrl() : DEFAULT_IMAGE_URL;
 	}
 

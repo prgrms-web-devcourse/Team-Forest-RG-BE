@@ -83,7 +83,7 @@ public class RidingPostInfo {
 			List<RidingSubSection> subSectionList = ridingPost.getSubSectionList();
 			mapSubSection(subSectionList, instance);
 			instance.setId(ridingPost.getId());
-			instance.setThumbnail(ridingPost.getThumbnail());
+			instance.setThumbnail(ridingPost.getThumbnailUrl());
 			instance.setThumbnailId(ridingPost.getThumbnailId());
 			instance.setCreatedAt(ridingPost.getCreatedAt());
 			return instance;
