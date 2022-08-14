@@ -10,12 +10,12 @@ import lombok.Getter;
 public final class RiderInfo {
 
 	@Getter
-	private int ridingYears;
+	private Integer ridingYears;
 	@Getter
 	private RidingLevel level;
 	private List<String> bicycles;
 
-	public RiderInfo(int ridingYears, RidingLevel level, List<String> bicycles) {
+	public RiderInfo(Integer ridingYears, RidingLevel level, List<String> bicycles) {
 		this.ridingYears = ridingYears;
 		this.level = level;
 		this.bicycles = bicycles;
