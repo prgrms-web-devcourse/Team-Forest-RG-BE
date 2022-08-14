@@ -23,7 +23,7 @@ public class Nickname {
 	private static final Pattern CHARSET_REGEX = Pattern.compile("(^[ㄱ-ㅎ가-힣a-zA-Z]*$)");
 	private static final String ALLOWED_CHARSET = "한글과 알파벳";
 	private static final String CHARSET_VALIDATION_MESSAGE = "닉네임은 " + ALLOWED_CHARSET + "만 허용됩니다.";
-	@Column(nullable = false, unique = true, length = 16)
+	@Column(nullable = false, unique = true, length = 24)
 	private String nickname;
 
 	public Nickname(String nickname) {

@@ -41,19 +41,17 @@ public class RiderProfile {
 	 */
 	//TODO: User 생성자에서 UserBicycle 추가 불가능?
 
-	public RiderProfile(int ridingStartYear, RidingLevel level) {
-		this.ridingStartYear = Year.of(ridingStartYear);
+	public RiderProfile(Integer ridingStartYear, RidingLevel level) {
+		if (ridingStartYear != null) {
+			this.ridingStartYear = Year.of(ridingStartYear);
+		}
 		this.level = level;
 	}
 
-	public RiderProfile(int ridingStartYear, RidingLevel level, Set<UserBicycle> bicycles) {
-		this.ridingStartYear = Year.of(ridingStartYear);
-		this.level = level;
-		this.bicycles = bicycles;
-	}
-
-	public void update(int ridingStartYear, RidingLevel level, Set<UserBicycle> bicyclesToApply) {
-		this.ridingStartYear = Year.of(ridingStartYear);
+	public void update(Integer ridingStartYear, RidingLevel level, Set<UserBicycle> bicyclesToApply) {
+		if (ridingStartYear != null) {
+			this.ridingStartYear = Year.of(ridingStartYear);
+		}
 		this.level = level;
 		bicycles.retainAll(bicyclesToApply);
 		bicycles.addAll(bicyclesToApply);
@@ -76,7 +74,7 @@ public class RiderProfile {
 		for (UserBicycle bicycle : bicycles) {
 			bicycleNames.add(bicycle.getName());
 		}
-		return new RiderInfo(getRidingYears().getValue(), level, bicycleNames);
+		return new RiderInfo((ridingStartYear != null) ? getRidingYears().getValue() : null, level, bicycleNames);
 	}
 
 	@Override
