@@ -55,9 +55,12 @@ public class WebSecurityConfigure extends WebSecurityConfigurerAdapter {
 
 	public CorsConfigurationSource corsConfigurationSource() {
 		CorsConfiguration configuration = new CorsConfiguration();
-		configuration.addAllowedOrigin("*"); // 나중에 바꾸기
+		configuration.addAllowedOrigin("https://cool-dusk-ced14a.netlify.app"); // 나중에 바꾸기
+		configuration.addAllowedOrigin("http://211.201.93.105");
+		configuration.addAllowedOrigin("http://124.50.252.111");
 		configuration.addAllowedHeader("*");
 		configuration.addAllowedMethod("*");
+		configuration.setAllowCredentials(true);
 		UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
 		source.registerCorsConfiguration("/**", configuration);
 		return source;
