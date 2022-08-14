@@ -69,6 +69,10 @@ public class RidingParticipantSection {
 		updateStatus();
 	}
 
+	public boolean isRecruiting() {
+		return status == IN_PROGRESS;
+	}
+
 	private void addParticipantCount() {
 		checkArgument(participantCount != maxParticipantCount);
 		participantCount++;
