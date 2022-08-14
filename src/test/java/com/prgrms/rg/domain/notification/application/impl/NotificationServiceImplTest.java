@@ -62,7 +62,7 @@ class NotificationServiceImplTest {
 	@Test
 	void test() {
 		//when
-		Page<Notification> page = notificationService.loadPagedNotificationByUser(mj, PageRequest.of(0, 10));
+		Page<Notification> page = notificationService.loadPagedNotificationByUser(mj.getId(), PageRequest.of(0, 10));
 
 		//then
 		assertThat(page.getNumberOfElements()).isEqualTo(10);
