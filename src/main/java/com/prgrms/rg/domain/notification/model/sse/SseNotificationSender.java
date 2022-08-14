@@ -21,13 +21,13 @@ public class SseNotificationSender {
 		Map<String, SseEmitter> emitterMap = emitterRepository.findEmitterByUserId(receiverId);
 		String emitterId = receiverId.toString();
 		SseEmitter emitter = emitterMap.get(emitterId);
-		if (emitter == null)
-			return;
+		log.info("health-check in progress");
 		try {
 			emitter.send(SseEmitter.event()
 				.id(emitterId)
 				.name(eventName)
 				.data(data));
+			log.info("health-check done");
 		} catch (IOException e) {
 			emitterRepository.deleteById(emitterId);
 			throw new NotificationSendFailException(e);
