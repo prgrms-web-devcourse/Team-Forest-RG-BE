@@ -11,10 +11,12 @@ import javax.persistence.ManyToOne;
 import com.prgrms.rg.domain.common.model.metadata.Bicycle;
 
 import lombok.AccessLevel;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
+@Getter
 public class RidingConditionBicycle {
 
 	@Id
