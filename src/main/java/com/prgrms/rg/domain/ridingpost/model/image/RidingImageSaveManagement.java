@@ -1,4 +1,4 @@
-package com.prgrms.rg.domain.ridingpost.model;
+package com.prgrms.rg.domain.ridingpost.model.image;
 
 import java.util.List;
 import java.util.Objects;
@@ -8,6 +8,8 @@ import org.springframework.util.CollectionUtils;
 
 import com.prgrms.rg.domain.common.file.application.ImageAttachManager;
 import com.prgrms.rg.domain.common.file.model.AttachedImageRepository;
+import com.prgrms.rg.domain.ridingpost.model.RidingPost;
+import com.prgrms.rg.domain.ridingpost.model.RidingSubSection;
 
 import lombok.RequiredArgsConstructor;
 
@@ -22,7 +24,7 @@ public class RidingImageSaveManagement {
 	public void saveThumbnailImage(RidingPost post, Long thumbnailId) {
 		//thumbnail -> 비교
 		if (!post.equalToThumbnail(thumbnailId)) {
-			post.removeCurrentImage();
+			imageManager.delete(post.getThumbnail(), post);
 			//null이 아닌 썸네일 삽입
 			if (!Objects.isNull(thumbnailId)) {
 				imageManager.store(thumbnailId, post);

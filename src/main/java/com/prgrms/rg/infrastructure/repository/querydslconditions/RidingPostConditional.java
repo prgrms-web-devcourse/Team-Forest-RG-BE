@@ -1,7 +1,5 @@
 package com.prgrms.rg.infrastructure.repository.querydslconditions;
 
-import static com.prgrms.rg.domain.ridingpost.model.QRidingParticipant.*;
-
 import java.time.LocalDateTime;
 import java.util.List;
 
