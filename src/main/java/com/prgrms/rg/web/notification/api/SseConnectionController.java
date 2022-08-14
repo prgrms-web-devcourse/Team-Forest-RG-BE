@@ -36,4 +36,11 @@ public class SseConnectionController {
 		sender.sendNotification(userId, SseResponse.createConnectSuccess(userId), "health-check");
 		return ResponseEntity.ok("job success");
 	}
+
+	@GetMapping("/api/v1/connection/{userId}/health-string")
+	public ResponseEntity<String> hcheck(@PathVariable Long userId) {
+		log.info("Health check requested by user " + userId);
+		sender.sendNotification(userId, "data", "health-string");
+		return ResponseEntity.ok("job success");
+	}
 }
