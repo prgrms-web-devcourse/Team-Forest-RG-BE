@@ -51,9 +51,12 @@ public class RidingPostInfo {
 	@Setter(AccessLevel.PRIVATE)
 	@NoArgsConstructor(access = AccessLevel.PRIVATE)
 	public static class RidingInfo {
+		private Long id;
 		private String title;
 		private String thumbnail;
+		private Long thumbnailId;
 		private String ridingLevel;
+		private boolean isRecruiting;
 		private ZoneInfo zone;
 		private int fee;
 		private String estimatedTime;
@@ -79,7 +82,9 @@ public class RidingPostInfo {
 			mapParticipantSection(participantSection, instance);
 			List<RidingSubSection> subSectionList = ridingPost.getSubSectionList();
 			mapSubSection(subSectionList, instance);
+			instance.setId(ridingPost.getId());
 			instance.setThumbnail(ridingPost.getThumbnail());
+			instance.setThumbnailId(ridingPost.getThumbnailId());
 			instance.setCreatedAt(ridingPost.getCreatedAt());
 			return instance;
 		}
@@ -110,9 +115,9 @@ public class RidingPostInfo {
 			List<ParticipantInfo> participantInfos = participantSection.getParticipants().stream()
 				.map(ridingParticipant -> ParticipantInfo.from(ridingParticipant.getUser()))
 				.collect(Collectors.toList());
-
 			instance.setMaxParticipant((participantSection.getMaxParticipantCount()));
 			instance.setMinParticipant(participantSection.getMinParticipantCount());
+			instance.setRecruiting(participantSection.isRecruiting());
 			instance.setParticipants((participantInfos));
 		}
 

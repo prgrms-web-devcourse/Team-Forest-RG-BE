@@ -5,8 +5,10 @@
 # TODO: 본격적인 배포가 시작되면 jpa 설정 수정 필요 (ddl-auto 등)
 
 spring:
+  jackson:
+    time-zone: Asia/Seoul
   datasource:
-    url: "jdbc:mysql://${RDBMS_URL}:3306/rg"
+    url: "jdbc:mysql://${RDBMS_URL}:3306/rg?serverTimezone=Asia/Seoul"
     username: ${RDBMS_USERNAME}
     password: ${RDBMS_PASSWORD}
     driver-class-name: com.mysql.cj.jdbc.Driver

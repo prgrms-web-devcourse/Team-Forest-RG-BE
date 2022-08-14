@@ -19,6 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.prgrms.rg.domain.common.model.metadata.BicycleRepository;
+import com.prgrms.rg.domain.ridingpost.application.information.RidingPostBriefInfo;
 import com.prgrms.rg.domain.ridingpost.model.AddressCode;
 import com.prgrms.rg.domain.ridingpost.model.Coordinate;
 import com.prgrms.rg.domain.ridingpost.model.RidingConditionSection;
@@ -121,7 +122,6 @@ class UserReadServiceImplTest {
 
 		//Then
 		Assertions.assertThat(info.getRidings().getFinished().size()).isEqualTo(0);
-		Assertions.assertThat(info.getRidings().getScheduled().size()).isEqualTo(2);
 		Assertions.assertThat(info.getRidings().getLeading().size()).isEqualTo(2);
 	}
 
@@ -138,7 +138,7 @@ class UserReadServiceImplTest {
 		em.flush();
 		em.clear();
 
-		Assertions.assertThat(info.getRidings().getEvaluabled().size()).isEqualTo(2);
+		Assertions.assertThat(info.getRidings().getCanEvaluated().size()).isEqualTo(2);
 
 	}
 }

@@ -120,6 +120,10 @@ public class RidingPost extends BaseTimeEntity implements ImageOwner {
 		return (thumbnail != null) ? thumbnail.getUrl() : DEFAULT_IMAGE_URL;
 	}
 
+	public Long getThumbnailId() {
+		return (thumbnail != null) ? thumbnail.getId() : null;
+	}
+
 	public boolean equalToThumbnail(Long thumbnailId) {
 		if (this.thumbnail == null)
 			return thumbnailId == null;

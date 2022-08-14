@@ -101,6 +101,7 @@ class RidingPostReadServiceImplTest {
 		assertThat(ridingInfo.getFee()).isEqualTo(fee);
 		assertThat(ridingInfo.getZone().getCode()).isEqualTo(addressCode.getCode());
 		assertThat(ridingInfo.getRidingCourses()).contains("start", "end");
+		assertTrue(ridingInfo.isRecruiting());
 		System.out.println(mapper.writeValueAsString(ridingPostInfo));
 	}
 

@@ -14,22 +14,26 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.jdbc.Sql;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.prgrms.rg.domain.common.model.metadata.Bicycle;
 import com.prgrms.rg.domain.common.model.metadata.BicycleRepository;
+import com.prgrms.rg.domain.ridingpost.model.AddressCodeRepository;
 import com.prgrms.rg.domain.user.application.UserCommandService;
 import com.prgrms.rg.domain.user.application.command.UserUpdateCommand;
 import com.prgrms.rg.domain.user.application.exception.DuplicateNicknameException;
 import com.prgrms.rg.domain.user.model.Introduction;
 import com.prgrms.rg.domain.user.model.Manner;
 import com.prgrms.rg.domain.user.model.Nickname;
+import com.prgrms.rg.domain.user.model.ProfileImage;
 import com.prgrms.rg.domain.user.model.RiderProfile;
 import com.prgrms.rg.domain.user.model.User;
 import com.prgrms.rg.domain.user.model.UserRepository;
 
 @Transactional
 @SpringBootTest
+@Sql(scripts = {"classpath:address_code.sql"})
 class UserCommandServiceImplTest {
 
 	@Autowired
@@ -66,7 +70,7 @@ class UserCommandServiceImplTest {
 		user.addBicycle(seoulBike);
 
 		UserUpdateCommand command = new UserUpdateCommand(user.getId(), "changedName", 2017, BEGINNER.getLevelName(),
-			new String[] {"따릉이", "MTB"}, "반갑습니다.");
+			new String[] {"따릉이", "MTB"}, "반갑습니다.", 11010, "01012345678", null);
 
 		em.flush();
 		em.clear();
@@ -102,8 +106,8 @@ class UserCommandServiceImplTest {
 			.manner(Manner.create())
 			.build());
 
-		UserUpdateCommand command = new UserUpdateCommand(user.getId(), "changedName", 5
-			, MASTER.getLevelName(), new String[] {}, "한강 라이딩을 즐겨합니다.");
+		UserUpdateCommand command = new UserUpdateCommand(user.getId(), "changedName", 2017, BEGINNER.getLevelName(),
+			new String[] {"따릉이", "MTB"}, "반갑습니다.", 11010, "01012345678", null);
 
 		em.flush();
 		em.clear();

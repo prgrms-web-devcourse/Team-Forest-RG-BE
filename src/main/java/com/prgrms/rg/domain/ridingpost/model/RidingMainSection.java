@@ -93,7 +93,7 @@ public class RidingMainSection {
 
 	//작성 날짜보다 미래인지
 	private void setRidingDate(LocalDateTime ridingDate) {
-		checkArgument(ridingDate.isAfter(LocalDateTime.now()));
+		checkArgument(ridingDate.isAfter(LocalDateTime.now().minusDays(1L)));
 		this.ridingDate = ridingDate;
 		this.evaluationDueDate = ridingDate.plusDays(7L);
 	}
