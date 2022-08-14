@@ -155,7 +155,7 @@ public class DataInitializer {
 			var evaluator = createUser(event.getApplicationContext().getBean(UserRepository.class), evaluatorNames.get(i));
 			var tokenProvider = event.getApplicationContext().getBean(JwtTokenProvider.class);
 
-			var evaluatorToken = tokenProvider.createToken("ROLE_USER", evaluator.getId());
+			var evaluatorToken = tokenProvider.createAdminToken("ROLE_USER", evaluator.getId());
 			CriticalMessageSender.send("평가자 토큰 " + (i + 1) + " : " + evaluatorToken);
 		}
 
