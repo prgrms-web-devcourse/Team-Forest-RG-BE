@@ -5,12 +5,14 @@ import static com.google.common.base.Preconditions.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.prgrms.rg.domain.ridingpost.model.RidingImageSaveManagement;
-import com.prgrms.rg.domain.ridingpost.model.RidingPost;
-import com.prgrms.rg.domain.ridingpost.model.RidingSaveManagement;
+import com.prgrms.rg.domain.common.event.DomainEventPublisher;
 import com.prgrms.rg.domain.ridingpost.application.RidingPostService;
 import com.prgrms.rg.domain.ridingpost.application.command.RidingSaveCommand;
+import com.prgrms.rg.domain.ridingpost.model.RidingImageSaveManagement;
+import com.prgrms.rg.domain.ridingpost.model.RidingPost;
 import com.prgrms.rg.domain.ridingpost.model.RidingPostRepository;
+import com.prgrms.rg.domain.ridingpost.model.RidingSaveManagement;
+import com.prgrms.rg.domain.ridingpost.model.event.RidingPostDeleteEvent;
 import com.prgrms.rg.domain.ridingpost.model.exception.RidingPostNotFoundException;
 import com.prgrms.rg.domain.ridingpost.model.exception.UnAuthorizedException;
 import com.prgrms.rg.domain.user.application.UserReadService;
@@ -26,6 +28,7 @@ public class RidingPostServiceImpl implements RidingPostService {
 	private final RidingPostRepository ridingPostRepository;
 	private final RidingSaveManagement saveManagement;
 	private final RidingImageSaveManagement imageSaveManagement;
+	private final DomainEventPublisher eventPublisher;
 
 	@Transactional
 	public Long createRidingPost(Long userId, RidingSaveCommand command) {
@@ -68,6 +71,9 @@ public class RidingPostServiceImpl implements RidingPostService {
 		checkAndFindPost(leaderId, postId);
 
 		ridingPostRepository.deleteById(postId);
+
+		RidingPostDeleteEvent deleteEvent = new RidingPostDeleteEvent(postId);
+		eventPublisher.publish(deleteEvent);
 	}
 
 	private RidingPost checkAndFindPost(Long leaderId, Long postId) {

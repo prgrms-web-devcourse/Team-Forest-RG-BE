@@ -2,6 +2,8 @@ package com.prgrms.rg.domain.notification.application.impl;
 
 import static org.springframework.transaction.event.TransactionPhase.*;
 
+import java.util.List;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -15,6 +17,7 @@ import com.prgrms.rg.domain.ridingpost.application.RidingPostReadService;
 import com.prgrms.rg.domain.ridingpost.model.RidingPost;
 import com.prgrms.rg.domain.ridingpost.model.event.RidingJoinCancelEvent;
 import com.prgrms.rg.domain.ridingpost.model.event.RidingJoinEvent;
+import com.prgrms.rg.domain.ridingpost.model.event.RidingPostDeleteEvent;
 import com.prgrms.rg.domain.user.model.User;
 
 import lombok.RequiredArgsConstructor;
@@ -44,5 +47,15 @@ public class NotificationPushService {
 		User host = post.getLeader();
 		Notification notification = notificationService.createJoinCancelNotification(host.getId(), post.getId());
 		notificationSender.sendNotification(host.getId(), notification, NOTIFICATION_OCCUR_EVENT);
+	}
+
+	@TransactionalEventListener(phase = AFTER_COMMIT, fallbackExecution = true)
+	@Transactional(propagation = Propagation.REQUIRES_NEW)
+	public void handleRidingDeleteEvent(RidingPostDeleteEvent event) {
+		RidingPost post = postReadService.loadRidingPostById(event.getPostId());
+		List<Notification> notifications = notificationService.createRidingDeleteNotification(post.getId());
+		notifications.forEach(
+			notification -> notificationSender.sendNotification(notification.getUser().getId(), notification,
+				NOTIFICATION_OCCUR_EVENT));
 	}
 }
