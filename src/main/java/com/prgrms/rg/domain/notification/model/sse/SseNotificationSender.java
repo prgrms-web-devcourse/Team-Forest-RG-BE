@@ -9,9 +9,11 @@ import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 import com.prgrms.rg.domain.notification.model.NotificationSendFailException;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 @Component
 @RequiredArgsConstructor
+@Slf4j
 public class SseNotificationSender {
 	private final SseEmitterRepository emitterRepository;
 
@@ -19,6 +21,8 @@ public class SseNotificationSender {
 		Map<String, SseEmitter> emitterMap = emitterRepository.findEmitterByUserId(receiverId);
 		String emitterId = receiverId.toString();
 		SseEmitter emitter = emitterMap.get(emitterId);
+		if (emitter == null)
+			return;
 		try {
 			emitter.send(SseEmitter.event()
 				.id(emitterId)
