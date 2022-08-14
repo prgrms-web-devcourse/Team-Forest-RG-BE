@@ -14,6 +14,6 @@ public class ImageDeleteEntityListener {
 
 	@PreRemove
 	public void removeOriginalFile(AttachedImage file) {
-		fileStore.delete(file.getUrl());
+		// fileStore.delete(file.getUrl());
 	}
 }
