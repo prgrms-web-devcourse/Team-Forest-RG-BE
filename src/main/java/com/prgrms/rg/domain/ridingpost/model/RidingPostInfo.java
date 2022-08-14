@@ -7,6 +7,7 @@ import java.util.stream.Collectors;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.prgrms.rg.domain.ridingpost.model.image.SubImage;
 import com.prgrms.rg.domain.user.model.User;
 
 import lombok.AccessLevel;

@@ -4,6 +4,7 @@ import static javax.persistence.CascadeType.*;
 import static javax.persistence.FetchType.*;
 import static lombok.AccessLevel.*;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -22,6 +23,7 @@ import com.prgrms.rg.domain.common.file.model.AttachedImage;
 import com.prgrms.rg.domain.common.file.model.ImageOwner;
 import com.prgrms.rg.domain.common.file.model.TemporaryImage;
 import com.prgrms.rg.domain.common.model.BaseTimeEntity;
+import com.prgrms.rg.domain.ridingpost.model.image.RidingThumbnailImage;
 import com.prgrms.rg.domain.user.model.User;
 
 import lombok.Builder;
@@ -84,6 +86,10 @@ public class RidingPost extends BaseTimeEntity implements ImageOwner {
 
 	public void assignConditionSection(RidingConditionSection ridingConditionSection) {
 		this.ridingConditionSection = ridingConditionSection;
+	}
+
+	public boolean checkneededStatus() {
+		return ridingMainSection.getRidingDate().isBefore(LocalDateTime.now());
 	}
 
 	public void addSubSection(RidingSubSection subSection) {
