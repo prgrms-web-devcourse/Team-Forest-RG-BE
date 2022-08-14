@@ -18,7 +18,7 @@ public class SseConnectionController {
 	private final SseConnector connector;
 
 	@Secured("ROLE_USER")
-	@GetMapping(value = "/api/v1/connection/sse/{userId}", produces = "text/event-stream")
+	@GetMapping(value = "/api/v1/connection/sse", produces = "text/event-stream")
 	public SseEmitter subscribe(@AuthenticationPrincipal JwtAuthentication auth) {
 		return connector.connect(auth.userId);
 	}
