@@ -18,6 +18,7 @@ import javax.validation.constraints.Size;
 import com.prgrms.rg.domain.common.file.model.AttachedImage;
 import com.prgrms.rg.domain.common.file.model.ImageOwner;
 import com.prgrms.rg.domain.common.file.model.TemporaryImage;
+import com.prgrms.rg.domain.ridingpost.model.image.SubImage;
 
 import lombok.AccessLevel;
 import lombok.Getter;

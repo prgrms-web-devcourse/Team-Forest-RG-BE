@@ -7,6 +7,7 @@ import java.util.stream.Collectors;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.prgrms.rg.domain.ridingpost.model.image.SubImage;
 import com.prgrms.rg.domain.user.model.User;
 
 import lombok.AccessLevel;
@@ -55,6 +56,7 @@ public class RidingPostInfo {
 		private String thumbnail;
 		private Long thumbnailId;
 		private String ridingLevel;
+		private boolean isRecruiting;
 		private ZoneInfo zone;
 		private int fee;
 		private String estimatedTime;
@@ -81,7 +83,7 @@ public class RidingPostInfo {
 			List<RidingSubSection> subSectionList = ridingPost.getSubSectionList();
 			mapSubSection(subSectionList, instance);
 			instance.setId(ridingPost.getId());
-			instance.setThumbnail(ridingPost.getThumbnail());
+			instance.setThumbnail(ridingPost.getThumbnailUrl());
 			instance.setThumbnailId(ridingPost.getThumbnailId());
 			instance.setCreatedAt(ridingPost.getCreatedAt());
 			return instance;
@@ -113,9 +115,9 @@ public class RidingPostInfo {
 			List<ParticipantInfo> participantInfos = participantSection.getParticipants().stream()
 				.map(ridingParticipant -> ParticipantInfo.from(ridingParticipant.getUser()))
 				.collect(Collectors.toList());
-
 			instance.setMaxParticipant((participantSection.getMaxParticipantCount()));
 			instance.setMinParticipant(participantSection.getMinParticipantCount());
+			instance.setRecruiting(participantSection.isRecruiting());
 			instance.setParticipants((participantInfos));
 		}
 

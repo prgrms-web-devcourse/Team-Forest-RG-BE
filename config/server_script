@@ -6,9 +6,10 @@ log_dir=$(pwd)/server_log
 # 인스턴스에 이미 작동하는 컨테이너가 있으면 종료시킵니다.
 if [ -n "$running_container" ]
 then
-  sudo docker rm -f "$running_container"
+  sudo docker stop "$running_container"
 fi
-
+sudo docker container prune -f
+sudo docker image prune -f
 sudo docker pull $image_name
 
 if [ ! -d "$log_dir" ]

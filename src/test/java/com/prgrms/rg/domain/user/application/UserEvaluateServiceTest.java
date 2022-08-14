@@ -14,7 +14,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.prgrms.rg.domain.ridingpost.application.impl.RidingJoinService;
 import com.prgrms.rg.domain.ridingpost.model.RidingPostRepository;
 import com.prgrms.rg.domain.user.application.command.ParticipantEvaluateCommand;
 import com.prgrms.rg.domain.user.model.UserRepository;

@@ -44,7 +44,7 @@ public class RidingPostBriefInfo {
 
 	public static RidingPostBriefInfo from(RidingPost post) {
 		return new RidingPostBriefInfo(post.getId(), post.getRidingMainSection().getTitle(),
-			post.getThumbnail(), post.getRidingConditionSection().getLevel(),
+			post.getThumbnailUrl(), post.getRidingConditionSection().getLevel(),
 			post.getRidingMainSection().getRidingDate(),
 			post.getRidingMainSection().getDeparturePlace(),
 			ZoneInfo.from(post.getRidingMainSection().getAddressCode()),
