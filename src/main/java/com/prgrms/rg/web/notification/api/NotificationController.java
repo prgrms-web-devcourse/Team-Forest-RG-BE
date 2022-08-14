@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.prgrms.rg.domain.auth.jwt.JwtAuthentication;
 import com.prgrms.rg.domain.notification.application.NotificationService;
-import com.prgrms.rg.domain.notification.model.Notification;
+import com.prgrms.rg.domain.notification.model.NotificationInfo;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -21,7 +21,7 @@ public class NotificationController {
 	private final NotificationService notificationService;
 
 	@GetMapping("/api/notifications")
-	public Page<Notification> getNotifications(
+	public Page<NotificationInfo> getNotifications(
 		@PageableDefault(sort = "createdAt") Pageable pageable,
 		@AuthenticationPrincipal JwtAuthentication auth) {
 		return notificationService.loadPagedNotificationByUser(auth.userId, pageable);

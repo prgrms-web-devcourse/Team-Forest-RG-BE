@@ -13,8 +13,10 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import com.prgrms.rg.domain.notification.application.NotificationService;
-import com.prgrms.rg.domain.notification.model.Notification;
+import com.prgrms.rg.domain.notification.model.NotificationInfo;
 import com.prgrms.rg.domain.notification.model.NotificationRepository;
 import com.prgrms.rg.domain.ridingpost.application.RidingPostReadService;
 import com.prgrms.rg.domain.ridingpost.application.RidingPostService;
@@ -37,12 +39,15 @@ class NotificationServiceImplTest {
 	private RidingPostService postService;
 	@Autowired
 	private RidingPostReadService postReadService;
+	@Autowired
+	private ObjectMapper mapper;
 	private User mj;
 	private User other;
 	private RidingPost ridingPost;
 
 	@BeforeEach
 	void init() {
+		mapper.enable(SerializationFeature.INDENT_OUTPUT);
 		mj = createUser("mjmjmjmj");
 		other = createUser("otherother");
 		userRepository.save(mj);
@@ -60,13 +65,15 @@ class NotificationServiceImplTest {
 
 	@DisplayName("페이징 조회 테스트")
 	@Test
-	void test() {
+	void test() throws Exception {
 		//when
-		Page<Notification> page = notificationService.loadPagedNotificationByUser(mj.getId(), PageRequest.of(0, 10));
+		Page<NotificationInfo> page = notificationService.loadPagedNotificationByUser(mj.getId(),
+			PageRequest.of(0, 10));
 
 		//then
+		System.out.println(mapper.writeValueAsString(page));
 		assertThat(page.getNumberOfElements()).isEqualTo(10);
-		assertThat(page.getTotalPages()).isEqualTo(2);
+		assertThat(page.getTotalPages()).isEqualTo(1);
 	}
 
 	@DisplayName("알림 삭제 테스트")
@@ -76,7 +83,6 @@ class NotificationServiceImplTest {
 		notificationService.deleteAllNotificationByUser(other.getId());
 		//then
 		assertThat(notificationRepository.count()).isEqualTo(20);
-
 	}
 
 }

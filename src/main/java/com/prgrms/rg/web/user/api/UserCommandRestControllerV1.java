@@ -27,6 +27,6 @@ public class UserCommandRestControllerV1 implements UserRestController {
 	public ResponseEntity<Long> editUser(@Valid @RequestBody UserUpdateRequest request,
 		@AuthenticationPrincipal JwtAuthentication auth,
 		@PathVariable(name = "userId") Long userId) {
-		return ResponseEntity.ok().body(userService.edit(request.toCommand(userId)));
+		return ResponseEntity.ok().body(userService.edit(request.toCommand(userId), auth.userId));
 	}
 }

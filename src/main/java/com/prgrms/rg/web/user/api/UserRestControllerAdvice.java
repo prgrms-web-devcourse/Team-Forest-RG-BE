@@ -4,6 +4,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
+import com.prgrms.rg.domain.ridingpost.model.exception.UnAuthorizedException;
 import com.prgrms.rg.domain.user.application.exception.DuplicateNicknameException;
 import com.prgrms.rg.domain.user.application.exception.NoSuchUserException;
 import com.prgrms.rg.web.common.RgControllerAdvice;
@@ -13,6 +14,13 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @RgControllerAdvice(assignableTypes = UserRestController.class)
 public class UserRestControllerAdvice {
+
+	@ResponseStatus(HttpStatus.UNAUTHORIZED)
+	@ExceptionHandler(UnAuthorizedException.class)
+	public String handleUnAuthorizedException(UnAuthorizedException e) {
+		log.info(e.getMessage(), e);
+		return e.getMessage();
+	}
 
 	@ResponseStatus(HttpStatus.BAD_REQUEST)
 	@ExceptionHandler(IllegalArgumentException.class)

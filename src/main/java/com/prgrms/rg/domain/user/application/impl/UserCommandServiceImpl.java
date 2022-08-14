@@ -13,6 +13,7 @@ import com.prgrms.rg.domain.common.model.metadata.BicycleRepository;
 import com.prgrms.rg.domain.common.model.metadata.RidingLevel;
 import com.prgrms.rg.domain.ridingpost.model.AddressCode;
 import com.prgrms.rg.domain.ridingpost.model.AddressCodeRepository;
+import com.prgrms.rg.domain.ridingpost.model.exception.UnAuthorizedException;
 import com.prgrms.rg.domain.user.application.UserCommandService;
 import com.prgrms.rg.domain.user.application.command.UserUpdateCommand;
 import com.prgrms.rg.domain.user.application.exception.DuplicateNicknameException;
@@ -36,7 +37,9 @@ public class UserCommandServiceImpl implements UserCommandService {
 	private final ImageAttachManager imageManager;
 
 	@Override
-	public Long edit(UserUpdateCommand command) {
+	public Long edit(UserUpdateCommand command, Long userId) {
+		checkAuthority(command, userId);
+
 		User user = userRepository.findById(command.getId())
 			.orElseThrow((() -> new NoSuchUserException(command.getId())));
 
@@ -48,6 +51,12 @@ public class UserCommandServiceImpl implements UserCommandService {
 		changeImage(command.getProfileImageId(), user);
 
 		return user.getId();
+	}
+
+	private static void checkAuthority(UserUpdateCommand command, Long userId) {
+		if (command.getId() != userId) {
+			throw new UnAuthorizedException(userId);
+		}
 	}
 
 	private void changeNickname(String nickname, User user) {
