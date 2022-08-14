@@ -9,11 +9,11 @@ import lombok.Data;
 @Data
 public final class RiderInfoResult {
 
-	private int ridingYears;
+	private Integer ridingYears;
 	private String level;
 	private List<String> bicycles;
 
-	private RiderInfoResult(int ridingYears, String level, List<String> bicycles) {
+	private RiderInfoResult(Integer ridingYears, String level, List<String> bicycles) {
 		this.ridingYears = ridingYears;
 		this.level = level;
 		this.bicycles = bicycles;

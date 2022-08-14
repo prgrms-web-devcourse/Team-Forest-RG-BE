@@ -51,7 +51,7 @@ public class User extends BaseTimeEntity implements ImageOwner {
 	@Embedded
 	private RiderProfile profile;
 
-	@OneToOne(mappedBy = "user",cascade = CascadeType.ALL, orphanRemoval = true)
+	@OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
 	private ProfileImage profileImage;
 
 	@Embedded
@@ -86,6 +86,9 @@ public class User extends BaseTimeEntity implements ImageOwner {
 	}
 
 	public void setPhoneNumber(String phoneNumber) {
+		if (phoneNumber == null) {
+			return;
+		}
 		if (!Pattern.matches("^01(?:0|1|[6-9])(?:\\d{3}|\\d{4})\\d{4}$", phoneNumber))
 			throw new IllegalArgumentException("잘못된 번호입니다.");
 		this.phoneNumber = phoneNumber;
@@ -95,16 +98,20 @@ public class User extends BaseTimeEntity implements ImageOwner {
 		this.nickname = nicknameToChange;
 	}
 
-	public void changeRiderProfile(int ridingYears, RidingLevel level, Set<UserBicycle> bicyclesToApply) {
+	public void changeRiderProfile(Integer ridingYears, RidingLevel level, Set<UserBicycle> bicyclesToApply) {
 		this.profile.update(ridingYears, level, bicyclesToApply);
 	}
 
 	public void changeIntroduction(Introduction introduction) {
-		this.introduction = introduction;
+		if (introduction != null) {
+			this.introduction = introduction;
+		}
 	}
 
 	public void changeAddress(AddressCode addressCode) {
-		this.addressCode = addressCode;
+		if (addressCode != null) {
+			this.addressCode = addressCode;
+		}
 	}
 
 	public boolean addBicycle(Bicycle bicycle) {
@@ -125,7 +132,7 @@ public class User extends BaseTimeEntity implements ImageOwner {
 	}
 
 	public Integer getRegionCode() {
-		if (addressCode==null) {
+		if (addressCode == null) {
 			return null;
 		}
 		return addressCode.getCode();
@@ -144,7 +151,7 @@ public class User extends BaseTimeEntity implements ImageOwner {
 	}
 
 	public boolean isNewImage(Long imageId) {
-		if (profileImage==null) {
+		if (profileImage == null) {
 			return true;
 		}
 		return !imageId.equals(profileImage.getId());
