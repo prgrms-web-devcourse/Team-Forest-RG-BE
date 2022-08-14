@@ -9,6 +9,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.context.request.async.AsyncRequestTimeoutException;
 
 import com.prgrms.rg.domain.ridingpost.model.exception.UnAuthorizedException;
 import com.prgrms.rg.web.common.message.ExceptionMessageSender;
@@ -59,6 +60,11 @@ public class GlobalControllerAdvice {
 		log.info(exception.getMessage(), exception);
 		return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
 			.body(GlobalServerErrorResult.from(exception.getMessage()));
+	}
+
+	@ExceptionHandler(AsyncRequestTimeoutException.class)
+	public void handleTimeOutException(AsyncRequestTimeoutException e) {
+		log.info("SSE Connection Timeout");
 	}
 
 }

@@ -119,7 +119,7 @@ class RidingPostServiceImplTest {
 		var subimage = imageRepository.save(image);
 
 
-		var conditionCommand = new RidingConditionSaveCommand("상", List.of("MTB"));
+		var conditionCommand = new RidingConditionSaveCommand("상", List.of("MTB", "로드"));
 		var participantCommand = new RidingParticipantSaveCommand(post.getRidingParticipantSection().getMinParticipantCount(),
 			post.getRidingParticipantSection().getMaxParticipantCount());
 		var subCommand = new RidingSubSaveCommand("new-sub title", "new-sub content",
@@ -144,15 +144,19 @@ class RidingPostServiceImplTest {
 
 		var updatedPost = ridingPostRepository.findById(postId);
 
+		assertThat(postId, is(equalTo(post.getId())));
 		assertThat(updatedPost.isPresent(), is(true));
 		assertThat(updatedPost.get().getLeader().getId(), is(equalTo(leader.getId())));
 		assertThat(updatedPost.get().getRidingMainSection().getEstimatedTime(), is(equalTo(
 			mainCommand.getEstimatedTime())));
+		assertThat(updatedPost.get().getRidingConditionSection().getBicycleList(), is(hasSize(2)));
+
 		assertThat(updatedPost.get().getSubSectionList(), is(hasSize(1)));
 
 		var subsection = updatedPost.get().getSubSectionList().get(0);
 		assertThat(subsection.getTitle(), is(equalTo(subCommand.getTitle())));
 		assertThat(subsection.getImages(), is(hasSize(1)));
+		assertThat(subsection.getImages().get(0).getId(), is(equalTo(subimage.getId())));
 	}
 
 	@Test

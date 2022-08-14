@@ -19,7 +19,7 @@ public class SseConnector {
 		SseEmitter emitter = emitterRepository.save(emitterId, new SseEmitter(DEFAULT_TIMEOUT));
 		emitter.onCompletion(() -> emitterRepository.deleteById(emitterId));
 		emitter.onTimeout(() -> emitterRepository.deleteById(emitterId));
-		sender.sendNotification(userId, SseResponse.createConnectSuccess(userId), "health-check");
+		log.info("SSE Emitter created successful");
 		return emitter;
 	}
 
