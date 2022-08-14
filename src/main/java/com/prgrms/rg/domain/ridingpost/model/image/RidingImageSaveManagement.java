@@ -24,7 +24,7 @@ public class RidingImageSaveManagement {
 	public void saveThumbnailImage(RidingPost post, Long thumbnailId) {
 		//thumbnail -> 비교
 		if (!post.equalToThumbnail(thumbnailId)) {
-			post.removeCurrentImage();
+			imageManager.delete(post.getThumbnail(), post);
 			//null이 아닌 썸네일 삽입
 			if (!Objects.isNull(thumbnailId)) {
 				imageManager.store(thumbnailId, post);

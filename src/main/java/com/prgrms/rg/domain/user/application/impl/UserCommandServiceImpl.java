@@ -84,6 +84,7 @@ public class UserCommandServiceImpl implements UserCommandService {
 		}
 
 		if (user.isNewImage(imageId)) {
+			imageManager.delete(user.getProfileImage(), user);
 			imageManager.store(imageId, user);
 		}
 	}

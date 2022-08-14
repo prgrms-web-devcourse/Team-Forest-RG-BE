@@ -51,7 +51,7 @@ public class User extends BaseTimeEntity implements ImageOwner {
 	@Embedded
 	private RiderProfile profile;
 
-	@OneToOne(mappedBy = "user",cascade = CascadeType.ALL)
+	@OneToOne(mappedBy = "user",cascade = CascadeType.ALL, orphanRemoval = true)
 	private ProfileImage profileImage;
 
 	@Embedded
