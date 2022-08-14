@@ -8,6 +8,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
+import com.prgrms.rg.domain.common.model.BaseTimeEntity;
 import com.prgrms.rg.domain.ridingpost.model.RidingPost;
 import com.prgrms.rg.domain.user.model.User;
 
@@ -18,7 +19,7 @@ import lombok.Setter;
 @Entity
 @Getter
 @Setter(AccessLevel.PRIVATE)
-public class Notification {
+public class Notification extends BaseTimeEntity {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
