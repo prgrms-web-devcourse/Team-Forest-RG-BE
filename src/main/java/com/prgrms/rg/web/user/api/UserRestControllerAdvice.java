@@ -15,6 +15,13 @@ import lombok.extern.slf4j.Slf4j;
 public class UserRestControllerAdvice {
 
 	@ResponseStatus(HttpStatus.BAD_REQUEST)
+	@ExceptionHandler(IllegalArgumentException.class)
+	public String handleIllegalArgumentException(IllegalArgumentException e) {
+		log.info(e.getMessage(), e);
+		return e.getMessage();
+	}
+
+	@ResponseStatus(HttpStatus.BAD_REQUEST)
 	@ExceptionHandler(NoSuchUserException.class)
 	public String handleNoSuchUserException(NoSuchUserException e) {
 		log.info(e.getMessage(), e);
