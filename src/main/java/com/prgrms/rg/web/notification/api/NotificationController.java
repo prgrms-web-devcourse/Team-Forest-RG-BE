@@ -24,7 +24,7 @@ public class NotificationController {
 	private final NotificationService notificationService;
 
 	@Secured("ROLE_USER")
-	@GetMapping("/api/notifications")
+	@GetMapping("/api/v1/notifications")
 	public Page<NotificationInfo> getNotifications(
 		@PageableDefault(sort = "createdAt") Pageable pageable,
 		@AuthenticationPrincipal JwtAuthentication auth) {
@@ -32,7 +32,7 @@ public class NotificationController {
 	}
 
 	@Secured("ROLE_USER")
-	@DeleteMapping("/api/notifications")
+	@DeleteMapping("/api/v1/notifications")
 	public ResponseEntity<String> deleteNotifications(
 		@AuthenticationPrincipal JwtAuthentication auth) {
 		notificationService.deleteAllNotificationByUser(auth.userId);

@@ -90,7 +90,14 @@ public class QuerydslRidingPostSearchRepository extends QuerydslRepositorySuppor
 	}
 
 	private BooleanExpression zoneEq(Integer zoneCode) {
-		return zoneCode != null ? ridingPost.ridingMainSection.addressCode.code.eq(zoneCode) : null;
+		if (zoneCode == null)
+			return null;
+
+		if (zoneCode < 100) { // 시 코드면
+			log.error("zone code = " + zoneCode);
+			return ridingPost.ridingMainSection.addressCode.code.divide(1000).round().eq(zoneCode);
+		}
+		return ridingPost.ridingMainSection.addressCode.code.eq(zoneCode);
 	}
 
 	private BooleanExpression bicycleEq(Long bicycleCode) {
