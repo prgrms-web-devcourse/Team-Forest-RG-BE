@@ -64,14 +64,6 @@
     <td align="center"><a href="https://github.com/res-cogitans">Kant(이한빈)</a></td>
   </tr>
 
-  <tr>
-  <td align="center"> 직무 기입 </td>
-  <td align="center"></td>
-  <td align="center"></td>
-  <td align="center"></td>
-  <td align="center"></td>
-  </tr>
-
 </table>
 <br>
 
@@ -103,59 +95,65 @@
 
 <details>
     <summary><b>카카오 회원가입/로그인</b></summary>
-    - 카카오 간편 회원가입을 통하여 서비스에 가입하고, 로그인할 수 있음
+  
+- 카카오 간편 회원가입을 통하여 서비스에 가입하고, 로그인할 수 있음
 </details>
 
 <br>
 
 <details>
     <summary><b>라이딩 참여</b></summary>
-    - 모집 중인 라이딩에 참여 신청을 할 수 있음
+  
+- 모집 중인 라이딩에 참여 신청을 할 수 있음
 </details>
 
 <br>
 
 <details>
     <summary><b>라이딩 주최</b></summary>
-    - 지정된 양식에 따라 라이딩 모집 게시글을 편리하게 작성할 수 있음
+  
+- 지정된 양식에 따라 라이딩 모집 게시글을 편리하게 작성할 수 있음
 </details>
 
 <br>
 
 <details>
     <summary><b>라이딩 검색</b></summary>
-    <br>
-    - 자전거 종류, 모집 상태, 레벨, 지역에 따른 라이딩 모집 게시글을 검색할 수 있음
+
+- 자전거 종류, 모집 상태, 레벨, 지역에 따른 라이딩 모집 게시글을 검색할 수 있음
 </details>
 
 <br>
 
 <details>
     <summary><b>알림</b></summary>
-    - 주최했던 라이딩에 대하여, 다른 사용자가 신청-취소하면 그에 대한 알림을 받을 수 있음
+  
+- 주최했던 라이딩에 대하여, 다른 사용자가 신청-취소하면 그에 대한 알림을 받을 수 있음
 </details>
 
 <br>
 
 <details>
     <summary><b>마이페이지</b></summary>
-    - 참여한, 참여했던 라이딩 정보와, 내가 주최했던 라이딩 게시글 정보들을 볼 수 있음
-    - 회원 정보를 수정할 수 있음
+  
+- 참여한, 참여했던 라이딩 정보와, 내가 주최했던 라이딩 게시글 정보들을 볼 수 있음
+- 회원 정보를 수정할 수 있음
 </details>
 
 <br>
 
 <details>
     <summary><b>평가</b></summary>
-    - 참여했던 라이딩에 대하여, 참여자들을 평가할 수 있음
-    - 라이딩을 주최한 라이딩 리더는, 멤버들의 노쇼 여부를 체크하여 해당 멤버에게 제약을 줄 수 있음
+  
+- 참여했던 라이딩에 대하여, 참여자들을 평가할 수 있음
+- 라이딩을 주최한 라이딩 리더는, 멤버들의 노쇼 여부를 체크하여 해당 멤버에게 제약을 줄 수 있음
 </details>
 
 <br>
 
 
 ## 💬 아키텍처
-![Diagram](https://user-images.githubusercontent.com/72663337/184542872-6cd45528-4879-46e7-84aa-f0f9235c4464.jpg)
+![Diagram](https://user-images.githubusercontent.com/72663337/184575992-d8879461-4872-429e-813a-264f6ac024d5.png)
 - **Github Actions**를 통한 CI/CD 를 진행하고, workflow를 통과해야만 PR이 merge됩니다. 
 - build된 **Docker image**를 **EC2** 서버에서 실행하는 방식으로 배포를 진행합니다.
 - 서버에서 발생한 에러에 대한 메시지를 **slack**으로 전달하여 확인할 수 있습니다.
