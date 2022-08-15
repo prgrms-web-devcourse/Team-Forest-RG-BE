@@ -17,6 +17,7 @@ spring:
     open-in-view: false
     hibernate:
       ddl-auto: validate
+    generate-ddl: true
   servlet:
     multipart:
       max-file-size: 10MB
