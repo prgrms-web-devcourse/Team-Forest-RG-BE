@@ -16,8 +16,7 @@ spring:
     database: mysql
     open-in-view: false
     hibernate:
-      ddl-auto: create-drop
-    defer-datasource-initialization: true
+      ddl-auto: validate
   servlet:
     multipart:
       max-file-size: 10MB
@@ -28,6 +27,8 @@ spring:
       data-locations:
         - classpath:static/db/bicycle.sql
         - classpath:static/db/address_code.sql
+      schema-locations:
+        - classpath:static/db/schema.sql
 server:
   port: 8080
 logging:

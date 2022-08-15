@@ -144,22 +144,17 @@ public class DataInitializer {
 		List<User> userList = new LinkedList<>();
 		var bicycleList = List.of("MTB", "TSB", "따릉이", "로드", "상관없음", "픽시", "하이브리드");
 
-		var userNames = List.of("Bob민성", "Matt승범", "Partey훈기", "Pray민재", "Kant한빈", "Kiko채우", "Tree인수", "Didi현정");
+		var userNames = List.of("민수", "승훈", "수훈", "재민", "지윤", "우제", "상혁", "지현");
 		for (String userName : userNames) {
-			userList.add(createUser(event.getApplicationContext().getBean(UserRepository.class), userName));
-		}
-
-		var evaluatorNames = List.of("민성","승범","훈기","현정","민재","한빈","채우","인수");
-
-		for (int i = 0; i < evaluatorNames.size(); i++ ) {
-			var evaluator = createUser(event.getApplicationContext().getBean(UserRepository.class), evaluatorNames.get(i));
+			var user = createUser(event.getApplicationContext().getBean(UserRepository.class), userName);
+			userList.add(user);
 			var tokenProvider = event.getApplicationContext().getBean(JwtTokenProvider.class);
-
-			var evaluatorToken = tokenProvider.createAdminToken("ROLE_USER", evaluator.getId());
-			CriticalMessageSender.send("평가자 토큰 " + (i + 1) + " : " + evaluatorToken);
+			var userToken = tokenProvider.createAdminToken("ROLE_USER", user.getId());
+			CriticalMessageSender.send("가짜 사용자 토큰 " + (1) + " : " + userToken);
 		}
 
-		for (int i = 0; i < 1000; i++) {
+
+		for (int i = 0; i < 50; i++) {
 			insertRidingPost(event.getApplicationContext(), bicycleList.get(nextInt(0, bicycleList.size())),
 				addressCodes.get(nextInt(0, addressCodes.size())),
 				values()[nextInt(0, values().length)],
