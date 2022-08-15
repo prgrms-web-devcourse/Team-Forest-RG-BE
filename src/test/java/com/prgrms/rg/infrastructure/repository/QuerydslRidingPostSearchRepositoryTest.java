@@ -52,19 +52,18 @@ class QuerydslRidingPostSearchRepositoryTest {
 	private ObjectMapper mapper;
 	private final static Integer BUNDANG = 31023;
 	private final static Integer GANGNAM = 11230;
-	private final static Integer JUNGU = 11010;
+	private final static Integer JONGRO = 11010;
+	private final static Integer YOUNGSAN = 11030;
+	private final static Integer GUANJIN = 11050;
+	private final static Integer NAMYANGJU = 31130;
+
 	@Autowired
 	RidingPostRepository ridingPostRepository;
 
 	@BeforeEach
 	void init() {
 		mapper.enable(SerializationFeature.INDENT_OUTPUT);
-		/*
-		 * TYPE = MTB, ZONE = 경기도 성남시 분당구, LEVEL = "상" 10개
-		 * TYPE = 로드,MTB ZONE = 경기도 성남시 분당구, LEVEL = "중" 20개
-		 * TYPE = 픽시 ZONE = 서울특별시 강남구 LEVEL = "하" 5개
-		 * TYPE = 픽시 ZONE = 서울특별시 강남구 LEVEL = "" 라이딩 모집  = 마감 8개
-		 * */
+
 		User leader = TestEntityDataFactory.createUser();
 		long userId = userRepository.save(leader).getId();
 
@@ -84,8 +83,16 @@ class QuerydslRidingPostSearchRepositoryTest {
 			createPostWithCondition(fixie, "하", GANGNAM, userId);
 		}
 
-		for (int i = 0; i < 8; i++) {
-			createClosePostWithCondition(fixie, "중", JUNGU, userId);
+		for (int i = 0; i < 4; i++) {
+			createClosePostWithCondition(fixie, "중", JONGRO, userId);
+		}
+
+		for (int i = 0; i < 4; i++) {
+			createClosePostWithCondition(fixie, "하", YOUNGSAN, userId);
+			createClosePostWithCondition(fixie, "하", GUANJIN, userId);
+		}
+		for (int i = 0; i < 7; i++) {
+			createClosePostWithCondition(fixie, "하", NAMYANGJU, userId);
 		}
 	}
 
@@ -110,12 +117,32 @@ class QuerydslRidingPostSearchRepositoryTest {
 		assertThat(results).hasSize(expect);
 	}
 
+	@DisplayName("시 코드로 라이딩 게시글 조회")
+	@ParameterizedTest
+	@CsvSource({
+		"11,   17",
+		"31,   37"
+	})
+	void test154(int zone, int expect) {
+		//given
+		Pageable pageable = PageRequest.of(0, 50, Sort.Direction.DESC, "createdAt");
+		RidingSearchCondition condition = new RidingSearchCondition();
+		condition.setAddressCode(zone);
+
+		//when
+		Slice<RidingPostInfo> ridingPostInfos = searchRepository.searchRidingPostSlice(condition, pageable);
+
+		//then
+		List<RidingPostInfo> results = ridingPostInfos.getContent();
+		assertThat(results).hasSize(expect);
+	}
+
 	@DisplayName("숙련도별 라이딩 게시글 조회")
 	@ParameterizedTest
 	@CsvSource({
 		"상,   10",
-		"중,   28",
-		"하,   5"
+		"중,   24",
+		"하,   20"
 	})
 	void test2(String level, int expect) {
 		//given
@@ -144,7 +171,7 @@ class QuerydslRidingPostSearchRepositoryTest {
 
 		//then
 		List<RidingPostInfo> results = ridingPostInfos.getContent();
-		assertThat(results).hasSize(8);
+		assertThat(results).hasSize(19);
 
 		System.out.println(mapper.writeValueAsString(ridingPostInfos));
 	}

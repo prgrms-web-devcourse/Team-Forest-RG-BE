@@ -76,7 +76,7 @@ public class RidingPost extends BaseTimeEntity implements ImageOwner {
 		removeCurrentSubSection();
 		ridingMainSection.update(newPost.getRidingMainSection());
 		ridingParticipantSection.update(newPost.getRidingParticipantSection());
-		ridingConditionSection.update(newPost.getRidingConditionSection());
+		ridingConditionSection.update(this, newPost.getRidingConditionSection());
 	}
 
 	private void assignLeader(User leader) {
