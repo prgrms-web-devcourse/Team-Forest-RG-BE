@@ -65,6 +65,13 @@
   </tr>
 
 </table>
+
+- **Party** : User 회원 가입 및 Kakao OAuth 연동 
+- **Bob** : 백엔드 CI/CD 파이프라인 구축 및 관리, Riding 댓글 API 구현, 배포 환경 이슈 트러블 슈팅
+- **Didi** : Riding 생성 및 수정, 평가 기능 API
+- **Pray** : 라이딩 조회, 라이딩 조건별 검색, 알림 서비스
+- **Kant** : ERD 설계, 사용자 정보 수정 및 조회 기능 개발, 이미지 업로드 기능 개발
+
 <br>
 
 ## ⚒ 기술스택
@@ -155,7 +162,7 @@
 ## 💬 아키텍처
 ![Diagram](https://user-images.githubusercontent.com/72663337/184575992-d8879461-4872-429e-813a-264f6ac024d5.png)
 - **Github Actions**를 통한 CI/CD 를 진행하고, workflow를 통과해야만 PR이 merge됩니다. 
-- build된 **Docker image**를 **EC2** 서버에서 실행하는 방식으로 배포를 진행합니다.
+- build된 **Docker image**를 **dockerhub**으로 push하고, **EC2**서버의 docker에서 이를 pull받아 실행하는 방식으로 배포를 진행합니다.
 - 서버에서 발생한 에러에 대한 메시지를 **slack**으로 전달하여 확인할 수 있습니다.
 - **nGrinder**, **PINPOINT**를 사용하여 부하 테스트를 진행, 서버의 요청 처리 성능을 모니터링합니다.
 
