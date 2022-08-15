@@ -64,7 +64,7 @@ class UserEvaluateServiceTest {
 		assertThat(participants, is(hasSize(3)));
 		var findUser = userRepository.findById(participants.get(1).getUser().getId());
 		assertThat(findUser.isPresent(), is(true));
-		assertThat(findUser.get().getMannerInfo().getMannerPoint(), is(equalTo(110)));
+		assertThat(findUser.get().getMannerInfo().getMannerPoint(), is(equalTo(10)));
 	}
 
 	@Test
@@ -92,6 +92,6 @@ class UserEvaluateServiceTest {
 		assertThat(participants, is(hasSize(3)));
 		var findUser = userRepository.findById(participants.get(0).getUser().getId());
 		assertThat(findUser.isPresent(), is(true));
-		assertThat(findUser.get().getMannerInfo().getMannerPoint(), is(equalTo(110)));
+		assertThat(findUser.get().getMannerInfo().getMannerPoint(), is(equalTo(10)));
 	}
 }
