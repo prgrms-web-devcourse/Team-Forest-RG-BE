@@ -21,17 +21,16 @@ import com.auth0.jwt.interfaces.DecodedJWT;
 import com.prgrms.rg.domain.auth.JwtRefreshToken;
 import com.prgrms.rg.domain.auth.JwtRefreshTokenRepository;
 import com.prgrms.rg.domain.auth.jwt.JwtTokenProvider;
-
 import com.prgrms.rg.domain.common.file.model.TemporaryImage;
 import com.prgrms.rg.domain.common.file.model.TemporaryImageRepository;
 import com.prgrms.rg.domain.common.model.metadata.Bicycle;
 import com.prgrms.rg.domain.common.model.metadata.BicycleRepository;
 import com.prgrms.rg.domain.common.model.metadata.RidingLevel;
-
 import com.prgrms.rg.domain.ridingpost.model.AddressCode;
 import com.prgrms.rg.domain.ridingpost.model.AddressCodeRepository;
 import com.prgrms.rg.domain.user.application.UserAuthenticationService;
 import com.prgrms.rg.domain.user.application.command.UserRegisterCommand;
+import com.prgrms.rg.domain.user.application.exception.DuplicateNicknameException;
 import com.prgrms.rg.domain.user.model.Introduction;
 import com.prgrms.rg.domain.user.model.Manner;
 import com.prgrms.rg.domain.user.model.Nickname;
@@ -51,6 +50,9 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 @Slf4j
 public class UserAuthenticationServiceImpl implements UserAuthenticationService {
+	private static final int MILLISECOND_CORRECTION = 1000;
+	private static final int DEFAULT_ADDRESS_CODE = 11010;
+	private static final int DEFAULT_RIDDING_START_YEAR = 2022;
 	private final UserRepository userRepository;
 	private final BicycleRepository bicycleRepository;
 	private final AddressCodeRepository addressCodeRepository;
@@ -58,13 +60,8 @@ public class UserAuthenticationServiceImpl implements UserAuthenticationService 
 	private final OAuthManager communicator;
 	private final JwtRefreshTokenRepository jwtRefreshTokenRepository;
 	private final TemporaryImageRepository temporaryImageRepository;
-
 	@Value("${jwt.refresh-expiry-seconds}")
 	private long refreshTokenExpiryTime;
-
-	private static final int MILLISECOND_CORRECTION = 1000;
-	private static final int DEFAULT_ADDRESS_CODE = 11010;
-	private static final int DEFAULT_RIDDING_START_YEAR = 2022;
 
 	@Override
 	@Transactional
@@ -135,6 +132,10 @@ public class UserAuthenticationServiceImpl implements UserAuthenticationService 
 	public UserRegisterResult updateUserByRegistration(UserRegisterCommand userRegisterCommand) {
 		User user = userRepository.findById(userRegisterCommand.getUserId())
 			.orElseThrow(() -> new NoSuchElementException("유저를 찾을 수 없습니다."));
+		var nicknameCandidate = new Nickname(userRegisterCommand.getNickName());
+		if(userRepository.existsUserByNickname(nicknameCandidate)) {
+			throw new DuplicateNicknameException(nicknameCandidate);
+		};
 
 		if (user.isRegistered()) {
 			log.info("Already exists: {} user", userRegisterCommand.getUserId());
@@ -159,9 +160,9 @@ public class UserAuthenticationServiceImpl implements UserAuthenticationService 
 	@PostConstruct
 	public void init() throws Exception {
 		AddressCode addressCode = addressCodeRepository.save(new AddressCode(99999));
-    
+
 		Bicycle mtb = bicycleRepository.save(new Bicycle(395683L, "TSB"));
-    
+
 		User user = User.builder()
 			.nickname(new Nickname("adminNickname"))
 			.manner(Manner.create())

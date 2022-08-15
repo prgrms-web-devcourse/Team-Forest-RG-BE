@@ -16,16 +16,16 @@ spring:
     database: mysql
     open-in-view: false
     hibernate:
-      ddl-auto: create
-    generate-ddl: true
-    defer-datasource-initialization: true
+      ddl-auto: validate
+    generate-ddl: false
+    defer-datasource-initialization: false
   servlet:
     multipart:
       max-file-size: 10MB
       max-request-size: 10MB
   sql:
     init:
-      mode: always
+      mode: never
       data-locations:
         - classpath:static/db/bicycle.sql
         - classpath:static/db/address_code.sql
