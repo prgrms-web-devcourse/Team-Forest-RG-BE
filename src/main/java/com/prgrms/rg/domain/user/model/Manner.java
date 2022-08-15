@@ -29,7 +29,7 @@ public class Manner {
 	}
 
 	public static Manner create() {
-		return new Manner((short)0, (short)0, null);
+		return new Manner((short)100, (short)0, null);
 	}
 
 	public static Manner of(short point, short noShow, LocalDate banned) {
@@ -44,7 +44,6 @@ public class Manner {
 		return MannerLevel.of(point);
 	}
 
-
 	void addNoShowCount() {
 		noShow++;
 		if (noShow % NO_SHOW_LIMIT == 0) {
@@ -53,7 +52,7 @@ public class Manner {
 	}
 
 	public void addPoint() {
-		point++;
+		point += 10;
 	}
 
 	@Override
