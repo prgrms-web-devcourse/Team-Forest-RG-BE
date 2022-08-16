@@ -80,34 +80,34 @@
 
 ### Spring
 
-<img src="https://img.shields.io/badge/JAVA 11-007396?style=for-the-badge&logo=Java&logoColor=white&style=flat"/></a>
-<img src="https://img.shields.io/badge/Spring Boot-6DB33F?style=flat-square&logo=Spring&logoColor=white&style=flat"/></a>
-<img src="https://img.shields.io/badge/Spring Security-6DB33F?style=flat-square&logo=SpringSecurity&logoColor=white&style=flat"/></a>
-<img src="https://img.shields.io/badge/Spring Data JPA-6DB33F?style=flat-square&logoColor=white&style=flat"/></a>
-<img src="https://img.shields.io/badge/Rest Docs-6DB33F?style=flat-square&style=flat"/></a>
-<img src="https://img.shields.io/badge/QueryDSL-gray?logoColor=white&style=flat"/></a>
+<img src="https://img.shields.io/badge/JAVA 11-007396?style=for-the-badge&logo=Java&logoColor=white"/></a>
+<img src="https://img.shields.io/badge/Spring Boot-6DB33F?style=for-the-badge&logo=Spring&logoColor=white"/></a>
+<img src="https://img.shields.io/badge/Spring Security-6DB33F?style=for-the-badge&logo=SpringSecurity&logoColor=white"/></a>
+<img src="https://img.shields.io/badge/Spring Data JPA-6DB33F?style=for-the-badge&logoColor=white"/></a>
+<img src="https://img.shields.io/badge/Rest Docs-6DB33F?style=for-the-badge"/></a>
+<img src="https://img.shields.io/badge/QueryDSL-gray?style=for-the-badge&logoColor=white"/></a>
 
 ### Build
 
-<img src="https://img.shields.io/badge/Gradle-4429A1?style=flat-square&logo=Gradle&logoColor=02303A&style=flat"/></a>
+<img src="https://img.shields.io/badge/Gradle-4429A1?style=for-the-badge&logo=Gradle&logoColor=02303A"/></a>
 
 ### Database
 
-<img src="https://img.shields.io/badge/MySQL 8-4479A1?style=flat-square&logo=MySQL&logoColor=white&style=flat"/></a>
+<img src="https://img.shields.io/badge/MySQL 8-4479A1?style=for-the-badge&logo=MySQL&logoColor=white"/></a>
 
 ### DevOps
 
-<img src="https://img.shields.io/badge/EC2-FF9900?style=flat-square&logo=Amazon EC2&logoColor=white&style=flat"/></a>
-<img src="https://img.shields.io/badge/RDS-527FFF?style=flat-square&logo=Amazon RDS&logoColor=white&style=flat"/></a>
-<img src="https://img.shields.io/badge/S3-527FFF?style=flat-square&logo=Amazon S3&logoColor=white&style=flat"/></a>
-<img src="https://img.shields.io/badge/Github Action-2088FF?style=flat-square&logo=Amazon RDS&logoColor=white&style=flat"/></a>
-<img src="https://img.shields.io/badge/Docker-2496ED?style=flat-square&logo=Amazon RDS&logoColor=white&style=flat"/></a>
-<img src="https://img.shields.io/badge/Slack-4A154B?style=flat-square&logo=Slack&logoColor=white&style=flat"/></a>
+<img src="https://img.shields.io/badge/EC2-FF9900?style=for-the-badge&logo=Amazon EC2&logoColor=white"/></a>
+<img src="https://img.shields.io/badge/RDS-527FFF?style=for-the-badge&logo=Amazon RDS&logoColor=white"/></a>
+<img src="https://img.shields.io/badge/S3-527FFF?style=for-the-badge&logo=Amazon S3&logoColor=white"/></a>
+<img src="https://img.shields.io/badge/Github Action-2088FF?style=for-the-badge&logo=Amazon RDS&logoColor=white"/></a>
+<img src="https://img.shields.io/badge/Docker-2496ED?style=for-the-badge&logo=Amazon RDS&logoColor=white"/></a>
+<img src="https://img.shields.io/badge/Slack-4A154B?style=for-the-badge&logo=Slack&logoColor=white"/></a>
 
 ### Test
 
-<img src="https://img.shields.io/badge/JUnit-25A162?style=flat-square&logo=JUnit5&logoColor=white&style=flat"/></a>
-<img src="https://img.shields.io/badge/nGrinder-03C75A?style=flat-square&logo=Naver&logoColor=white&style=flat"/></a>
+<img src="https://img.shields.io/badge/JUnit-25A162?style=for-the-badge&logo=JUnit5&logoColor=white"/></a>
+<img src="https://img.shields.io/badge/nGrinder-03C75A?style=for-the-badge&logo=Naver&logoColor=white"/></a>
 
 <br>
 
