@@ -80,7 +80,7 @@
 
 ### Spring
 
-<img src="https://img.shields.io/badge/Java11-007396?style=flat-square&logo=Java&logoColor=white&style=flat"/></a>
+<img src="https://img.shields.io/badge/JAVA 11-007396?style=for-the-badge&logo=Java&logoColor=white&style=flat"/></a>
 <img src="https://img.shields.io/badge/Spring Boot-6DB33F?style=flat-square&logo=Spring&logoColor=white&style=flat"/></a>
 <img src="https://img.shields.io/badge/Spring Security-6DB33F?style=flat-square&logo=SpringSecurity&logoColor=white&style=flat"/></a>
 <img src="https://img.shields.io/badge/Spring Data JPA-6DB33F?style=flat-square&logoColor=white&style=flat"/></a>
