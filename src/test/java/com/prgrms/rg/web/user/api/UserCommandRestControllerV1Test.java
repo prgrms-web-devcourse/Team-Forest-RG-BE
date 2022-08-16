@@ -1,6 +1,9 @@
 package com.prgrms.rg.web.user.api;
 
 import static org.mockito.Mockito.*;
+import static org.springframework.restdocs.payload.PayloadDocumentation.*;
+import static org.springframework.restdocs.request.RequestDocumentation.*;
+import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -8,7 +11,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders;
 import org.springframework.test.web.servlet.MockMvc;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -19,6 +24,7 @@ import com.prgrms.rg.domain.user.application.exception.NoSuchUserException;
 import com.prgrms.rg.testutil.ControllerTest;
 import com.prgrms.rg.web.user.requests.UserUpdateRequest;
 
+@AutoConfigureRestDocs
 @ControllerTest(controllers = UserCommandRestControllerV1.class)
 class UserCommandRestControllerV1Test {
 
@@ -50,11 +56,27 @@ class UserCommandRestControllerV1Test {
 		when(userCommandService.edit(command, 1L)).thenReturn(1L);
 
 		//When
-		mockMvc.perform(put(("/api/v1/users/1"))
+		mockMvc.perform(RestDocumentationRequestBuilders.put("/api/v1/users/{userId}", 1L)
 				.header("Authorization", "token " + token)
 				.content(body)
-				.contentType("application/json")
-			).andExpect(status().isOk())
+				.contentType("application/json"))
+			.andExpect(status().isOk())
+			.andDo(document("user-update",
+				pathParameters(
+					parameterWithName("userId").description("수정할 유저 ID")
+				),
+				requestFields(
+					fieldWithPath("nickname").description("유저 닉네임"),
+					fieldWithPath("ridingStartYear").description("라이딩 시작 년도"),
+					fieldWithPath("ridingLevel").description("라이딩 레벨"),
+					fieldWithPath("bicycles[]").description("자전거 리스트"),
+					fieldWithPath("introduction").description("자기소개"),
+					fieldWithPath("favoriteRegionCode").description("자신의 지역 코드"),
+					fieldWithPath("phoneNumber").description("전화번호"),
+					fieldWithPath("profileImageId").description("프로필 이미지 ID")
+				),
+				responseBody()
+				))
 			.andDo(print());
 	}
 
