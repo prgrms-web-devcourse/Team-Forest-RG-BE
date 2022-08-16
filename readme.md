@@ -58,7 +58,7 @@
   </tr>
 
   <tr> 
-    <td align="center"><a href="https://github.com/HunkiKim">Party(김훈기)</a></td>
+    <td align="center"><a href="https://github.com/HunkiKim">Partey(김훈기)</a></td>
     <td align="center"><a href="https://github.com/epicblues">Bob(김민성)</a></td>
     <td align="center"><a href="https://github.com/kkj0419">Didi(김현정)</a></td>
     <td align="center"><a href="https://github.com/blessing333">Pray(이민재)</a></td>
@@ -68,7 +68,7 @@
 </table>
 </div>
 
-- **Party** : User 회원 가입 및 Kakao OAuth 연동 
+- **Partey** : User 회원 가입 및 Kakao OAuth 연동 
 - **Bob** : 백엔드 CI/CD 파이프라인 구축 및 관리, Riding 댓글 API 구현, 배포 환경 이슈 트러블 슈팅
 - **Didi** : Riding 생성 및 수정, 평가 기능 API
 - **Pray** : 라이딩 조회, 라이딩 조건별 검색, 알림 서비스
@@ -83,7 +83,7 @@
 - Gradle
 - Spring Data JPA(Hibernate), QueryDSL
 - Spring Security(JWT, OAuth)
-- RestDocs
+- Spring RestDocs
 
 ### Database
 - MySQL
@@ -168,9 +168,9 @@
 - build된 **Docker image**를 **dockerhub**으로 push하고, **EC2** 서버의 **docker**에서 이를 pull받아 실행하는 방식으로 배포를 진행합니다.
 
 ### 서비스 아키텍처
-![Untitled Diagram drawio](https://user-images.githubusercontent.com/72663337/184637222-ff9b5deb-08d8-43f0-97e6-52f3cf9e5df4.png)
+![Untitled Diagram drawio (1)](https://user-images.githubusercontent.com/72663337/184794418-78f46f4a-1b41-4114-ab26-593d72ced230.png)
 
-- 서버에서 발생한 에러에 대한 메시지를 **slack**으로 전달하여 확인할 수 있습니다.
+- 서버에서 발생한 에러에 대한 메시지를 **slack, file**으로 전달하여 확인할 수 있습니다.
 - **nGrinder**, **PINPOINT**를 사용하여 부하 테스트를 진행, 서버의 요청 처리 성능을 모니터링합니다.
 
 <br>
