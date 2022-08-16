@@ -79,24 +79,35 @@
 ## ⚒ 기술스택
 
 ### Spring
-- Java 11
-- Gradle
-- Spring Data JPA(Hibernate), QueryDSL
-- Spring Security(JWT, OAuth)
-- Spring RestDocs
+
+<img src="https://img.shields.io/badge/Java11-007396?style=flat-square&logo=Java&logoColor=white&style=flat"/></a>
+<img src="https://img.shields.io/badge/Spring Boot-6DB33F?style=flat-square&logo=Spring&logoColor=white&style=flat"/></a>
+<img src="https://img.shields.io/badge/Spring Security-6DB33F?style=flat-square&logo=SpringSecurity&logoColor=white&style=flat"/></a>
+<img src="https://img.shields.io/badge/Spring Data JPA-6DB33F?style=flat-square&logoColor=white&style=flat"/></a>
+<img src="https://img.shields.io/badge/Rest Docs-6DB33F?style=flat-square&style=flat"/></a>
+<img src="https://img.shields.io/badge/QueryDSL-gray?logoColor=white&style=flat"/></a>
+
+### Build
+
+<img src="https://img.shields.io/badge/Gradle-4429A1?style=flat-square&logo=Gradle&logoColor=02303A&style=flat"/></a>
 
 ### Database
-- MySQL
+
+<img src="https://img.shields.io/badge/MySQL 8-4479A1?style=flat-square&logo=MySQL&logoColor=white&style=flat"/></a>
 
 ### DevOps
-- AWS - EC2/RDS/S3
-- Github Actions
-- Docker
-- Slack
-- PINPOINT, nGrinder
+
+<img src="https://img.shields.io/badge/EC2-FF9900?style=flat-square&logo=Amazon EC2&logoColor=white&style=flat"/></a>
+<img src="https://img.shields.io/badge/RDS-527FFF?style=flat-square&logo=Amazon RDS&logoColor=white&style=flat"/></a>
+<img src="https://img.shields.io/badge/S3-527FFF?style=flat-square&logo=Amazon S3&logoColor=white&style=flat"/></a>
+<img src="https://img.shields.io/badge/Github Action-2088FF?style=flat-square&logo=Amazon RDS&logoColor=white&style=flat"/></a>
+<img src="https://img.shields.io/badge/Docker-2496ED?style=flat-square&logo=Amazon RDS&logoColor=white&style=flat"/></a>
+<img src="https://img.shields.io/badge/Slack-4A154B?style=flat-square&logo=Slack&logoColor=white&style=flat"/></a>
 
 ### Test
-- JUnit5
+
+<img src="https://img.shields.io/badge/JUnit-25A162?style=flat-square&logo=JUnit5&logoColor=white&style=flat"/></a>
+<img src="https://img.shields.io/badge/nGrinder-03C75A?style=flat-square&logo=Naver&logoColor=white&style=flat"/></a>
 
 <br>
 
