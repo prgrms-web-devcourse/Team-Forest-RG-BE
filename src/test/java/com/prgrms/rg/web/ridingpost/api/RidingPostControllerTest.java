@@ -159,7 +159,7 @@ class RidingPostControllerTest {
 		when(ridingPostService.updateRidingPost(leaderId, postId, body.toCommand())).thenReturn(postId);
 		when(ridingPostService.updateRidingPost(anyLong(), anyLong(), any())).thenReturn(postId);
 		//when
-		mockMvc.perform(put("/api/v1/ridingposts/{postId}", postId)
+		mockMvc.perform(RestDocumentationRequestBuilders.put("/api/v1/ridingposts/{postId}", postId)
 				.header("Authorization", "token " + token)
 				.contentType("application/json")
 				.content(bodyString))
