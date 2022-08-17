@@ -2,6 +2,7 @@ package com.prgrms.rg.domain.ridingpost.model;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -17,6 +18,7 @@ import javax.validation.constraints.Size;
 import com.prgrms.rg.domain.common.file.model.AttachedImage;
 import com.prgrms.rg.domain.common.file.model.ImageOwner;
 import com.prgrms.rg.domain.common.file.model.TemporaryImage;
+import com.prgrms.rg.domain.ridingpost.model.image.SubImage;
 
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -26,8 +28,6 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class RidingSubSection implements ImageOwner {
-
-	private static final int MAX_IMAGE_LIST_SIZE = 5;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -44,8 +44,8 @@ public class RidingSubSection implements ImageOwner {
 	@Column(name = "content")
 	private String content;
 
-	//0-5개의 사진. 사진 용량 체크 -> service 단에서 해야할듯 ..
-	@OneToMany(mappedBy = "subInformation", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+	//0-2개의 사진
+	@OneToMany(mappedBy = "subInformation", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<SubImage> images = new ArrayList<>();
 
 	public RidingSubSection(String title, String content) {
@@ -57,9 +57,22 @@ public class RidingSubSection implements ImageOwner {
 		this.post = post;
 	}
 
+	public List<String> getImageUrlAsList() {
+		return getImages().stream()
+			.map(SubImage::getUrl)
+			.collect(Collectors.toList());
+	}
+
+	public void addImage(AttachedImage attachedImage) {
+		if (!(attachedImage instanceof SubImage))	throw new IllegalArgumentException();
+		var image = (SubImage)attachedImage;
+		image.updateOwner(this);
+		images.add(image);
+	}
+
 	@Override
 	public AttachedImage attach(TemporaryImage storedImage) {
-		var image = new SubImage(storedImage, this);
+		var image = new SubImage(storedImage.getId(), storedImage, this);
 		images.add(image);
 		return image;
 	}

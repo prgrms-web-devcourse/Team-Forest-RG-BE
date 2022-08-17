@@ -1,18 +1,15 @@
 package com.prgrms.rg.config;
 
-import javax.servlet.http.HttpServletResponse;
+import java.util.List;
 
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.security.web.context.SecurityContextPersistenceFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
@@ -26,6 +23,7 @@ import lombok.extern.slf4j.Slf4j;
 
 @Configuration
 @EnableWebSecurity
+@EnableGlobalMethodSecurity(securedEnabled = true)
 @Slf4j
 public class WebSecurityConfigure extends WebSecurityConfigurerAdapter {
 
@@ -38,19 +36,6 @@ public class WebSecurityConfigure extends WebSecurityConfigurerAdapter {
 	@Override
 	public void configure(WebSecurity web) {
 		web.ignoring().antMatchers("/assets/**", "/h2-console/**");
-	}
-
-	public AccessDeniedHandler accessDeniedHandler() {
-		return (request, response, e) -> {
-			Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-			Object principal = authentication != null ? authentication.getPrincipal() : null;
-			log.warn("{} is denied", principal, e);
-			response.setStatus(HttpServletResponse.SC_FORBIDDEN);
-			response.setContentType("text/plain;charset=UTF-8");
-			response.getWriter().write("ACCESS DENIED");
-			response.getWriter().flush();
-			response.getWriter().close();
-		};
 	}
 
 	public Jwt jwt() {
@@ -72,9 +57,10 @@ public class WebSecurityConfigure extends WebSecurityConfigurerAdapter {
 
 	public CorsConfigurationSource corsConfigurationSource() {
 		CorsConfiguration configuration = new CorsConfiguration();
-		configuration.addAllowedOrigin("*"); // 나중에 바꾸기
+		configuration.setAllowedOriginPatterns(List.of("https://riding-is-good.netlify.app","http://localhost:[*]", "http://127.0.0.1:[*]"));
 		configuration.addAllowedHeader("*");
 		configuration.addAllowedMethod("*");
+		configuration.setAllowCredentials(true);
 		UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
 		source.registerCorsConfiguration("/**", configuration);
 		return source;
@@ -87,7 +73,6 @@ public class WebSecurityConfigure extends WebSecurityConfigurerAdapter {
 			.cors().configurationSource(corsConfigurationSource())
 			.and()
 			.authorizeRequests()
-			.antMatchers("/user/me").authenticated()
 			.anyRequest().permitAll()
 			.and()
 
@@ -111,12 +96,6 @@ public class WebSecurityConfigure extends WebSecurityConfigurerAdapter {
 			 */
 			.sessionManagement()
 			.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-			.and()
-			/*
-			 * 예외처리 핸들러
-			 */
-			.exceptionHandling()
-			.accessDeniedHandler(accessDeniedHandler())
 			.and()
 			/*
 			 * Jwt 필터

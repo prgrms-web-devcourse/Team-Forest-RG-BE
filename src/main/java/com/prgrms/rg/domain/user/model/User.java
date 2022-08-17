@@ -3,24 +3,28 @@ package com.prgrms.rg.domain.user.model;
 import static javax.persistence.GenerationType.*;
 import static lombok.AccessLevel.*;
 
-import java.util.Collection;
-import java.util.List;
+import java.util.Set;
+import java.util.regex.Pattern;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
-
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
 
 import com.prgrms.rg.domain.common.file.model.AttachedImage;
 import com.prgrms.rg.domain.common.file.model.ImageOwner;
 import com.prgrms.rg.domain.common.file.model.TemporaryImage;
 import com.prgrms.rg.domain.common.model.BaseTimeEntity;
 import com.prgrms.rg.domain.common.model.metadata.Bicycle;
+import com.prgrms.rg.domain.common.model.metadata.RidingLevel;
+import com.prgrms.rg.domain.ridingpost.model.AddressCode;
+import com.prgrms.rg.domain.user.model.dto.UserRegisterDTO;
+import com.prgrms.rg.domain.user.model.information.ContactInfo;
 import com.prgrms.rg.domain.user.model.information.MannerInfo;
 import com.prgrms.rg.domain.user.model.information.RiderInfo;
 import com.prgrms.rg.domain.user.model.information.UserImageInfo;
@@ -35,7 +39,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor(access = PRIVATE)
 @NoArgsConstructor(access = PROTECTED)
 @Getter
-public class User extends BaseTimeEntity implements UserDetails, ImageOwner {
+public class User extends BaseTimeEntity implements ImageOwner {
 
 	@Id
 	@GeneratedValue(strategy = IDENTITY)
@@ -47,12 +51,8 @@ public class User extends BaseTimeEntity implements UserDetails, ImageOwner {
 	@Embedded
 	private RiderProfile profile;
 
-	private String profileImages;
-
-	@OneToOne(mappedBy = "user")
+	@OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
 	private ProfileImage profileImage;
-
-	//TODO: 연락처 추가
 
 	@Embedded
 	private Introduction introduction;
@@ -61,48 +61,61 @@ public class User extends BaseTimeEntity implements UserDetails, ImageOwner {
 
 	private String providerId;
 
-	private String isRegistered;
+	private boolean isRegistered;
+
+	private String phoneNumber;
+
+	private String email;
+
+	@JoinColumn(name = "address_code")
+	@ManyToOne(fetch = FetchType.LAZY)
+	private AddressCode addressCode;
 
 	@Embedded
 	private Manner manner;
 
+	public void updateByRegistration(UserRegisterDTO userRegisterDTO) {
+		this.nickname = new Nickname(userRegisterDTO.getNickName());
+
+		this.changeRiderProfile(userRegisterDTO.getRidingStartYear(),
+			RidingLevel.of(userRegisterDTO.getLevel()), this.profile.getBicycles());
+
+		this.addressCode = userRegisterDTO.getFavoriteRegionCode();
+		this.isRegistered = true;
+		setPhoneNumber(userRegisterDTO.getPhoneNumber());
+	}
+
+	public void setPhoneNumber(String phoneNumber) {
+		if (phoneNumber == null) {
+			return;
+		}
+		if (!Pattern.matches("^01(?:0|1|[6-9])(?:\\d{3}|\\d{4})\\d{4}$", phoneNumber))
+			throw new IllegalArgumentException("잘못된 번호입니다.");
+		this.phoneNumber = phoneNumber;
+	}
+
+	public void changeNickname(Nickname nicknameToChange) {
+		this.nickname = nicknameToChange;
+	}
+
+	public void changeRiderProfile(Integer ridingYears, RidingLevel level, Set<UserBicycle> bicyclesToApply) {
+		this.profile.update(ridingYears, level, bicyclesToApply);
+	}
+
+	public void changeIntroduction(Introduction introduction) {
+		if (introduction != null) {
+			this.introduction = introduction;
+		}
+	}
+
+	public void changeAddress(AddressCode addressCode) {
+		if (addressCode != null) {
+			this.addressCode = addressCode;
+		}
+	}
+
 	public boolean addBicycle(Bicycle bicycle) {
 		return profile.addBicycle(this, bicycle);
-	}
-
-	@Override
-	public Collection<? extends GrantedAuthority> getAuthorities() {
-		return List.of(new SimpleGrantedAuthority("ROLE_USER"));
-	}
-
-	@Override
-	public String getPassword() {
-		return "";
-	}
-
-	@Override
-	public String getUsername() {
-		return this.nickname.toString();
-	}
-
-	@Override
-	public boolean isAccountNonExpired() {
-		return true;
-	}
-
-	@Override
-	public boolean isAccountNonLocked() {
-		return true;
-	}
-
-	@Override
-	public boolean isCredentialsNonExpired() {
-		return true;
-	}
-
-	@Override
-	public boolean isEnabled() {
-		return this.provider != null && this.providerId != null;
 	}
 
 	public String getNickname() {
@@ -110,11 +123,19 @@ public class User extends BaseTimeEntity implements UserDetails, ImageOwner {
 	}
 
 	public UserImageInfo getImage() {
-		return new UserImageInfo(profileImage.getUrl(), profileImage.getOriginalFileName());
+		return (profileImage != null) ? new UserImageInfo(profileImage.getUrl(), profileImage.getOriginalFileName())
+			: UserImageInfo.defaultImage();
 	}
 
 	public String getIntroduction() {
-		return introduction.get();
+		return (introduction != null) ? introduction.get() : "";
+	}
+
+	public Integer getRegionCode() {
+		if (addressCode == null) {
+			return null;
+		}
+		return addressCode.getCode();
 	}
 
 	public RiderInfo getRiderInformation() {
@@ -125,13 +146,28 @@ public class User extends BaseTimeEntity implements UserDetails, ImageOwner {
 		return manner.information();
 	}
 
+	public ContactInfo getContactInfo() {
+		return new ContactInfo(phoneNumber, email);
+	}
+
+	public boolean isNewImage(Long imageId) {
+		if (profileImage == null) {
+			return true;
+		}
+		return !imageId.equals(profileImage.getId());
+	}
+
+	public String getAddressCodeInfo() {
+		return addressCode.getArea();
+	}
+
 	@Override
 	public String toString() {
 		return "User{" +
 			"id=" + id +
 			", nickname=" + nickname +
 			", profile=" + profile +
-			", profileImage=" + profileImages +
+			", profileImage=" + profileImage +
 			", introduction=" + introduction +
 			", manner=" + manner +
 			'}';
@@ -145,6 +181,6 @@ public class User extends BaseTimeEntity implements UserDetails, ImageOwner {
 
 	@Override
 	public void removeCurrentImage() {
-		profileImages = null;
+		profileImage = null;
 	}
 }

@@ -10,12 +10,12 @@ import lombok.Getter;
 public final class RiderInfo {
 
 	@Getter
-	private int ridingYears;
+	private Integer ridingYears;
 	@Getter
 	private RidingLevel level;
 	private List<String> bicycles;
 
-	public RiderInfo(int ridingYears, RidingLevel level, List<String> bicycles) {
+	public RiderInfo(Integer ridingYears, RidingLevel level, List<String> bicycles) {
 		this.ridingYears = ridingYears;
 		this.level = level;
 		this.bicycles = bicycles;
@@ -23,6 +23,14 @@ public final class RiderInfo {
 
 	public List<String> getBicycles() {
 		return Collections.unmodifiableList(bicycles);
+	}
+
+	public String[] getBicyclesAsArray() {
+		String[] result = new String[bicycles.size()];
+		for (int i = 0; i < result.length; i++) {
+			result[i] = bicycles.get(i);
+		}
+		return result;
 	}
 
 	@Override

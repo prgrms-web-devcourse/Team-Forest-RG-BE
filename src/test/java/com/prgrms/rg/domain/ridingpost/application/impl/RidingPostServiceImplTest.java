@@ -3,9 +3,11 @@ package com.prgrms.rg.domain.ridingpost.application.impl;
 import static org.hamcrest.MatcherAssert.*;
 import static org.hamcrest.Matchers.*;
 
-
 import java.time.LocalDateTime;
 import java.util.List;
+
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -14,16 +16,28 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.prgrms.rg.domain.ridingpost.application.command.RidingConditionCreateCommand;
-import com.prgrms.rg.domain.ridingpost.application.command.RidingCreateCommand;
-import com.prgrms.rg.domain.ridingpost.application.command.RidingMainCreateCommand;
-import com.prgrms.rg.domain.ridingpost.application.command.RidingParticipantCreateCommand;
+import com.prgrms.rg.domain.common.file.model.AttachedImageRepository;
+import com.prgrms.rg.domain.common.file.model.TemporaryImage;
+import com.prgrms.rg.domain.common.file.model.TemporaryImageRepository;
+import com.prgrms.rg.domain.common.model.metadata.RidingLevel;
+import com.prgrms.rg.domain.ridingpost.application.command.RidingConditionSaveCommand;
+import com.prgrms.rg.domain.ridingpost.application.command.RidingSaveCommand;
+import com.prgrms.rg.domain.ridingpost.application.command.RidingMainSaveCommand;
+import com.prgrms.rg.domain.ridingpost.application.command.RidingParticipantSaveCommand;
+import com.prgrms.rg.domain.ridingpost.application.command.RidingSubSaveCommand;
 import com.prgrms.rg.domain.ridingpost.model.AddressCode;
+import com.prgrms.rg.domain.ridingpost.model.Coordinate;
 import com.prgrms.rg.domain.ridingpost.model.RidingPost;
 import com.prgrms.rg.domain.ridingpost.model.RidingPostRepository;
+import com.prgrms.rg.domain.user.model.Manner;
+import com.prgrms.rg.domain.user.model.Nickname;
+import com.prgrms.rg.domain.user.model.User;
+import com.prgrms.rg.domain.user.model.UserRepository;
+import com.prgrms.rg.testutil.TestEntityDataFactory;
 
 @SpringBootTest
 @Transactional
+@Sql(scripts = {"classpath:address_code.sql", "classpath:bicycle.sql"})
 class RidingPostServiceImplTest {
 
 	@Autowired
@@ -32,29 +46,134 @@ class RidingPostServiceImplTest {
 	@Autowired
 	private RidingPostRepository ridingPostRepository;
 
+	@Autowired
+	private UserRepository userRepository;
+
+	@Autowired
+	private TemporaryImageRepository temporaryImageRepository;
+
+	@Autowired
+	private AttachedImageRepository imageRepository;
+
+	@PersistenceContext
+	EntityManager em;
+
 	@Test
-	@DisplayName("사진x RidingPost 생성")
-	@Sql(scripts = "classpath:data.sql")
+	@DisplayName("RidingPost 생성")
 	void createRidingTest(){
 
 	    //given
-		List<String> routes = List.of("start", "end");
-		var mainCreateCommand = RidingMainCreateCommand.builder()
-			.title("testTitle")
-			.estimatedTime(120).ridingDate(LocalDateTime.now().plusDays(10L))
-			.fee(0).addressCode(new AddressCode(11010)).routes(routes).build();
+		var user = User.builder()
+			.nickname(new Nickname("testNickname"))
+			.manner(Manner.create())
+			.build();
+		User savedUser = userRepository.save(user);
 
-		var createCommand = new RidingCreateCommand(null,
+		var tempThumbnailImage = new TemporaryImage("test.png", "http://test.png");
+		var thumbnailId = temporaryImageRepository.save(tempThumbnailImage).getId();
+		var tempSubImage = new TemporaryImage("test2.png", "http://test2.png");
+		var subImageId = temporaryImageRepository.save(tempSubImage).getId();
+
+		em.flush();
+		em.clear();
+
+		List<String> routes = List.of("start", "end");
+		var mainCreateCommand = RidingMainSaveCommand.builder()
+			.title("testTitle")
+			.estimatedTime("2시간").ridingDate(LocalDateTime.now().plusDays(10L))
+			.fee(0).addressCode(new AddressCode(11010)).routes(routes).build();
+		var subCommand = new RidingSubSaveCommand("sub-title", "sub-content", List.of(subImageId));
+
+		var createCommand = new RidingSaveCommand(thumbnailId,
 			mainCreateCommand,
-			new RidingParticipantCreateCommand(6, 10),
-			new RidingConditionCreateCommand("BEGINNER", List.of("MTV")), null
+			new RidingParticipantSaveCommand(6, 10),
+			new RidingConditionSaveCommand(RidingLevel.BEGINNER.getLevelName(), List.of("MTB")),
+			List.of(subCommand)
 		);
 
 	    //when
-		Long savedPostId = ridingPostService.createRidingPost(1L, createCommand);
-		RidingPost savedOne = ridingPostRepository.findById(savedPostId).get();
+		Long savedPostId = ridingPostService.createRidingPost(user.getId(), createCommand);
+
+		em.flush();
+		em.clear();
+
+		var savedOne = ridingPostRepository.findById(savedPostId);
 
 	    //then
-		assertThat(savedOne.getRidingMainSection(), is(samePropertyValuesAs(mainCreateCommand.toSection())));
+		assertThat(savedOne.isPresent(), is(true));
+		assertThat(savedOne.get().getRidingMainSection(), is(samePropertyValuesAs(mainCreateCommand.toSection())));
+	}
+
+	@Test
+	@DisplayName("ridingpost 수정 테스트")
+	void updateRidingTest(){
+		//user-post save
+		User leader = userRepository.save(TestEntityDataFactory.createUser());
+		RidingPost post = ridingPostRepository.save(TestEntityDataFactory.createRidingPost(leader.getId()));
+
+		em.flush();
+		em.clear();
+
+		//image save
+		var image = post.getSubSectionList().get(0).getImages().get(0);
+		var subimage = imageRepository.save(image);
+
+
+		var conditionCommand = new RidingConditionSaveCommand("상", List.of("MTB", "로드"));
+		var participantCommand = new RidingParticipantSaveCommand(post.getRidingParticipantSection().getMinParticipantCount(),
+			post.getRidingParticipantSection().getMaxParticipantCount());
+		var subCommand = new RidingSubSaveCommand("new-sub title", "new-sub content",
+			List.of(subimage.getId()));
+
+		var mainCommand = RidingMainSaveCommand.builder()
+			.title("자전거가 타고싶어요")
+			.ridingDate(LocalDateTime.now().plusDays(10L))
+			.routes(List.of("중앙 공원", "능골 공원", "탑골 공원"))
+			.estimatedTime("3시간")
+			.addressCode(new AddressCode(11010))
+			.fee(10000)
+			.departurePlace(new Coordinate(35.232600, 127.650250)).build();
+
+		var updateCommand = new RidingSaveCommand(null, mainCommand, participantCommand, conditionCommand, List.of(subCommand));
+
+		//when
+		Long postId = ridingPostService.updateRidingPost(leader.getId(), post.getId(), updateCommand);
+
+		em.flush();
+		em.clear();
+
+		var updatedPost = ridingPostRepository.findById(postId);
+
+		assertThat(postId, is(equalTo(post.getId())));
+		assertThat(updatedPost.isPresent(), is(true));
+		assertThat(updatedPost.get().getLeader().getId(), is(equalTo(leader.getId())));
+		assertThat(updatedPost.get().getRidingMainSection().getEstimatedTime(), is(equalTo(
+			mainCommand.getEstimatedTime())));
+		assertThat(updatedPost.get().getRidingConditionSection().getBicycleList(), is(hasSize(2)));
+
+		assertThat(updatedPost.get().getSubSectionList(), is(hasSize(1)));
+
+		var subsection = updatedPost.get().getSubSectionList().get(0);
+		assertThat(subsection.getTitle(), is(equalTo(subCommand.getTitle())));
+		assertThat(subsection.getImages(), is(hasSize(1)));
+		assertThat(subsection.getImages().get(0).getId(), is(equalTo(subimage.getId())));
+	}
+
+	@Test
+	@DisplayName("RidingPost 삭제 테스트")
+	void deleteRidingTest(){
+
+		var leader = userRepository.save(TestEntityDataFactory.createUser(10L));
+		var post = ridingPostRepository.save(TestEntityDataFactory.createRidingPost(leader.getId()));
+
+		//when
+		ridingPostService.deleteRidingPost(leader.getId(), post.getId());
+
+		em.flush();
+		em.clear();
+
+		var findPost = ridingPostRepository.findById(post.getId());
+		assertThat(findPost.isEmpty(), is(true));
+
 	}
 }

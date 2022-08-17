@@ -29,7 +29,7 @@ public class Manner {
 	}
 
 	public static Manner create() {
-		return new Manner((short)0, (short)0, null);
+		return new Manner((short)100, (short)0, null);
 	}
 
 	public static Manner of(short point, short noShow, LocalDate banned) {
@@ -37,19 +37,22 @@ public class Manner {
 	}
 
 	MannerInfo information() {
-		return new MannerInfo(mannerLevel(), noShow, bannedUntil);
+		return new MannerInfo(point, noShow, bannedUntil);
 	}
 
 	MannerLevel mannerLevel() {
 		return MannerLevel.of(point);
 	}
 
-
 	void addNoShowCount() {
 		noShow++;
 		if (noShow % NO_SHOW_LIMIT == 0) {
 			bannedUntil = ((bannedUntil != null) ? bannedUntil : LocalDate.now()).plusDays(NO_SHOW_BAN_DURATION);
 		}
+	}
+
+	public void addPoint() {
+		point += 10;
 	}
 
 	@Override

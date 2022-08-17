@@ -2,19 +2,19 @@ package com.prgrms.rg.config;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
-import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 @Component
-@ConfigurationProperties(prefix = "jwt")
 public class JwtConfigure {
 
+	@Value("${jwt.header}")
 	private String header;
-
+	@Value("${jwt.issuer}")
 	private String issuer;
-
+	@Value("${jwt.client-secret}")
 	private String clientSecret;
-
+	@Value("${jwt.expiry-seconds}")
 	private int expirySeconds;
 
 	public String getHeader() {
@@ -29,24 +29,12 @@ public class JwtConfigure {
 		return issuer;
 	}
 
-	public void setIssuer(String issuer) {
-		this.issuer = issuer;
-	}
-
 	public String getClientSecret() {
 		return clientSecret;
 	}
 
-	public void setClientSecret(String clientSecret) {
-		this.clientSecret = clientSecret;
-	}
-
 	public int getExpirySeconds() {
 		return expirySeconds;
-	}
-
-	public void setExpirySeconds(int expirySeconds) {
-		this.expirySeconds = expirySeconds;
 	}
 
 	@Override

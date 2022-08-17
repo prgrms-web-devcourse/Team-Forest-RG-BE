@@ -4,6 +4,7 @@ import static javax.persistence.CascadeType.*;
 import static javax.persistence.FetchType.*;
 import static lombok.AccessLevel.*;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -18,10 +19,11 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
-import com.prgrms.rg.domain.common.file.model.ImageOwner;
 import com.prgrms.rg.domain.common.file.model.AttachedImage;
+import com.prgrms.rg.domain.common.file.model.ImageOwner;
 import com.prgrms.rg.domain.common.file.model.TemporaryImage;
 import com.prgrms.rg.domain.common.model.BaseTimeEntity;
+import com.prgrms.rg.domain.ridingpost.model.image.RidingThumbnailImage;
 import com.prgrms.rg.domain.user.model.User;
 
 import lombok.Builder;
@@ -33,6 +35,8 @@ import lombok.NoArgsConstructor;
 @Entity
 public class RidingPost extends BaseTimeEntity implements ImageOwner {
 
+	private static final String DEFAULT_IMAGE_URL = "https://team-05-storage.s3.ap-northeast-2.amazonaws.com/static/RG_Logo.png";
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
@@ -41,7 +45,7 @@ public class RidingPost extends BaseTimeEntity implements ImageOwner {
 	@ManyToOne(optional = false, fetch = LAZY)
 	private User leader;
 
-	@OneToOne(mappedBy = "post")
+	@OneToOne(mappedBy = "post", cascade = ALL, orphanRemoval = true)
 	private RidingThumbnailImage thumbnail;
 
 	@Embedded
@@ -53,7 +57,7 @@ public class RidingPost extends BaseTimeEntity implements ImageOwner {
 	@Embedded
 	private RidingConditionSection ridingConditionSection;
 
-	@OneToMany(fetch = LAZY, cascade = ALL, mappedBy = "post")
+	@OneToMany(fetch = LAZY, cascade = ALL, mappedBy = "post", orphanRemoval = true)
 	private List<RidingSubSection> subSectionList = new ArrayList<>();
 
 	@Builder
@@ -61,11 +65,18 @@ public class RidingPost extends BaseTimeEntity implements ImageOwner {
 		RidingMainSection ridingMainSection,
 		RidingParticipantSection ridingParticipantSection,
 		RidingConditionSection ridingConditionSection
-		) {
+	) {
 		this.ridingMainSection = ridingMainSection;
 		this.ridingParticipantSection = ridingParticipantSection;
 		this.ridingConditionSection = ridingConditionSection;
 		assignLeader(leader);
+	}
+
+	public void changePost(RidingPost newPost) {
+		removeCurrentSubSection();
+		ridingMainSection.update(newPost.getRidingMainSection());
+		ridingParticipantSection.update(newPost.getRidingParticipantSection());
+		ridingConditionSection.update(this, newPost.getRidingConditionSection());
 	}
 
 	private void assignLeader(User leader) {
@@ -77,13 +88,53 @@ public class RidingPost extends BaseTimeEntity implements ImageOwner {
 		this.ridingConditionSection = ridingConditionSection;
 	}
 
+	public boolean checkneededStatus() {
+		return ridingMainSection.getRidingDate().isBefore(LocalDateTime.now());
+	}
+
 	public void addSubSection(RidingSubSection subSection) {
 		subSectionList.add(subSection);
 		subSection.assignPost(this);
 	}
 
+	public void join(User participant) {
+		var ridingStatus = getRidingParticipantSection().getStatus();
+		if (ridingStatus != RidingStatus.IN_PROGRESS)
+			throw new IllegalArgumentException("riding not in progress");
+		addParticipant(participant);
+	}
+
+	public void close() {
+		ridingParticipantSection.changeRidingStatus(RidingStatus.CLOSED);
+	}
+
 	public void addParticipant(User participant) {
 		ridingParticipantSection.addParticipant(this, participant);
+	}
+
+	public void removeParticipant(User participant) {
+		ridingParticipantSection.removeParticipant(participant);
+	}
+
+	public String getThumbnailUrl() {
+		return (thumbnail != null) ? thumbnail.getUrl() : DEFAULT_IMAGE_URL;
+	}
+
+	public Long getThumbnailId() {
+		return (thumbnail != null) ? thumbnail.getId() : null;
+	}
+
+	public boolean equalToThumbnail(Long thumbnailId) {
+		if (this.thumbnail == null)
+			return thumbnailId == null;
+		return this.thumbnail.getId().equals(thumbnailId);
+	}
+
+	public void removeCurrentSubSection() {
+		for (int i = 0; i < subSectionList.size(); i++) {
+			subSectionList.get(i).removeCurrentImage();
+		}
+		this.subSectionList.clear();
 	}
 
 	@Override
@@ -103,9 +154,9 @@ public class RidingPost extends BaseTimeEntity implements ImageOwner {
 
 	@Override
 	public AttachedImage attach(TemporaryImage storedImage) {
-		var image = new RidingThumbnailImage(storedImage.getId(), storedImage.getOriginalFileName(), storedImage.getUrl(), this);
-		this.thumbnail = image;
-		return image;
+		this.thumbnail = new RidingThumbnailImage(storedImage.getId(), storedImage.getOriginalFileName(),
+			storedImage.getUrl(), this);
+		return thumbnail;
 	}
 
 	@Override

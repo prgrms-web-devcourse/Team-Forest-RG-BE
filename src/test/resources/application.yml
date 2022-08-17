@@ -1,8 +1,7 @@
-# test profile 활성화용 파일
-# 테스트 코드에서 따로 profile 활성화 코드를 작성할 필요가 없음
+# 테스트에 필요한 Profile 들을 활성화시킵니다.
 
 spring:
   profiles:
     active:
+      - common
       - test
-      - security

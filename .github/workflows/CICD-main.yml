@@ -45,8 +45,8 @@ jobs:
             ' $YML_PATH
       - name: Write Security yml
         run: |
-          touch src/main/resources/application-security.yml
           echo '${{ secrets.OAUTH_SECRET }}' >> src/main/resources/application-security.yml
+
 
       - name: Build with Gradle
         run: |
@@ -87,6 +87,9 @@ jobs:
           SERVER_SCRIPT: ./config/server_script_env
         run: |
           echo '#!/bin/sh' >> $SERVER_SCRIPT
+          echo 'IMAGE_NAME=${{ secrets.DOCKERHUB_USERNAME }}/rg:latest' >> $SERVER_SCRIPT
+          echo 'DOCKERHUB_USERNAME=${{ secrets.DOCKERHUB_USERNAME }}' >> $SERVER_SCRIPT
+          echo 'DOCKERHUB_PASSWORD=${{ secrets.DOCKERHUB_SECRET }}' >> $SERVER_SCRIPT
           echo 'RDBMS_URL=${{ secrets.RDBMS_URL }}' >> $SERVER_SCRIPT
           echo 'RDBMS_USERNAME=${{ secrets.RDBMS_USERNAME }}' >> $SERVER_SCRIPT
           echo 'RDBMS_PASSWORD=${{ secrets.RDBMS_PASSWORD }}' >> $SERVER_SCRIPT

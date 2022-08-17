@@ -19,14 +19,16 @@ import org.hibernate.validator.constraints.Range;
 import com.prgrms.rg.domain.user.model.User;
 
 import lombok.AccessLevel;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Embeddable
+@Getter
 public class RidingParticipantSection {
 
 	@Column(name = "participant_count")
-	private int participantCount = 1;
+	private int participantCount = 0;
 
 	@Range(min = 5, max = 30)
 	@Column(name = "min_participant_count", nullable = false)
@@ -46,6 +48,10 @@ public class RidingParticipantSection {
 		setMinMaxParticipantCount(minParticipantCount, maxParticipantCount);
 	}
 
+	public void update(RidingParticipantSection section) {
+		setMinMaxParticipantCount(section.getMinParticipantCount(), section.getMaxParticipantCount());
+	}
+
 	public void addParticipant(RidingPost post, User participant) {
 		//TODO 2차 시기에 동시성 처리
 		participants.add(new RidingParticipant(post, participant));
@@ -53,9 +59,28 @@ public class RidingParticipantSection {
 		updateStatus();
 	}
 
+	public void changeRidingStatus(RidingStatus status) {
+		this.status = status;
+	}
+
+	public void removeParticipant(User participant) {
+		participants.removeIf((ridingParticipant -> ridingParticipant.getUser().equals(participant)));
+		reduceParticipantCount();
+		updateStatus();
+	}
+
+	public boolean isRecruiting() {
+		return status == IN_PROGRESS;
+	}
+
 	private void addParticipantCount() {
 		checkArgument(participantCount != maxParticipantCount);
 		participantCount++;
+	}
+
+	private void reduceParticipantCount() {
+		checkArgument(participantCount > 0);
+		participantCount--;
 	}
 
 	private void updateStatus() {

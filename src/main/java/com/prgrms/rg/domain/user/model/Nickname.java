@@ -4,6 +4,7 @@ import static com.google.common.base.Preconditions.*;
 import static lombok.AccessLevel.*;
 
 import java.nio.charset.StandardCharsets;
+import java.util.Objects;
 import java.util.regex.Pattern;
 
 import javax.persistence.Column;
@@ -22,7 +23,7 @@ public class Nickname {
 	private static final Pattern CHARSET_REGEX = Pattern.compile("(^[ㄱ-ㅎ가-힣a-zA-Z]*$)");
 	private static final String ALLOWED_CHARSET = "한글과 알파벳";
 	private static final String CHARSET_VALIDATION_MESSAGE = "닉네임은 " + ALLOWED_CHARSET + "만 허용됩니다.";
-	@Column(nullable = false, unique = true, length = 16)
+	@Column(nullable = false, unique = true, length = 24)
 	private String nickname;
 
 	public Nickname(String nickname) {
@@ -43,6 +44,23 @@ public class Nickname {
 
 	private void validateNicknameCharacter(String nickname) {
 		checkArgument(CHARSET_REGEX.matcher(nickname).matches(), CHARSET_VALIDATION_MESSAGE);
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o)
+			return true;
+		if (!(o instanceof Nickname))
+			return false;
+
+		Nickname nickname1 = (Nickname)o;
+
+		return Objects.equals(nickname, nickname1.nickname);
+	}
+
+	@Override
+	public int hashCode() {
+		return nickname != null ? nickname.hashCode() : 0;
 	}
 
 	@Override

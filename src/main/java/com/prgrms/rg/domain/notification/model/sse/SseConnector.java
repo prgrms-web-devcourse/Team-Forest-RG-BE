@@ -4,9 +4,11 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 @Component
 @RequiredArgsConstructor
+@Slf4j
 public class SseConnector {
 	private static final Long DEFAULT_TIMEOUT = 60L * 1000 * 60;
 	private final SseEmitterRepository emitterRepository;
@@ -17,7 +19,7 @@ public class SseConnector {
 		SseEmitter emitter = emitterRepository.save(emitterId, new SseEmitter(DEFAULT_TIMEOUT));
 		emitter.onCompletion(() -> emitterRepository.deleteById(emitterId));
 		emitter.onTimeout(() -> emitterRepository.deleteById(emitterId));
-		sender.sendNotification(userId, "EventStream Created. [userId=" + userId + "]", "health-check");
+		sender.sendNotification(userId, SseResponse.createConnectSuccess(userId), "health-check");
 		return emitter;
 	}
 

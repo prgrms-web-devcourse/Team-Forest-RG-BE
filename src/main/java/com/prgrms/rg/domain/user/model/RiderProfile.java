@@ -5,6 +5,7 @@ import static lombok.AccessLevel.*;
 
 import java.time.Year;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -32,7 +33,7 @@ public class RiderProfile {
 	@Enumerated(value = STRING)
 	private RidingLevel level;
 
-	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
 	private Set<UserBicycle> bicycles = new HashSet<>();
 
 	/*	Tree와의 논의에서 자전거 경력을 입력 쪽에서는 "5년차" 형태로 받고,
@@ -40,9 +41,24 @@ public class RiderProfile {
 	 */
 	//TODO: User 생성자에서 UserBicycle 추가 불가능?
 
-	public RiderProfile(int ridingYears, RidingLevel level) {
-		this.ridingStartYear = Year.now().minusYears(ridingYears);
+	public RiderProfile(Integer ridingStartYear, RidingLevel level) {
+		if (ridingStartYear != null) {
+			this.ridingStartYear = Year.of(ridingStartYear);
+		}
 		this.level = level;
+	}
+
+	public void update(Integer ridingStartYear, RidingLevel level, Set<UserBicycle> bicyclesToApply) {
+		if (ridingStartYear != null) {
+			this.ridingStartYear = Year.of(ridingStartYear);
+		}
+		this.level = level;
+		bicycles.retainAll(bicyclesToApply);
+		bicycles.addAll(bicyclesToApply);
+	}
+
+	public Set<UserBicycle> getBicycles() {
+		return Collections.unmodifiableSet(bicycles);
 	}
 
 	boolean addBicycle(User user, Bicycle bicycle) {
@@ -50,7 +66,7 @@ public class RiderProfile {
 	}
 
 	Year getRidingYears() {
-		return Year.now().minusYears(ridingStartYear.getValue());
+		return ridingStartYear;
 	}
 
 	RiderInfo information() {
@@ -58,7 +74,7 @@ public class RiderProfile {
 		for (UserBicycle bicycle : bicycles) {
 			bicycleNames.add(bicycle.getName());
 		}
-		return new RiderInfo(getRidingYears().getValue(), level, bicycleNames);
+		return new RiderInfo((ridingStartYear != null) ? getRidingYears().getValue() : null, level, bicycleNames);
 	}
 
 	@Override

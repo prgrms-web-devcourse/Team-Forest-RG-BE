@@ -1,32 +1,43 @@
 # 배포용
 # 배포 환경에서 가장 먼저 읽는 설정입니다. (application.yml이 아닙니다!)
 # DB 관련 정보는 Docker 컨테이너의 환경 변수에서 들어옵니다.
-# TODO: 본격적인 배포가 시작되면 jpa 설정 수정 필요 (ddl-auto 등)
+# Cloud에서 실행할 때 aws, security profile을 동시에 실행합니다.
+# 새로운 DB를 생성하거나 기존 스키마를 삭제하고 수정해야 할 경우,
+#  hibernate.ddl-auto(create), defer-datasource-initialization, generate-ddl, sql.init.mode 설정을 변경하셔야 합니다.
 
 spring:
+  jackson:
+    time-zone: Asia/Seoul
   datasource:
-    url: "jdbc:mysql://${RDBMS_URL}:3306/rg"
+    url: "jdbc:mysql://${RDBMS_URL}:3306/rg?serverTimezone=Asia/Seoul"
     username: ${RDBMS_USERNAME}
     password: ${RDBMS_PASSWORD}
     driver-class-name: com.mysql.cj.jdbc.Driver
   jpa:
-    show-sql: true
-    generate-ddl: true
     database: mysql
     open-in-view: false
     hibernate:
-      ddl-auto: create-drop
-    properties:
-      hibernate:
-        format_sql: true
-        use_sql_comments: true
+      ddl-auto: validate
+    generate-ddl: false
+    defer-datasource-initialization: false
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 10MB
+  sql:
+    init:
+      mode: never
+      data-locations:
+        - classpath:static/db/bicycle.sql
+        - classpath:static/db/address_code.sql
+      schema-locations:
+        - classpath:static/db/schema.sql
 server:
   port: 8080
 logging:
   file:
     path: ${LOG_PATH}
-  level:
-    com:
-      amazonaws:
-        util:
-          EC2MetadataUtils: error
+decorator:
+  datasource:
+    p6spy:
+      enable-logging: false

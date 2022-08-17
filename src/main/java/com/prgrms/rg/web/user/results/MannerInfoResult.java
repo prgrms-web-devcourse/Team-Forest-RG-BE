@@ -9,18 +9,18 @@ import lombok.Data;
 @Data
 public final class MannerInfoResult {
 
-	private String level;
+	private int mannerPoint;
 	private short noShow;
 	private LocalDate bannedUntil;
 
-	private MannerInfoResult(String level, short noShow, LocalDate bannedUntil) {
-		this.level = level;
+	private MannerInfoResult(int mannerPoint, short noShow, LocalDate bannedUntil) {
+		this.mannerPoint = mannerPoint;
 		this.noShow = noShow;
 		this.bannedUntil = bannedUntil;
 	}
 
 	public static MannerInfoResult of(MannerInfo mannerInfo) {
-		return new MannerInfoResult(mannerInfo.getLevel().toString(), mannerInfo.getNoShow(),
+		return new MannerInfoResult(mannerInfo.getMannerPoint(), mannerInfo.getNoShow(),
 			mannerInfo.getBannedUntil());
 	}
 }

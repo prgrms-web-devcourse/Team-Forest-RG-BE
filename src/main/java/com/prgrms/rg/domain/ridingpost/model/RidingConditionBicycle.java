@@ -1,5 +1,6 @@
 package com.prgrms.rg.domain.ridingpost.model;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -10,17 +11,19 @@ import javax.persistence.ManyToOne;
 import com.prgrms.rg.domain.common.model.metadata.Bicycle;
 
 import lombok.AccessLevel;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
+@Getter
 public class RidingConditionBicycle {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	@ManyToOne(optional = false, fetch = FetchType.LAZY)
+	@ManyToOne(optional = false, fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
 	private RidingPost post;
 
 	@ManyToOne(optional = false, fetch = FetchType.LAZY)
@@ -29,6 +32,10 @@ public class RidingConditionBicycle {
 	public RidingConditionBicycle(RidingPost post, Bicycle bicycle) {
 		this.post = post;
 		this.bicycle = bicycle;
+	}
+
+	public String getBicycleName() {
+		return bicycle.getName();
 	}
 
 	@Override

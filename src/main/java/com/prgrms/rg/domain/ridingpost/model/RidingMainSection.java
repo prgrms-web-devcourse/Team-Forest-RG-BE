@@ -36,12 +36,14 @@ public class RidingMainSection {
 	@Column(name = "title", nullable = false)
 	private String title;
 
-	@Min(value = 0L)
-	@Column(name = "estimated_minutes", nullable = false)
-	private int estimatedMinutes;
+	@Column(name = "estimated_time", nullable = false)
+	private String estimatedTime;
 
 	@Column(name = "riding_date", nullable = false)
 	private LocalDateTime ridingDate;
+
+	@Column(name = "evaluation_due_date", nullable = false)
+	private LocalDateTime evaluationDueDate;
 
 	@Min(value = 0)
 	@Column(name = "fee")
@@ -51,6 +53,7 @@ public class RidingMainSection {
 	@ManyToOne(fetch = FetchType.LAZY)
 	private AddressCode addressCode;
 
+	//0-5개 길이 제한
 	@ElementCollection
 	@CollectionTable(name = "riding_routes", joinColumns =
 	@JoinColumn(name = "post_id"))
@@ -62,15 +65,26 @@ public class RidingMainSection {
 	private Coordinate departurePlace;
 
 	@Builder
-	public RidingMainSection(String title, int estimatedMinutes, LocalDateTime ridingDate, int fee,
+	public RidingMainSection(String title, String estimatedTime, LocalDateTime ridingDate, int fee,
 		AddressCode addressCode, List<String> routes, Coordinate departurePlace) {
 		setTitle(title);
-		setEstimatedMinutes(estimatedMinutes);
+		setEstimatedTime(estimatedTime);
 		setFee(fee);
-		setAddressCode(addressCode);
+		assignAddressCode(addressCode);
 		setRidingDate(ridingDate);
 		setRoutes(routes);
 		setDeparturePlace(departurePlace);
+	}
+
+	public void update(RidingMainSection section) {
+		setTitle(section.getTitle());
+		setEstimatedTime(section.getEstimatedTime());
+		setFee(section.getFee());
+		assignAddressCode(section.getAddressCode());
+		setRidingDate(section.getRidingDate());
+		setDeparturePlace(section.getDeparturePlace());
+		routes.clear();
+		routes.addAll(section.getRoutes());
 	}
 
 	public List<String> getRoutes() {
@@ -79,7 +93,13 @@ public class RidingMainSection {
 
 	//작성 날짜보다 미래인지
 	private void setRidingDate(LocalDateTime ridingDate) {
-		checkArgument(ridingDate.isAfter(LocalDateTime.now()));
+		checkArgument(ridingDate.isAfter(LocalDateTime.now().minusDays(1L)));
 		this.ridingDate = ridingDate;
+		this.evaluationDueDate = ridingDate.plusDays(7L);
 	}
+
+	public void assignAddressCode(AddressCode code) {
+		this.addressCode = code;
+	}
+
 }

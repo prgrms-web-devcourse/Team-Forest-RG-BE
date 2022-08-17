@@ -15,22 +15,37 @@ import lombok.NoArgsConstructor;
 public class AddressCode {
 
 	@Id
-	private int code;
+	private Integer code;
 
-	//도
+	//시, 도
 	@Column(name = "area")
 	private String area;
-
-	//시
-	@Column(name = "city")
-	private String city;
 
 	//군, 구
 	@Column(name = "district")
 	private String district;
 
-	public AddressCode(int code) {
+	public AddressCode(Integer code) {
 		this.code = code;
 	}
 
+	@Override
+	public String toString() {
+		return area + " " + district;
+	}
+	public boolean equals(Object o) {
+		if (this == o)
+			return true;
+		if (!(o instanceof AddressCode))
+			return false;
+
+		AddressCode that = (AddressCode)o;
+
+		return code.equals(that.code);
+	}
+
+	@Override
+	public int hashCode() {
+		return code.hashCode();
+	}
 }
