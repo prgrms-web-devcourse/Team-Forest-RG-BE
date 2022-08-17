@@ -2,7 +2,7 @@
 # 배포 환경에서 가장 먼저 읽는 설정입니다. (application.yml이 아닙니다!)
 # DB 관련 정보는 Docker 컨테이너의 환경 변수에서 들어옵니다.
 # Cloud에서 실행할 때 aws, security profile을 동시에 실행합니다.
-# TODO: 본격적인 배포가 시작되면 jpa 설정 수정 필요 (ddl-auto 등)
+#
 
 spring:
   jackson:
@@ -29,8 +29,8 @@ spring:
       data-locations:
         - classpath:static/db/bicycle.sql
         - classpath:static/db/address_code.sql
-#      schema-locations:
-#        - classpath:static/db/schema.sql
+      schema-locations:
+        - classpath:static/db/schema.sql
 server:
   port: 8080
 logging:
