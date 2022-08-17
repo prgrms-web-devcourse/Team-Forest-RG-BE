@@ -2,7 +2,8 @@
 # 배포 환경에서 가장 먼저 읽는 설정입니다. (application.yml이 아닙니다!)
 # DB 관련 정보는 Docker 컨테이너의 환경 변수에서 들어옵니다.
 # Cloud에서 실행할 때 aws, security profile을 동시에 실행합니다.
-#
+# 새로운 DB를 생성하거나 기존 스키마를 삭제하고 수정해야 할 경우,
+#  hibernate.ddl-auto(create), defer-datasource-initialization, generate-ddl, sql.init.mode 설정을 변경하셔야 합니다.
 
 spring:
   jackson:
