@@ -69,6 +69,7 @@ public class CriticalMessageSender {
 		emojiBuffer.append("\n").append(message).append("\n");
 		emojiBuffer.append(emoji.repeat(20));
 		return json.writeValueAsString(Map.of("channel", SLACK_CHANNEL_ID, "text", emojiBuffer));
+
 	}
 
 }

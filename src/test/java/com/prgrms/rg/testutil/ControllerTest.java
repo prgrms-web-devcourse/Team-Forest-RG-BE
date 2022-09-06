@@ -1,24 +1,22 @@
 package com.prgrms.rg.testutil;
 
-import static org.springframework.context.annotation.ComponentScan.*;
+import static org.springframework.context.annotation.ComponentScan.Filter;
 
+import com.prgrms.rg.config.JpaConfiguration;
+import com.prgrms.rg.config.JwtConfigure;
+import com.prgrms.rg.web.common.message.LocalMessageSender;
 import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Inherited;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
-
 import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceTransactionManagerAutoConfiguration;
 import org.springframework.boot.autoconfigure.orm.jpa.HibernateJpaAutoConfiguration;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.context.annotation.FilterType;
 import org.springframework.core.annotation.AliasFor;
-
-import com.prgrms.rg.config.JpaConfiguration;
-import com.prgrms.rg.config.JwtConfigure;
-import com.prgrms.rg.web.common.message.LocalSystemExceptionMessageSender;
 
 /**
  * <p>Database, Jpa 관련 Bean들을 필요로 하지 않는 Controller 테스트를 작성하기 위한 annotation 입니다.</p>
@@ -40,7 +38,7 @@ import com.prgrms.rg.web.common.message.LocalSystemExceptionMessageSender;
 		type = FilterType.ASSIGNABLE_TYPE,
 		classes = {
 			JwtConfigure.class,
-			LocalSystemExceptionMessageSender.class})},
+			LocalMessageSender.class})},
 	excludeFilters = {@Filter(type = FilterType.ASSIGNABLE_TYPE, classes = JpaConfiguration.class)})
 public @interface ControllerTest {
 	@AliasFor(annotation = WebMvcTest.class, attribute = "controllers")
