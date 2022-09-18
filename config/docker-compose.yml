@@ -1,6 +1,6 @@
 # 테스트용 mysql 인스턴스를 docker로 만들어서 실행하고자 할 때 사용합니다.
 
-version: "3"
+version: "3.x"
 
 services:
   mysql-server:
@@ -18,3 +18,4 @@ services:
       - "3306:3306"
     cap_add:
       - SYS_NICE
+

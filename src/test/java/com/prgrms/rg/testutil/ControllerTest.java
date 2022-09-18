@@ -4,7 +4,7 @@ import static org.springframework.context.annotation.ComponentScan.Filter;
 
 import com.prgrms.rg.config.JpaConfiguration;
 import com.prgrms.rg.config.JwtConfigure;
-import com.prgrms.rg.web.common.message.LocalMessageSender;
+import com.prgrms.rg.infrastructure.message.exception.LocalErrorMessageSender;
 import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Inherited;
@@ -29,19 +29,20 @@ import org.springframework.core.annotation.AliasFor;
 @Documented
 @Inherited
 @WebMvcTest(
-	excludeAutoConfiguration = {
-		DataSourceAutoConfiguration.class,
-		DataSourceTransactionManagerAutoConfiguration.class,
-		HibernateJpaAutoConfiguration.class
-	},
-	includeFilters = {@Filter(
-		type = FilterType.ASSIGNABLE_TYPE,
-		classes = {
-			JwtConfigure.class,
-			LocalMessageSender.class})},
-	excludeFilters = {@Filter(type = FilterType.ASSIGNABLE_TYPE, classes = JpaConfiguration.class)})
+    excludeAutoConfiguration = {
+        DataSourceAutoConfiguration.class,
+        DataSourceTransactionManagerAutoConfiguration.class,
+        HibernateJpaAutoConfiguration.class
+    },
+    includeFilters = {@Filter(
+        type = FilterType.ASSIGNABLE_TYPE,
+        classes = {
+            JwtConfigure.class,
+            LocalErrorMessageSender.class})},
+    excludeFilters = {@Filter(type = FilterType.ASSIGNABLE_TYPE, classes = JpaConfiguration.class)})
 public @interface ControllerTest {
-	@AliasFor(annotation = WebMvcTest.class, attribute = "controllers")
-	Class<?>[] controllers();
+
+  @AliasFor(annotation = WebMvcTest.class, attribute = "controllers")
+  Class<?>[] controllers();
 
 }

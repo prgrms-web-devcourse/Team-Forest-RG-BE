@@ -1,10 +1,14 @@
 package com.prgrms.rg.web.common;
 
-import static org.mockito.BDDMockito.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.mockito.BDDMockito.any;
+import static org.mockito.BDDMockito.then;
+import static org.mockito.BDDMockito.times;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import com.prgrms.rg.infrastructure.message.exception.HttpErrorMessageSender;
+import com.prgrms.rg.testutil.ControllerTest;
+import com.prgrms.rg.testutil.FakeRestController;
 import javax.servlet.http.HttpServletRequest;
-
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -14,49 +18,45 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
-import com.prgrms.rg.testutil.ControllerTest;
-import com.prgrms.rg.testutil.FakeRestController;
-import com.prgrms.rg.web.common.message.ExceptionMessageSender;
-
 @ControllerTest(controllers = {FakeRestController.class})
 class GlobalControllerAdviceTest {
 
-	@Autowired
-	MockMvc mockMvc;
+  @Autowired
+  MockMvc mockMvc;
 
-	@MockBean
-	ExceptionMessageSender exceptionMessageSender;
+  @MockBean
+  HttpErrorMessageSender httpErrorMessageSender;
 
-	@Test
-	@DisplayName("다른 ControllerAdvice에서 처리하지 못한 예외들을 개발자에게 전송하고, 클라이언트에게 500 InternalServerError 메시지를 응답한다.")
-	void handle_exception_send_response_with_internal_server_error() throws Exception {
+  @Test
+  @DisplayName("다른 ControllerAdvice에서 처리하지 못한 예외들을 개발자에게 전송하고, 클라이언트에게 500 InternalServerError 메시지를 응답한다.")
+  void handle_exception_send_response_with_internal_server_error() throws Exception {
 
-		// When
-		var result = mockMvc.perform(MockMvcRequestBuilders.get("/fake"));
+    // When
+    var result = mockMvc.perform(MockMvcRequestBuilders.get("/fake"));
 
-		// Then
-		result.andExpectAll(
-			status().is5xxServerError(),
-			MockMvcResultMatchers.jsonPath("message").value(Matchers.equalTo("Internal Server Error"))
-		);
+    // Then
+    result.andExpectAll(
+        status().is5xxServerError(),
+        MockMvcResultMatchers.jsonPath("message").value(Matchers.equalTo("Internal Server Error"))
+    );
 
-		then(exceptionMessageSender).should(times(1)).send(any(Exception.class), any(HttpServletRequest.class));
+    then(httpErrorMessageSender).should(times(1)).send(any(Exception.class), any(HttpServletRequest.class));
 
-	}
+  }
 
-	@Test
-	@DisplayName("처리되지 못한 사용자 자원 제어 권한 예외를 처리하고, 클라이언트에게 403 Unauthorized 메시지를 응답한다.")
-	void handle_unauthorized_exception() throws Exception {
+  @Test
+  @DisplayName("처리되지 못한 사용자 자원 제어 권한 예외를 처리하고, 클라이언트에게 403 Unauthorized 메시지를 응답한다.")
+  void handle_unauthorized_exception() throws Exception {
 
-		// When
-		var result = mockMvc.perform(MockMvcRequestBuilders.get("/fake-unauthorized"));
+    // When
+    var result = mockMvc.perform(MockMvcRequestBuilders.get("/fake-unauthorized"));
 
-		// Then
-		result.andExpectAll(
-			status().isUnauthorized(),
-			MockMvcResultMatchers.jsonPath("message").isString()
-		);
+    // Then
+    result.andExpectAll(
+        status().isUnauthorized(),
+        MockMvcResultMatchers.jsonPath("message").isString()
+    );
 
-	}
+  }
 
 }

@@ -43,6 +43,7 @@ dependencies {
     implementation group: 'commons-io', name: 'commons-io', version: '2.6'
     implementation 'org.projectlombok:lombok:1.18.22'
     implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE'
+    implementation 'org.apache.kafka:kafka-clients:3.2.1'
 
     implementation 'org.apache.commons:commons-lang3:3.9'
     implementation group: 'com.auth0', name: 'java-jwt', version: '3.16.0'
